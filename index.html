@@ -1,0 +1,1834 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Muaz Construction</title>
+    <link rel="icon" href="https://i.ibb.co.com/RkByHr2S/file-000000001ba87208917a643199a1201d.png" type="image/png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        *{ box-sizing:border-box; margin:0; padding:0; font-family:Arial,"Noto Sans Bengali",sans-serif; }
+        body{ background:#f4f7f8; color:#222; display: flex; flex-direction: column; min-height: 100vh; }
+        
+        :root { --primary: #062a4d; --secondary: #f39c12; --light-bg: #f8f9fa; }
+
+        /* ================= LOGIN ================= */
+        #loginPage{ min-height:100vh; display:flex; align-items:center; justify-content:center; background:#eef3f1; padding:20px; }
+        .login-box{ width:100%; max-width:420px; background:white; padding:35px 30px; border-radius:15px; box-shadow:0 5px 25px #0002; text-align:center; }
+        .logo-img-login { max-width: 150px; margin-bottom: 20px; }
+        .login-box h1{ color:var(--primary); margin-top:15px; font-size:24px; }
+        .login-box p{ color:#777; margin:8px 0 25px; }
+        .input{ width:100%; padding:14px; border:1px solid #ccc; border-radius:7px; margin-bottom:14px; font-size:16px; }
+        .login-btn{ width:100%; padding:14px; border:none; border-radius:7px; background:var(--primary); color:white; font-size:17px; font-weight:bold; cursor:pointer; }
+        .login-btn:hover{ background:#041c33; }
+        .back-btn{ width:100%; padding:14px; border:none; border-radius:7px; background:#7f8c8d; color:white; font-size:17px; font-weight:bold; cursor:pointer; margin-top: 10px; }
+        .demo-info{ margin-top:20px; font-size:13px; color:#777; }
+        
+        /* ================= HEADER & SIDEBAR ================= */
+        #website{ display:none; flex: 1; flex-direction: column; }
+        .top-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 5%; background: var(--light-bg); color: var(--primary); font-size: 14px; border-bottom: 1px solid #ddd; flex-wrap: wrap; gap: 10px; }
+        .top-bar-contact i { margin-right: 5px; color: var(--secondary); }
+        .top-bar-social a { color: var(--primary); margin-left: 15px; font-size: 16px; text-decoration: none; }
+        .main-header { display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; background: white; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .brand-logo { height: 60px; object-fit: contain; }
+        .menu-btn { background: var(--secondary); border: none; color: white; font-size: 24px; cursor: pointer; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; border-radius: 5px; }
+        .sidebar { position: fixed; right: -300px; top: 0; width: 280px; height: 100vh; background: var(--primary); transition: 0.3s; padding-top: 20px; z-index: 101; box-shadow: -5px 0 15px rgba(0,0,0,0.2); overflow-y: auto; }
+        .sidebar.open { right: 0; }
+        .close-sidebar { background: transparent; border: none; color: white; font-size: 30px; cursor: pointer; position: absolute; top: 15px; right: 20px; }
+        .sidebar-logo { text-align: center; margin-bottom: 30px; margin-top: 30px;}
+        .sidebar-logo img { height: 60px; }
+        .sidebar button { display: block; width: 100%; text-align: left; padding: 15px 25px; border: none; background: transparent; color: white; font-size: 16px; cursor: pointer; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .sidebar button i { width: 25px; text-align: center; margin-right: 10px; color: var(--secondary); }
+        .sidebar button:hover { background: rgba(255,255,255,0.1); padding-left: 30px; }
+        .logout-btn { background: #c0392b !important; text-align: center !important; margin-top: 20px; font-weight: bold; }
+        .login-nav-btn { background: #16a085 !important; text-align: center !important; margin-top: 20px; font-weight: bold; }
+        .sidebar-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; display: none; }
+        .sidebar-overlay.show { display: block; }
+        
+        /* ================= PAGE LAYOUT ================= */
+        .page{ display:none; padding: 20px; flex: 1; }
+        .page.active{ display:block; }
+        .container{ width:100%; max-width:1200px; margin: 0 auto; }
+        
+        /* HOME PAGE */
+        .home-page { text-align: center; padding-top: 40px; }
+        .home-center-logo { max-width: 350px; width: 100%; height: auto; }
+        
+        /* DASHBOARD & GRIDS */
+        .dashboard{ display:grid; grid-template-columns:repeat(auto-fit, minmax(250px, 1fr)); gap:20px; }
+        .dashboard-card{ background:white; border-radius:14px; padding:30px 20px; text-align:center; box-shadow:0 3px 12px rgba(0,0,0,0.05); border-top: 4px solid var(--secondary); }
+        .dashboard-icon{ font-size:38px; color: var(--primary); }
+        .dashboard-card h3{ margin-top:10px; color:var(--primary); font-size:20px; }
+        .dashboard-card strong{ display:block; margin-top:12px; font-size:30px; }
+        
+        .mosque-grid, .summary-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:20px; margin-top:22px; }
+        .mosque-card, .summary-card{ background:white; padding:30px 20px; border-radius:14px; text-align:center; cursor:pointer; box-shadow:0 3px 12px rgba(0,0,0,0.05); border: 1px solid #eee; }
+        .summary-card strong { display:block; margin-top:12px; font-size:30px; color:var(--primary); }
+
+        .details-box, .admin-section{ background:white; padding:28px; border-radius:14px; box-shadow:0 3px 12px rgba(0,0,0,0.05); margin-bottom: 25px; }
+        .table-wrap{ overflow-x:auto; }
+        table{ width:100%; min-width:700px; border-collapse:collapse; margin-top:20px; }
+        th,td{ border:1px solid #eee; padding:12px; text-align:center; }
+        th{ background:var(--primary); color:white; }
+        tr:nth-child(even) { background-color: #f9f9f9; }
+        .receipt{ width:60px; height:60px; object-fit:cover; border-radius:6px; cursor:pointer; border: 1px solid #ccc; transition: 0.2s; }
+        .receipt:hover{ transform: scale(1.1); border-color: var(--secondary); }
+        
+        /* FORMS & BUTTONS */
+        .form-group{ margin-bottom:15px; text-align: left; }
+        .form-group label{ display:block; font-weight:bold; margin-bottom:6px; color:var(--primary); }
+        input,select,textarea{ width:100%; padding:12px; border:1px solid #ccc; border-radius:6px; font-size:15px; }
+        .btn{ border:0; padding:12px 25px; border-radius:6px; cursor:pointer; color:white; background:var(--primary); font-size:15px; display: inline-block; text-align: center; margin-top: 10px; font-weight: bold; }
+        .btn-danger{ background:#d63031; }
+        .btn-info { background: #0984e3; margin-bottom:15px; }
+        .detail-btn{ display:block; margin:30px auto; }
+        
+        .admin-tabs{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:20px; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        .admin-tab{ border:none; color:#777; background:transparent; padding:10px 15px; cursor:pointer; font-weight: bold; font-size: 16px; border-bottom: 3px solid transparent; }
+        .admin-tab.active{ color:var(--primary); border-bottom-color: var(--secondary); }
+        .admin-panel{ display:none; }
+        .admin-panel.active{ display:block; }
+        
+        .modal{ position:fixed; inset:0; background:rgba(0,0,0,0.85); display:none; align-items:center; justify-content:center; padding:20px; z-index:1000; overflow-y:auto; }
+        .modal.show{ display:flex; }
+        .modal-box{ background:white; width:100%; max-width:450px; padding:30px; border-radius:12px; text-align: center; position: relative; margin: auto; }
+        .close{ position: absolute; right: 20px; top: 15px; font-size:35px; cursor:pointer; color: #555; }
+        .close:hover{ color: red; }
+        
+        /* Image Viewer Modal Specific */
+        .img-modal-content { max-width: 90%; max-height: 90vh; border-radius: 8px; box-shadow: 0 5px 25px rgba(0,0,0,0.5); }
+        .img-modal-close { position: absolute; top: 15px; right: 30px; font-size: 40px; color: white; cursor: pointer; }
+        
+        .message{ display:none; margin-top:12px; padding:11px; border-radius:6px; }
+        .success{ display:block; background:#d4edda; color:#155724; }
+        .error{ display:block; background:#f8d7da; color:#721c24; }
+        .empty-state { padding: 50px; text-align: center; color: #aaa; font-size: 20px; }
+        footer{ background:var(--primary); color:white; text-align:center; padding:20px; margin-top: auto; font-size: 14px; width: 100%; }
+
+        /* PRINT STYLES */
+        .pdf-export-header { display: none; }
+        @media print {
+            body * { visibility: hidden; }
+            .print-section, .print-section * { visibility: visible; }
+            .print-section { position: absolute; left: 0; top: 0; width: 100%; }
+            .pdf-export-header { display: block !important; text-align: center; margin-bottom: 25px; }
+            .pdf-export-header h2 { color: #062a4d; margin: 0; font-size: 26px; }
+            .pdf-export-header h3 { margin: 5px 0; color: #333; font-size: 18px; }
+            .pdf-export-header p { margin: 0; font-weight: bold; font-size: 15px; }
+            .pdf-export-header hr { margin-top: 15px; border: 1px solid #ddd; }
+            .no-print { display: none !important; }
+        }
+
+        /* 🖼️ Advanced Image Uploader Styles */
+        .upload-container {
+            background: #ffffff; padding: 20px; border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); width: 100%;
+            text-align: center; border: 1px solid #eee; margin-bottom: 20px; box-sizing: border-box;
+        }
+        .upload-container h4 { margin-top: 0; color: var(--primary); margin-bottom: 15px; }
+        .upload-container .input-group { margin-bottom: 15px; text-align: left; }
+        .upload-container input[type="file"], .upload-container input[type="text"], .upload-container input[type="url"] {
+            width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box;
+        }
+        .upload-container .divider { margin: 15px 0; color: #777; font-weight: bold; text-align: center; }
+        .upload-container .preview-area {
+            margin-top: 20px; padding: 15px; border: 2px dashed #007bff;
+            border-radius: 8px; background-color: #f8f9fa;
+        }
+        .uploader-preview-img {
+            max-width: 100%; max-height: 250px; border-radius: 8px; cursor: pointer; transition: transform 0.2s;
+        }
+        .uploader-preview-img:hover { transform: scale(1.02); }
+        .uploader-placeholder { color: #777; margin: 0; }
+        
+        /* 🔍 Lightbox Modal */
+        #customImageModal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.85); justify-content: center; align-items: center; }
+        .custom-modal-content { max-width: 90%; max-height: 90%; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
+        .custom-close-btn { position: absolute; top: 20px; right: 35px; color: #fff; font-size: 40px; font-weight: bold; cursor: pointer; }
+        .custom-close-btn:hover { color: #ccc; }
+
+        /* CONTACT STYLES */
+        .contact-card { max-width: 600px; margin: 50px auto; padding: 30px 20px; background: #fff; border-radius: 18px; box-shadow: 0 8px 30px rgba(0,0,0,0.10); text-align: center; }
+        .contact-title { color: var(--primary, #0d6efd); font-size: 26px; margin-bottom: 15px; }
+        .contact-logo { width: 80px; height: 80px; object-fit: contain; margin-bottom: 10px; }
+        .company-name { color: var(--primary, #0d6efd); font-size: 23px; margin-bottom: 25px; }
+        .contact-item { display: flex; align-items: center; gap: 15px; text-decoration: none; color: #333; background: #f8f9fa; padding: 13px 15px; margin: 12px 0; border-radius: 12px; transition: 0.25s; text-align: left; }
+        .contact-item:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.10); }
+        .contact-icon { width: 45px; height: 45px; min-width: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 20px; }
+        .phone-icon { background: #198754; }
+        .email-icon { background: #dc3545; }
+        .facebook-icon { background: #1877f2; }
+        .whatsapp-icon { background: #25d366; }
+        .contact-text strong { display: block; font-size: 15px; margin-bottom: 3px; }
+        .contact-text span { font-size: 14px; color: #666; }
+        @media (max-width: 600px) { .contact-card { margin: 20px 10px; padding: 25px 15px; } .company-name { font-size: 20px; } }
+    </style>
+</head>
+<body>
+
+<!-- ================= LOGIN ================= -->
+<div id="loginPage" style="display:none;">
+    <div class="login-box">
+        <img src="https://i.ibb.co.com/RkByHr2S/file-000000001ba87208917a643199a1201d.png" alt="Logo" class="logo-img-login">
+        <h1>Muaz Construction</h1>
+        <p>Admin Login</p>
+        <input id="loginEmail" class="input" type="email" placeholder="Email">
+        <input id="loginPassword" class="input" type="password" placeholder="Password">
+        <button class="login-btn" onclick="login()"> Login </button>
+        <button class="back-btn" onclick="openWebsite()"> Back to Website </button>
+        <div id="loginMessage" class="message"></div>
+    </div>
+</div>
+
+<!-- ================= WEBSITE MAIN ================= -->
+<div id="website">
+    
+    <!-- TOP BAR & HEADER -->
+    <div class="top-bar no-print">
+        <div class="top-bar-contact">
+            <i class="fa-solid fa-phone"></i> +88 01773167407 , +88 01612309206
+        </div>
+        <div class="top-bar-social">
+            <a href="https://www.facebook.com/profile.php?id=61589705093986" target="_blank"><i class="fa-brands fa-facebook"></i></a>
+            <a href="https://chat.whatsapp.com/LgbeXirOTiPCmT0mnPmgJH" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>
+        </div>
+    </div>
+
+    <header class="main-header no-print">
+        <img src="https://i.ibb.co.com/RkByHr2S/file-000000001ba87208917a643199a1201d.png" alt="Muaz Construction" class="brand-logo">
+        <button class="menu-btn" onclick="toggleMenu()">☰</button>
+    </header>
+
+    <div id="sidebarOverlay" class="sidebar-overlay" onclick="toggleMenu()"></div>
+
+    <!-- SIDEBAR -->
+    <div id="sidebar" class="sidebar no-print">
+        <button class="close-sidebar" onclick="toggleMenu()">×</button>
+        <div class="sidebar-logo">
+            <img src="https://i.ibb.co.com/RkByHr2S/file-000000001ba87208917a643199a1201d.png" alt="Logo">
+        </div>
+        <button onclick="showPage('home')"><i class="fa-solid fa-house"></i> Home Page</button>
+        <button onclick="showPage('mosjid')"><i class="fa-solid fa-mosque"></i> List Of Mosjid</button>
+        <button id="menuPaymentOfOffice" onclick="showPage('officePayment')"><i class="fa-solid fa-building-columns"></i> Payment Of Office</button>
+        <button id="menuLabour" onclick="showPage('labour')"><i class="fa-solid fa-users-gear"></i> Labour Management</button>
+        <button onclick="showPage('dashboard')"><i class="fa-solid fa-chart-pie"></i> Dashboard</button>
+        <button id="menuAdmin" onclick="showPage('admin')"><i class="fa-solid fa-gears"></i> Admin Panel</button>
+        <button onclick="showPage('contact')"><i class="fa-solid fa-address-book"></i> Contact Us</button>
+        
+        <button id="menuLogin" class="login-nav-btn" onclick="showAdminLogin()"><i class="fa-solid fa-right-to-bracket"></i> Admin Login</button>
+        <button id="menuLogout" class="logout-btn" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+    </div>
+
+    <!-- ================= HOME ================= -->
+    <section id="home" class="page active">
+        <div class="container home-page">
+            <img src="https://i.ibb.co.com/RkByHr2S/file-000000001ba87208917a643199a1201d.png" alt="Muaz Construction Logo" class="home-center-logo">
+        </div>
+    </section>
+
+    <!-- ================= DASHBOARD ================= -->
+    <section id="dashboard" class="page">
+        <div class="container">
+            <h2 style="color:var(--primary); margin-bottom: 20px;">📊 Dashboard</h2>
+            <div class="dashboard">
+                <div class="dashboard-card">
+                    <div class="dashboard-icon"> <i class="fa-solid fa-mosque"></i> </div>
+                    <h3>Mosque</h3>
+                    <strong id="dashMosque">0</strong>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= LIST OF MOSJID ================= -->
+    <section id="mosjid" class="page">
+        <div class="container">
+            <h2 style="color:var(--primary); margin-bottom: 20px;">🕌 List of Mosjid</h2>
+            <div id="mosqueList" class="mosque-grid"></div>
+        </div>
+    </section>
+
+    <!-- ================= MOSQUE SUMMARY / DETAILS ================= -->
+    <section id="mosqueView" class="page">
+        <div class="container">
+            <button class="btn no-print" style="margin-bottom: 15px;" onclick="showPage('mosjid')"> ← Back to List </button>
+            <div id="mosqueSummary"></div>
+        </div>
+    </section>
+
+    <!-- ================= PAYMENT OF OFFICE ================= -->
+    <section id="officePayment" class="page">
+        <div class="container">
+            <div id="officePaymentAdminView">
+                <div class="admin-section">
+                    <h2 style="color:var(--primary);"><i class="fa-solid fa-building-columns"></i> Payment Of Office</h2><br>
+                    
+                    <div class="admin-tabs no-print">
+                        <button class="admin-tab active" onclick="officeTab('officePaymentForm',this)">Payment Form</button>
+                        <button class="admin-tab" onclick="officeTab('officePaymentHistory',this)">Payment History</button>
+                    </div>
+
+                    <div id="officePaymentForm" class="admin-panel active">
+                        <form onsubmit="addOfficePayment(event)">
+                            <div class="form-group"><label>Date</label><input id="opDate" type="date" required></div>
+                            <div class="form-group"><label>Name of Payment</label><input id="opName" type="text" placeholder="e.g. Office Rent" required></div>
+                            <div class="form-group"><label>Payment Method</label>
+                                <select id="opMethod" required><option>BKash</option><option>Cash</option><option>Rocket</option><option>Bank</option></select>
+                            </div>
+                            
+                            <div class="form-group"><label>Total Amount (Admin Allow)</label><input id="opTotalAmt" type="number" required oninput="calcOfficeDue()"></div>
+                            <div class="form-group"><label>Total Payment</label><input id="opTotalPay" type="number" required oninput="calcOfficeDue()"></div>
+                            <div class="form-group"><label>Due Amount (Auto Calculated)</label><input id="opDue" type="number" required readonly style="background:#eef3f1; cursor:not-allowed;"></div>
+                            
+                            <button class="btn">Submit Payment</button>
+                        </form>
+                    </div>
+
+                    <div id="officePaymentHistory" class="admin-panel">
+                        <div id="printOfficeHistoryArea">
+                            <button class="btn btn-info no-print"
+                                onclick="printData('printOfficeHistoryArea', 'Office Payment Report')">
+                                <i class="fa-solid fa-file-pdf"></i> Download PDF
+                            </button>
+                            <div id="officeHistoryList"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="officePaymentVisitorView" class="empty-state">
+                <i class="fa-solid fa-folder-open fa-3x" style="color:#ddd; margin-bottom:15px;"></i>
+                <p>No Records Found</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= LABOUR MANAGEMENT ================= -->
+    <section id="labour" class="page">
+        <div class="container">
+            <h2 style="color:var(--primary); margin-bottom: 20px;">👷 Labour Management</h2>
+            <div class="admin-tabs no-print">
+                <button class="admin-tab active" onclick="adminTab('labourForm',this)">Labour Form</button>
+                <button class="admin-tab" onclick="adminTab('labourListTab',this)">Labour List</button>
+                <button class="admin-tab" onclick="adminTab('labourPaymentTab',this)">Labour Payment</button>
+                <button class="admin-tab" onclick="adminTab('labourHistoryTab',this)">Payment History</button>
+            </div>
+
+            <div id="labourForm" class="admin-panel active admin-section">
+                <form onsubmit="addLabour(event)">
+                    <div class="form-group"><label>নাম</label><input id="labourName" required></div>
+                    <div class="form-group"><label>মোবাইল নম্বর</label><input id="labourMobile" required></div>
+                    <div class="form-group"><label>কাজের ধরন</label><input id="labourWork" required></div>
+                    <div class="form-group"><label>দৈনিক মজুরি</label><input id="labourDaily" type="number" required></div>
+                    <button class="btn">Add Labour</button>
+                </form>
+            </div>
+
+            <div id="labourListTab" class="admin-panel admin-section">
+                <div id="printLabourListArea">
+                    <button class="btn btn-info no-print"
+                        onclick="printData('printLabourListArea', 'Labour Contact List')">
+                        <i class="fa-solid fa-file-pdf"></i> Download PDF
+                    </button>
+                    <div id="adminLabourList"></div>
+                </div>
+            </div>
+
+            <div id="labourPaymentTab" class="admin-panel admin-section">
+                <form onsubmit="addLabourPayment(event)">
+                    <div class="form-group"><label>শ্রমিক</label><select id="paymentLabour" required></select></div>
+                    <div class="form-group"><label>তারিখ</label><input id="paymentDate" type="date" required></div>
+                    <div class="form-group"><label>সময়</label><input id="paymentTime" type="time" required></div>
+                    <div class="form-group"><label>মোট টাকার পরিমান</label><input id="paymentAmount" type="number" required></div>
+                    <div class="form-group"><label>মোট কাজ (দিন)</label><input id="paymentWorkDays" type="number" step="any" required></div>
+                    <div class="form-group"><label>মাধ্যম</label>
+                        <select id="paymentMethod" required><option value="">Select</option><option>BKash</option><option>Cash</option><option>Rocket</option><option>Bank</option></select>
+                    </div>
+                    <div class="form-group"><label>Remarks</label><textarea id="paymentRemarks"></textarea></div>
+                    <button class="btn">Add Payment</button>
+                </form>
+            </div>
+
+            <div id="labourHistoryTab" class="admin-panel admin-section">
+                <div id="printLabourHistoryArea">
+                    <button class="btn btn-info no-print"
+                        onclick="printData('printLabourHistoryArea', 'Labour Payment Report')">
+                        <i class="fa-solid fa-file-pdf"></i> Download PDF
+                    </button>
+                    <div id="labourPaymentHistoryList"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= ADMIN PANEL ================= -->
+    <section id="admin" class="page">
+        <div class="container">
+            <h2 style="color:var(--primary); margin-bottom: 20px;">⚙️ Admin Panel</h2>
+            <div class="admin-section">
+                <div class="admin-tabs no-print">
+                    <button class="admin-tab active" onclick="adminTab('addMosque',this)">Add Mosjid</button>
+                    <button class="admin-tab" onclick="adminTab('manageMosque',this)">Manage Mosjid</button>
+                    <button class="admin-tab" onclick="adminTab('transaction',this)">Transaction</button>
+                </div>
+                
+                <div id="addMosque" class="admin-panel active">
+                    <form onsubmit="addMosque(event)">
+                        <div class="form-group"><label>মসজিদের নাম</label><input id="mosqueName" required></div>
+                        <div class="form-group"><label>ঠিকানা</label><textarea id="mosqueAddress" required></textarea></div>
+                        <div class="form-group"><label>Unique ID</label><input id="mosqueUniqueId" required></div>
+                        <div class="form-group"><label>মোট বরাদ্দ</label><input id="mosqueAllocated" type="number" required></div>
+                        
+                        <!-- 🖼️ Uploader 1: Add Mosque Image -->
+                        <div class="upload-container">
+                            <h4>🖼️ মসজিদের ছবি (Image Upload & Preview)</h4>
+                            <div class="input-group">
+                                <label><b>Local File (গ্যালারি থেকে):</b></label>
+                                <input type="file" id="mosqueFile" accept="image/*">
+                            </div>
+                            <div class="divider">OR</div>
+                            <div class="input-group">
+                                <label><b>Image URL (ডাইরেক্ট লিংক):</b></label>
+                                <input type="url" id="mosqueImage" placeholder="🔗 Paste image link here..." oninput="syncPreview(this.value, 'mosquePreview', 'mosquePlaceholder', 'mosqueHint')">
+                            </div>
+                            <div class="preview-area">
+                                <img id="mosquePreview" class="uploader-preview-img" src="" style="display:none;" onclick="openCustomModal(this.src)">
+                                <p id="mosquePlaceholder" class="uploader-placeholder">No image selected</p>
+                                <small id="mosqueHint" class="uploader-hint" style="display:none; color:#555; margin-top:10px;">🔍 Click image to enlarge</small>
+                            </div>
+                        </div>
+                        
+                        <button class="btn" id="addMosqueBtn">Save Mosjid</button>
+                    </form>
+                    <div id="addMosqueMessage" class="message"></div>
+                </div>
+                
+                <div id="manageMosque" class="admin-panel">
+                    <button class="btn btn-info no-print" onclick="printData('manageMosque', 'List of Mosjid & Status')"><i class="fa-solid fa-file-pdf"></i> Download PDF</button>
+                    <div id="manageMosqueList"></div>
+                </div>
+
+                <div id="transaction" class="admin-panel">
+                    <form onsubmit="addTransaction(event)">
+                        <div class="form-group"><label>মসজিদ</label><select id="transactionMosque" required></select></div>
+                        <div class="form-group"><label>তারিখ</label><input id="transactionDate" type="date" required></div>
+                        <div class="form-group"><label>সময়</label><input id="transactionTime" type="time" required></div>
+                        <div class="form-group"><label>মোট টাকার পরিমান</label><input id="transactionAmount" type="number" required></div>
+                        <div class="form-group"><label>পরিশোধের মাধ্যম</label>
+                            <select id="transactionMethod" required><option value="">Select</option><option>BKash</option><option>Cash</option><option>Rocket</option><option>Bank</option></select>
+                        </div>
+                        <div class="form-group"><label>কী বাবদ খরচ</label><input id="transactionPurpose" required></div>
+                        
+                        <!-- 🖼️ Uploader 2: Add Transaction Image -->
+                        <div class="upload-container">
+                            <h4>🖼️ Bill/Receipt (Image Upload & Preview)</h4>
+                            <div class="input-group">
+                                <label><b>Local File (গ্যালারি থেকে):</b></label>
+                                <input type="file" id="transactionFile" accept="image/*">
+                            </div>
+                            <div class="divider">OR</div>
+                            <div class="input-group">
+                                <label><b>Image URL (রসিদের লিংক):</b></label>
+                                <input type="url" id="transactionImage" placeholder="🔗 Paste image link here..." oninput="syncPreview(this.value, 'transactionPreview', 'transactionPlaceholder', 'transactionHint')">
+                            </div>
+                            <div class="preview-area">
+                                <img id="transactionPreview" class="uploader-preview-img" src="" style="display:none;" onclick="openCustomModal(this.src)">
+                                <p id="transactionPlaceholder" class="uploader-placeholder">No image selected</p>
+                                <small id="transactionHint" class="uploader-hint" style="display:none; color:#555; margin-top:10px;">🔍 Click image to enlarge</small>
+                            </div>
+                        </div>
+                        
+                        <button class="btn" id="addTransBtn">Add Transaction</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= CONTACT ================= -->
+    <section id="contact" class="page">
+        <div class="container">
+            <div class="contact-card">
+                
+                <div class="contact-title">
+                    <i class="fa-solid fa-address-book"></i>
+                    Contact Us
+                </div>
+
+                <img class="contact-logo" src="https://i.ibb.co.com/RkByHr2S/file-000000001ba87208917a643199a1201d.png" alt="Muaz Construction Logo">
+
+                <h2 class="company-name">Muaz Construction & Consultant</h2>
+
+                <a class="contact-item" href="tel:+8801773167407">
+                    <div class="contact-icon phone-icon">
+                        <i class="fa-solid fa-phone"></i>
+                    </div>
+                    <div class="contact-text">
+                        <strong>Phone</strong>
+                        <span>01773167407</span>
+                    </div>
+                </a>
+
+                <a class="contact-item" href="tel:+8801612309206">
+                    <div class="contact-icon phone-icon">
+                        <i class="fa-solid fa-phone"></i>
+                    </div>
+                    <div class="contact-text">
+                        <strong>Phone</strong>
+                        <span>01612309206</span>
+                    </div>
+                </a>
+
+                <a class="contact-item" href="mailto:info.muazconstruction@gmail.com">
+                    <div class="contact-icon email-icon">
+                        <i class="fa-solid fa-envelope"></i>
+                    </div>
+                    <div class="contact-text">
+                        <strong>Email</strong>
+                        <span>info.muazconstruction@gmail.com</span>
+                    </div>
+                </a>
+
+                <a class="contact-item" href="https://www.facebook.com/profile.php?id=61589705093986" target="_blank" rel="noopener noreferrer">
+                    <div class="contact-icon facebook-icon">
+                        <i class="fa-brands fa-facebook-f"></i>
+                    </div>
+                    <div class="contact-text">
+                        <strong>Facebook</strong>
+                        <span>Visit our Facebook Page</span>
+                    </div>
+                </a>
+
+                <a class="contact-item" href="https://wa.me/8801773167407" target="_blank" rel="noopener noreferrer">
+                    <div class="contact-icon whatsapp-icon">
+                        <i class="fa-brands fa-whatsapp"></i>
+                    </div>
+                    <div class="contact-text">
+                        <strong>WhatsApp</strong>
+                        <span>Chat with us on WhatsApp</span>
+                    </div>
+                </a>
+
+            </div>
+        </div>
+    </section>
+
+    <footer class="no-print">© 2026 Muaz Construction & Consultant. All rights reserved.</footer>
+</div>
+
+<!-- ================= UNIQUE ID MODAL ================= -->
+<div id="idModal" class="modal no-print">
+    <div class="modal-box">
+        <span class="close" onclick="closeModal()">×</span>
+        <h2 style="color: var(--primary);">🔐 Unique ID</h2>
+        <p id="idMosqueName" style="margin:12px 0 18px; font-weight:bold; color:var(--secondary); font-size: 18px;"></p>
+        <input id="visitorUniqueId" class="input" type="password" placeholder="Enter Unique ID">
+        <button class="btn" id="verifyIdBtn" style="width: 100%;" onclick="verifyUniqueId()">প্রবেশ করুন</button>
+        <div id="idMessage" class="message"></div>
+    </div>
+</div>
+
+<!-- ================= IMAGE VIEWER MODAL ================= -->
+<div id="imageViewerModal" class="modal no-print" onclick="closeImageModal()">
+    <span class="img-modal-close" onclick="closeImageModal()">×</span>
+    <img class="img-modal-content" id="expandedImg">
+</div>
+
+<!-- 🔍 Custom Uploader Lightbox Modal -->
+<div id="customImageModal" class="no-print">
+    <span class="custom-close-btn" onclick="closeCustomModal()">&times;</span>
+    <img class="custom-modal-content" id="customEnlargedImg">
+</div>
+
+<!-- ================= EDIT MODALS ================= -->
+<!-- Edit Mosque -->
+<div id="editMosqueModal" class="modal no-print">
+    <div class="modal-box" style="max-width: 500px;">
+        <span class="close" onclick="closeEditModal('editMosqueModal')">×</span>
+        <h2 style="color: var(--primary); margin-bottom:15px;">Edit Mosque</h2>
+        <input type="hidden" id="emIndex">
+        <div class="form-group"><label>মসজিদের নাম</label><input id="emName" required></div>
+        <div class="form-group"><label>ঠিকানা</label><textarea id="emAddress" required></textarea></div>
+        <div class="form-group"><label>Unique ID</label><input id="emUniqueId" required></div>
+        <div class="form-group"><label>মোট বরাদ্দ</label><input id="emAllocated" type="number" required></div>
+        
+        <!-- 🖼️ Uploader 3: Edit Mosque Image -->
+        <div class="upload-container">
+            <h4>🖼️ Update Image</h4>
+            <div class="input-group">
+                <label><b>Local File (গ্যালারি থেকে):</b></label>
+                <input type="file" id="emFile" accept="image/*">
+            </div>
+            <div class="divider">OR</div>
+            <div class="input-group">
+                <label><b>Image URL:</b></label>
+                <input type="url" id="emImage" placeholder="🔗 Paste image link here..." oninput="syncPreview(this.value, 'emPreview', 'emPlaceholder', 'emHint')">
+            </div>
+            <div class="preview-area">
+                <img id="emPreview" class="uploader-preview-img" src="" style="display:none;" onclick="openCustomModal(this.src)">
+                <p id="emPlaceholder" class="uploader-placeholder">No image selected</p>
+                <small id="emHint" class="uploader-hint" style="display:none; color:#555; margin-top:10px;">🔍 Click image to enlarge</small>
+            </div>
+        </div>
+
+        <button class="btn" style="width:100%;" onclick="saveMosqueEdit()">Update Mosjid</button>
+    </div>
+</div>
+
+<!-- Edit Labour -->
+<div id="editLabourModal" class="modal no-print">
+    <div class="modal-box">
+        <span class="close" onclick="closeEditModal('editLabourModal')">×</span>
+        <h2 style="color: var(--primary); margin-bottom:15px;">Edit Labour</h2>
+        <input type="hidden" id="elIndex">
+        <div class="form-group"><label>নাম</label><input id="elName" required></div>
+        <div class="form-group"><label>মোবাইল</label><input id="elMobile" required></div>
+        <div class="form-group"><label>কাজের ধরন</label><input id="elWork" required></div>
+        <div class="form-group"><label>দৈনিক মজুরি</label><input id="elDaily" type="number" required></div>
+        <button class="btn" style="width:100%;" onclick="saveLabourEdit()">Update Labour</button>
+    </div>
+</div>
+
+<!-- Edit Labour Payment -->
+<div id="editLabourPaymentModal" class="modal no-print">
+    <div class="modal-box">
+        <span class="close" onclick="closeEditModal('editLabourPaymentModal')">×</span>
+        <h2 style="color: var(--primary); margin-bottom:15px;">Edit Labour Payment</h2>
+        <input type="hidden" id="elpLabourIndex">
+        <input type="hidden" id="elpPaymentIndex">
+        <div class="form-group"><label>তারিখ</label><input id="elpDate" type="date" required></div>
+        <div class="form-group"><label>সময়</label><input id="elpTime" type="time" required></div>
+        <div class="form-group"><label>টাকা</label><input id="elpAmount" type="number" required></div>
+        <div class="form-group"><label>মোট কাজ (দিন)</label><input id="elpWorkDays" type="number" step="any" required></div>
+        <div class="form-group"><label>মাধ্যম</label>
+            <select id="elpMethod" required><option>BKash</option><option>Cash</option><option>Rocket</option><option>Bank</option></select>
+        </div>
+        <div class="form-group"><label>Remarks</label><textarea id="elpRemarks"></textarea></div>
+        <button class="btn" style="width:100%;" onclick="saveLabourPaymentEdit()">Update Payment</button>
+    </div>
+</div>
+
+<!-- Edit Transaction -->
+<div id="editTransactionModal" class="modal no-print">
+    <div class="modal-box" style="max-width: 500px;">
+        <span class="close" onclick="closeEditModal('editTransactionModal')">×</span>
+        <h2 style="color: var(--primary); margin-bottom:15px;">Edit Transaction</h2>
+        <input type="hidden" id="etMosqueIndex">
+        <input type="hidden" id="etTransIndex">
+        <div class="form-group"><label>তারিখ</label><input id="etDate" type="date" required></div>
+        <div class="form-group"><label>সময়</label><input id="etTime" type="time" required></div>
+        <div class="form-group"><label>টাকা</label><input id="etAmount" type="number" required></div>
+        <div class="form-group"><label>মাধ্যম</label><select id="etMethod" required><option>BKash</option><option>Cash</option><option>Rocket</option><option>Bank</option></select></div>
+        <div class="form-group"><label>কী বাবদ</label><input id="etPurpose" required></div>
+        
+        <!-- 🖼️ Uploader 4: Edit Transaction Image -->
+        <div class="upload-container">
+            <h4>🖼️ Update Receipt Image</h4>
+            <div class="input-group">
+                <label><b>Local File (গ্যালারি থেকে):</b></label>
+                <input type="file" id="etFile" accept="image/*">
+            </div>
+            <div class="divider">OR</div>
+            <div class="input-group">
+                <label><b>Image URL:</b></label>
+                <input type="url" id="etImage" placeholder="🔗 Paste image link here..." oninput="syncPreview(this.value, 'etPreview', 'etPlaceholder', 'etHint')">
+            </div>
+            <div class="preview-area">
+                <img id="etPreview" class="uploader-preview-img" src="" style="display:none;" onclick="openCustomModal(this.src)">
+                <p id="etPlaceholder" class="uploader-placeholder">No image selected</p>
+                <small id="etHint" class="uploader-hint" style="display:none; color:#555; margin-top:10px;">🔍 Click image to enlarge</small>
+            </div>
+        </div>
+        
+        <button class="btn" style="width:100%;" onclick="saveTransactionEdit()">Update Transaction</button>
+    </div>
+</div>
+
+<!-- Edit Office Payment -->
+<div id="editOfficePaymentModal" class="modal no-print">
+    <div class="modal-box">
+        <span class="close" onclick="closeEditModal('editOfficePaymentModal')">×</span>
+        <h2 style="color: var(--primary); margin-bottom:15px;">Edit Office Payment</h2>
+        <input type="hidden" id="eopIndex">
+        <div class="form-group"><label>Date</label><input id="eopDate" type="date" required></div>
+        <div class="form-group"><label>Name of Payment</label><input id="eopName" type="text" required></div>
+        <div class="form-group"><label>Payment Method</label>
+            <select id="eopMethod" required><option>BKash</option><option>Cash</option><option>Rocket</option><option>Bank</option></select>
+        </div>
+        <div class="form-group"><label>Total Amount (Admin Allow)</label><input id="eopTotalAmt" type="number" required oninput="calcEditOfficeDue()"></div>
+        <div class="form-group"><label>Total Payment</label><input id="eopTotalPay" type="number" required oninput="calcEditOfficeDue()"></div>
+        <div class="form-group"><label>Due Amount</label><input id="eopDue" type="number" required readonly style="background:#eef3f1; cursor:not-allowed;"></div>
+        <button class="btn" style="width:100%;" onclick="saveOfficePaymentEdit()">Update Payment</button>
+    </div>
+</div>
+
+
+<!-- ================= UNIFIED FIREBASE & APP SCRIPT ================= -->
+<script type="module">
+    // 1. Fixed Firebase Versions to a stable release (10.12.2)
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
+    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+  
+    const firebaseConfig = {
+      apiKey: "AIzaSyBTk33tbL_I1du7cYkCxDmyjoJ5C0wHZNM",
+      authDomain: "muaz-contraction.firebaseapp.com",
+      projectId: "muaz-contraction",
+      storageBucket: "muaz-contraction.firebasestorage.app",
+      messagingSenderId: "929764617437",
+      appId: "1:929764617437:web:e6a06207a98a9e20263f34",
+      measurementId: "G-7SRSTJNEWR"
+    };
+  
+    const app = initializeApp(firebaseConfig);
+    const dbFirestore = getFirestore(app);
+    const storage = getStorage(app);
+    const auth = getAuth(app);
+
+    let db = { mosques: [], labours: [], officePayments: [] };
+    let currentUser = null;
+    let selectedMosque = null;
+
+    // Helper functions
+    function money(v){ return "৳ " + Number(v||0).toLocaleString("en-IN"); }
+    function makeId(){ return Date.now().toString(36) + Math.random().toString(36).substring(2,8); }
+    function safe(v){ return String(v??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;"); }
+    
+    function showMessage(id,text,type){
+        const el = document.getElementById(id);
+        if(!el) return;
+        el.innerText = text;
+        el.className = "message " + type;
+        setTimeout(() => el.className = "message", 4000);
+    }
+
+    const today = new Date().toISOString().split("T")[0];
+    if(document.getElementById("opDate")) document.getElementById("opDate").value = today;
+    if(document.getElementById("transactionDate")) document.getElementById("transactionDate").value = today;
+    if(document.getElementById("paymentDate")) document.getElementById("paymentDate").value = today;
+
+    /* ================= FIREBASE SYNC ================= */
+    async function loadMosques(){
+        try {
+            const snap = await getDocs(collection(dbFirestore, "mosques"));
+            db.mosques = [];
+            snap.forEach(docItem => {
+                db.mosques.push({ firebaseId: docItem.id, ...docItem.data() });
+            });
+        } catch(e) { console.error("Mosques fetch failed", e); }
+    }
+
+    async function loadOfficePayments() {
+        try {
+            const snap = await getDocs(collection(dbFirestore, "officePayments"));
+            db.officePayments = [];
+            snap.forEach(docItem => {
+                db.officePayments.push({ firebaseId: docItem.id, ...docItem.data() });
+            });
+        } catch(e) { console.error("Office payments fetch failed", e); }
+    }
+
+    async function loadLabours() {
+        try {
+            const snap = await getDocs(collection(dbFirestore, "labours"));
+            db.labours = [];
+            snap.forEach(docItem => {
+                db.labours.push({ firebaseId: docItem.id, ...docItem.data() });
+            });
+        } catch(e) { console.error("Labours fetch failed", e); }
+    }
+
+    async function uploadImage(file, folder="mosques"){
+        const fileName = Date.now() + "_" + file.name.replace(/[^a-zA-Z0-9._-]/g, "");
+        const storageRef = ref(storage, folder + "/" + fileName);
+        await uploadBytes(storageRef, file);
+        return await getDownloadURL(storageRef);
+    }
+
+    Promise.all([loadMosques(), loadOfficePayments(), loadLabours()]).then(() => {
+        refresh();
+    });
+
+    /* ================= MOSQUE LOGIC ================= */
+    async function addMosque(e){
+        e.preventDefault();
+        const btn = document.getElementById("addMosqueBtn");
+        btn.innerText = "Saving..."; btn.disabled = true;
+
+        try {
+            const uniqueId = document.getElementById("mosqueUniqueId").value.trim();
+            if(db.mosques.some(m => m.uniqueId.toLowerCase() === uniqueId.toLowerCase())){
+                showMessage("addMosqueMessage", "Unique ID আগে থেকেই আছে।", "error"); 
+                btn.innerText = "Save Mosjid"; btn.disabled = false;
+                return;
+            }
+            
+            const file = document.getElementById("mosqueFile").files[0];
+            let imageUrl = document.getElementById("mosqueImage").value.trim();
+            
+            if(file){
+                imageUrl = await uploadImage(file, "mosques");
+            }
+
+            await addDoc(collection(dbFirestore, "mosques"), {
+                name: document.getElementById("mosqueName").value.trim(),
+                address: document.getElementById("mosqueAddress").value.trim(),
+                uniqueId: uniqueId,
+                allocated: Number(document.getElementById("mosqueAllocated").value),
+                image: imageUrl,
+                transactions: [], 
+                createdAt: Date.now()
+            });
+
+            e.target.reset();
+            syncPreview('', 'mosquePreview', 'mosquePlaceholder', 'mosqueHint'); 
+            alert("Mosque Saved Successfully!");
+            await loadMosques(); 
+            refresh();
+            showMessage("addMosqueMessage", "মসজিদ যোগ হয়েছে।", "success");
+        } catch(error) {
+            console.error(error);
+            alert("Failed to save mosque!");
+        }
+
+        btn.innerText = "Save Mosjid"; btn.disabled = false;
+    }
+
+    async function saveMosqueEdit() {
+        const i = document.getElementById('emIndex').value;
+        const newId = document.getElementById('emUniqueId').value.trim();
+        const file = document.getElementById('emFile').files[0];
+        let imageUrl = document.getElementById('emImage').value.trim();
+        
+        if(db.mosques.some((m, idx) => m.uniqueId.toLowerCase() === newId.toLowerCase() && idx != i)){
+            alert("Unique ID Already Exists!");
+            return;
+        }
+
+        if(file) {
+            imageUrl = await uploadImage(file, "mosques");
+        }
+
+        db.mosques[i].name = document.getElementById('emName').value;
+        db.mosques[i].address = document.getElementById('emAddress').value;
+        db.mosques[i].uniqueId = newId;
+        db.mosques[i].allocated = Number(document.getElementById('emAllocated').value);
+        db.mosques[i].image = imageUrl;
+
+        if(db.mosques[i].firebaseId) {
+            await updateDoc(doc(dbFirestore, "mosques", db.mosques[i].firebaseId), {
+                name: db.mosques[i].name,
+                address: db.mosques[i].address,
+                uniqueId: db.mosques[i].uniqueId,
+                allocated: db.mosques[i].allocated,
+                image: db.mosques[i].image
+            });
+        }
+
+        closeEditModal('editMosqueModal');
+        await loadMosques();
+        refresh();
+        alert("Mosque updated successfully!");
+    }
+
+    async function deleteMosque(i){
+        const pass = prompt("Type DELETE to confirm");
+        if(pass === "DELETE"){
+            if(db.mosques[i].firebaseId) {
+                await deleteDoc(doc(dbFirestore, "mosques", db.mosques[i].firebaseId));
+            }
+            db.mosques.splice(i,1);
+            await loadMosques();
+            refresh();
+        }
+    }
+
+    async function addTransaction(e){
+        e.preventDefault();
+        const transMosqueSelect = document.getElementById("transactionMosque");
+        if(transMosqueSelect.value === ""){
+            alert("অনুগ্রহ করে একটি মসজিদ নির্বাচন করুন!");
+            return;
+        }
+
+        const btn = document.getElementById("addTransBtn");
+        btn.innerText = "Adding..."; btn.disabled = true;
+
+        try {
+            const i = Number(transMosqueSelect.value);
+            const file = document.getElementById("transactionFile").files[0];
+            let imageUrl = document.getElementById("transactionImage").value.trim();
+            
+            if(file) {
+                imageUrl = await uploadImage(file, "receipts");
+            }
+            
+            if(!db.mosques[i].transactions) db.mosques[i].transactions = [];
+            db.mosques[i].transactions.push({
+                id: makeId(),
+                date: document.getElementById("transactionDate").value,
+                time: document.getElementById("transactionTime").value,
+                amount: Number(document.getElementById("transactionAmount").value),
+                method: document.getElementById("transactionMethod").value,
+                purpose: document.getElementById("transactionPurpose").value.trim(),
+                image: imageUrl
+            });
+
+            if(db.mosques[i].firebaseId) {
+                await updateDoc(doc(dbFirestore, "mosques", db.mosques[i].firebaseId), {
+                    transactions: db.mosques[i].transactions
+                });
+            }
+
+            e.target.reset(); 
+            syncPreview('', 'transactionPreview', 'transactionPlaceholder', 'transactionHint');
+            alert("Transaction যোগ হয়েছে।");
+            document.getElementById("transactionDate").value = new Date().toISOString().split("T")[0];
+            refresh();
+        } catch (error) {
+            console.error(error);
+            alert("Failed to add transaction");
+        }
+
+        btn.innerText = "Add Transaction"; btn.disabled = false;
+    }
+
+    async function saveTransactionEdit() {
+        const mIndex = document.getElementById('etMosqueIndex').value;
+        const tIndex = document.getElementById('etTransIndex').value;
+        const t = db.mosques[mIndex].transactions[tIndex];
+        
+        const file = document.getElementById('etFile').files[0];
+        let imageUrl = document.getElementById('etImage').value.trim();
+        
+        if(file) {
+            imageUrl = await uploadImage(file, "receipts");
+        }
+        
+        t.date = document.getElementById('etDate').value;
+        t.time = document.getElementById('etTime').value;
+        t.amount = Number(document.getElementById('etAmount').value);
+        t.method = document.getElementById('etMethod').value;
+        t.purpose = document.getElementById('etPurpose').value;
+        t.image = imageUrl;
+        
+        if(db.mosques[mIndex].firebaseId) {
+            await updateDoc(doc(dbFirestore, "mosques", db.mosques[mIndex].firebaseId), {
+                transactions: db.mosques[mIndex].transactions
+            });
+        }
+
+        closeEditModal('editTransactionModal');
+        showFullDetails(mIndex); 
+        refresh();
+        alert("Transaction updated successfully!");
+    }
+
+    async function deleteTrans(mIndex, tIndex) {
+        const pass = prompt("Type DELETE to confirm");
+        if(pass === "DELETE"){
+            db.mosques[mIndex].transactions.splice(tIndex, 1);
+            if(db.mosques[mIndex].firebaseId) {
+                await updateDoc(doc(dbFirestore, "mosques", db.mosques[mIndex].firebaseId), {
+                    transactions: db.mosques[mIndex].transactions
+                });
+            }
+            showFullDetails(mIndex);
+            refresh();
+        }
+    }
+
+    /* ================= OFFICE PAYMENT LOGIC ================= */
+    function calcOfficeDue() {
+        let total = Number(document.getElementById('opTotalAmt').value) || 0;
+        let paid = Number(document.getElementById('opTotalPay').value) || 0;
+        document.getElementById('opDue').value = total - paid;
+    }
+    
+    function calcEditOfficeDue() {
+        let total = Number(document.getElementById('eopTotalAmt').value) || 0;
+        let paid = Number(document.getElementById('eopTotalPay').value) || 0;
+        document.getElementById('eopDue').value = total - paid;
+    }
+
+    async function addOfficePayment(e){
+        e.preventDefault();
+        const newPayment = {
+            date: document.getElementById("opDate").value,
+            name: document.getElementById("opName").value.trim(),
+            method: document.getElementById("opMethod").value,
+            paid: Number(document.getElementById("opTotalPay").value),
+            due: Number(document.getElementById("opDue").value),
+            total: Number(document.getElementById("opTotalAmt").value),
+            createdAt: Date.now()
+        };
+
+        try {
+            await addDoc(collection(dbFirestore, "officePayments"), newPayment);
+            e.target.reset(); 
+            alert("Office Payment যোগ হয়েছে।");
+            document.getElementById("opDate").value = new Date().toISOString().split("T")[0];
+            await loadOfficePayments();
+            refresh();
+        } catch(err) {
+            console.error(err); alert("Failed to add Office Payment");
+        }
+    }
+
+    async function deleteOfficePayment(i) {
+        const pass = prompt("Type DELETE to confirm");
+        if(pass === "DELETE"){
+            if(db.officePayments[i].firebaseId) {
+                await deleteDoc(doc(dbFirestore, "officePayments", db.officePayments[i].firebaseId));
+            }
+            db.officePayments.splice(i, 1);
+            await loadOfficePayments();
+            refresh();
+        }
+    }
+
+    function openEditOfficePayment(i) {
+        const p = db.officePayments[i];
+        document.getElementById('eopIndex').value = i;
+        document.getElementById('eopDate').value = p.date;
+        document.getElementById('eopName').value = p.name;
+        document.getElementById('eopMethod').value = p.method;
+        document.getElementById('eopTotalAmt').value = p.total;
+        document.getElementById('eopTotalPay').value = p.paid;
+        document.getElementById('eopDue').value = p.due;
+        document.getElementById('editOfficePaymentModal').classList.add('show');
+    }
+
+    async function saveOfficePaymentEdit() {
+        const i = document.getElementById('eopIndex').value;
+        db.officePayments[i].date = document.getElementById('eopDate').value;
+        db.officePayments[i].name = document.getElementById('eopName').value.trim();
+        db.officePayments[i].method = document.getElementById('eopMethod').value;
+        db.officePayments[i].total = Number(document.getElementById('eopTotalAmt').value);
+        db.officePayments[i].paid = Number(document.getElementById('eopTotalPay').value);
+        db.officePayments[i].due = Number(document.getElementById('eopDue').value);
+        
+        if(db.officePayments[i].firebaseId) {
+            await updateDoc(doc(dbFirestore, "officePayments", db.officePayments[i].firebaseId), {
+                date: db.officePayments[i].date,
+                name: db.officePayments[i].name,
+                method: db.officePayments[i].method,
+                total: db.officePayments[i].total,
+                paid: db.officePayments[i].paid,
+                due: db.officePayments[i].due
+            });
+        }
+        
+        closeEditModal('editOfficePaymentModal');
+        await loadOfficePayments();
+        refresh();
+        alert("Office Payment updated successfully!");
+    }
+
+    /* ================= LABOUR LOGIC ================= */
+    async function addLabour(e){
+        e.preventDefault();
+        const mobile = document.getElementById("labourMobile").value.trim();
+        
+        if(db.labours.some(l => l.mobile === mobile)){
+            alert("Mobile Number Already Exists!");
+            return;
+        }
+        
+        const newLabour = {
+            id: makeId(),
+            name: document.getElementById("labourName").value.trim(),
+            mobile: mobile,
+            work: document.getElementById("labourWork").value.trim(),
+            dailyWage: Number(document.getElementById("labourDaily").value),
+            payments: [],
+            createdAt: Date.now()
+        };
+
+        try {
+            await addDoc(collection(dbFirestore, "labours"), newLabour);
+            e.target.reset(); 
+            alert("Labour যোগ হয়েছে।");
+            await loadLabours();
+            refresh();
+        } catch(err) {
+            console.error(err); alert("Failed to add Labour");
+        }
+    }
+
+    function openEditLabour(i) {
+        const l = db.labours[i];
+        document.getElementById('elIndex').value = i;
+        document.getElementById('elName').value = l.name;
+        document.getElementById('elMobile').value = l.mobile;
+        document.getElementById('elWork').value = l.work;
+        document.getElementById('elDaily').value = l.dailyWage;
+        document.getElementById('editLabourModal').classList.add('show');
+    }
+    
+    async function saveLabourEdit() {
+        const i = document.getElementById('elIndex').value;
+        const mobile = document.getElementById('elMobile').value.trim();
+        
+        if(db.labours.some((l, idx) => l.mobile === mobile && idx != i)){
+            alert("Mobile Number Already Exists!");
+            return;
+        }
+
+        db.labours[i].name = document.getElementById('elName').value;
+        db.labours[i].mobile = mobile;
+        db.labours[i].work = document.getElementById('elWork').value;
+        db.labours[i].dailyWage = Number(document.getElementById('elDaily').value);
+        
+        if(db.labours[i].firebaseId) {
+            await updateDoc(doc(dbFirestore, "labours", db.labours[i].firebaseId), {
+                name: db.labours[i].name,
+                mobile: db.labours[i].mobile,
+                work: db.labours[i].work,
+                dailyWage: db.labours[i].dailyWage
+            });
+        }
+        
+        closeEditModal('editLabourModal');
+        await loadLabours();
+        refresh();
+        alert("Labour updated successfully!");
+    }
+
+    async function deleteLabour(i){
+        const pass = prompt("Type DELETE to confirm");
+        if(pass === "DELETE"){
+            if(db.labours[i].firebaseId) {
+                await deleteDoc(doc(dbFirestore, "labours", db.labours[i].firebaseId));
+            }
+            db.labours.splice(i,1);
+            await loadLabours();
+            refresh();
+        }
+    }
+
+    async function addLabourPayment(e){
+        e.preventDefault();
+        const labourSelect = document.getElementById("paymentLabour");
+        if(labourSelect.value === ""){
+            alert("অনুগ্রহ করে একজন শ্রমিক নির্বাচন করুন!");
+            return;
+        }
+
+        const i = Number(labourSelect.value);
+        if(!db.labours[i].payments) db.labours[i].payments=[];
+        db.labours[i].payments.push({
+            id: makeId(), 
+            date: document.getElementById("paymentDate").value, 
+            time: document.getElementById("paymentTime").value,
+            amount: Number(document.getElementById("paymentAmount").value), 
+            workDays: Number(document.getElementById("paymentWorkDays").value),
+            method: document.getElementById("paymentMethod").value,
+            remarks: document.getElementById("paymentRemarks").value.trim()
+        });
+        
+        if(db.labours[i].firebaseId) {
+            await updateDoc(doc(dbFirestore, "labours", db.labours[i].firebaseId), {
+                payments: db.labours[i].payments
+            });
+        }
+
+        e.target.reset(); alert("Payment যোগ হয়েছে।");
+        document.getElementById("paymentDate").value = new Date().toISOString().split("T")[0];
+        renderLabourHistory();
+        refresh();
+    }
+
+    function openEditLabourPayment(lIndex, pIndex) {
+        const p = db.labours[lIndex].payments[pIndex];
+        document.getElementById("elpLabourIndex").value = lIndex;
+        document.getElementById("elpPaymentIndex").value = pIndex;
+        document.getElementById("elpDate").value = p.date;
+        document.getElementById("elpTime").value = p.time;
+        document.getElementById("elpAmount").value = p.amount;
+        document.getElementById("elpWorkDays").value = p.workDays;
+        document.getElementById("elpMethod").value = p.method;
+        document.getElementById("elpRemarks").value = p.remarks || "";
+        document.getElementById("editLabourPaymentModal").classList.add("show");
+    }
+
+    async function saveLabourPaymentEdit() {
+        const lIndex = document.getElementById("elpLabourIndex").value;
+        const pIndex = document.getElementById("elpPaymentIndex").value;
+        const p = db.labours[lIndex].payments[pIndex];
+        
+        p.date = document.getElementById("elpDate").value;
+        p.time = document.getElementById("elpTime").value;
+        p.amount = Number(document.getElementById("elpAmount").value);
+        p.workDays = Number(document.getElementById("elpWorkDays").value);
+        p.method = document.getElementById("elpMethod").value;
+        p.remarks = document.getElementById("elpRemarks").value;
+        
+        if(db.labours[lIndex].firebaseId) {
+            await updateDoc(doc(dbFirestore, "labours", db.labours[lIndex].firebaseId), {
+                payments: db.labours[lIndex].payments
+            });
+        }
+
+        closeEditModal("editLabourPaymentModal");
+        viewLabourPayments(lIndex);
+        refresh();
+        alert("Payment updated successfully!");
+    }
+
+    async function deleteLabourPayment(lIndex, pIndex) {
+        const pass = prompt("Type DELETE to confirm");
+        if(pass === "DELETE"){
+            db.labours[lIndex].payments.splice(pIndex, 1);
+            if(db.labours[lIndex].firebaseId) {
+                await updateDoc(doc(dbFirestore, "labours", db.labours[lIndex].firebaseId), {
+                    payments: db.labours[lIndex].payments
+                });
+            }
+            viewLabourPayments(lIndex);
+            refresh();
+        }
+    }
+
+    /* ================= RENDERING ================= */
+    function renderMosqueList(){
+        const box = document.getElementById("mosqueList");
+        box.innerHTML = db.mosques.map((m,index)=>`
+            <div class="mosque-card" onclick="openMosque(${index})">
+                ${m.image ? `<img src="${m.image}" style="width:100%;height:180px;object-fit:cover;border-radius:8px;margin-bottom:10px;">` : `<i class="fa-solid fa-mosque" style="font-size: 40px; color: var(--secondary); margin-bottom:15px;"></i>`}
+                <h3>${safe(m.name)}</h3>
+            </div>`).join("");
+    }
+
+    function openMosque(index){
+        selectedMosque = index;
+        if(currentUser && currentUser.role==="admin"){ showMosqueSummary(index); return; }
+        document.getElementById("idMosqueName").innerText = db.mosques[index].name;
+        document.getElementById("visitorUniqueId").value = "";
+        document.getElementById("idMessage").className = "message";
+        document.getElementById("idModal").classList.add("show");
+    }
+
+    async function verifyUniqueId(){
+        const id = document.getElementById("visitorUniqueId").value.trim();
+        const clickedMosque = db.mosques[selectedMosque];
+        const btn = document.getElementById("verifyIdBtn");
+        
+        if (!id) {
+            showMessage("idMessage", "Unique ID দিন!", "error");
+            return;
+        }
+
+        btn.innerText = "চেক করা হচ্ছে...";
+        btn.disabled = true;
+
+        try {
+            const q = query(collection(dbFirestore, "mosques"), where("uniqueId", "==", id));
+            const querySnapshot = await getDocs(q);
+            
+            let isValid = false;
+            
+            querySnapshot.forEach((docSnap) => {
+                if (docSnap.id === clickedMosque.firebaseId) {
+                    isValid = true;
+                }
+            });
+
+            if (isValid) {
+                closeModal(); 
+                showMosqueSummary(selectedMosque); 
+            } else {
+                showMessage("idMessage", "ভুল Unique ID।", "error"); 
+            }
+        } catch (error) {
+            console.error("Error verifying Unique ID:", error);
+            showMessage("idMessage", "সার্ভার এরর! আবার চেষ্টা করুন।", "error");
+        }
+        
+        btn.innerText = "প্রবেশ করুন";
+        btn.disabled = false;
+    }
+    
+    function closeModal(){ document.getElementById("idModal").classList.remove("show"); }
+
+    function showMosqueSummary(index){
+        const mosque = db.mosques[index];
+        const paid = mosque.transactions ? mosque.transactions.reduce((sum,t)=>sum+Number(t.amount||0),0) : 0;
+        const due = Number(mosque.allocated) - paid;
+        
+        let headerImgHTML = mosque.image ? 
+            `<img src="${mosque.image}" onclick="viewImage('${mosque.image}')" style="width:100%; max-width:300px; height:auto; border-radius:8px; cursor:pointer; margin: 15px auto; display:block; box-shadow: 0 4px 10px rgba(0,0,0,0.1);" title="Click to View">` 
+            : '';
+
+        document.getElementById("mosqueSummary").innerHTML=`
+            <div class="no-print" style="background: white; padding: 10px 15px; border-radius: 6px; margin-bottom: 20px; font-weight: bold; color: var(--primary); box-shadow: 0 2px 8px rgba(0,0,0,0.05); display: inline-block; border: 1px solid #ddd;">
+                <i class="fa-solid fa-key" style="color: var(--secondary); margin-right: 5px;"></i> Unique ID : <span style="color: #c0392b; margin-left: 5px;">${safe(mosque.uniqueId)}</span>
+            </div>
+            
+            <div class="details-box" style="text-align:center;">
+                <h2 style="color:var(--primary);"><i class="fa-solid fa-mosque"></i> ${safe(mosque.name)}</h2>
+                <p style="margin-top:10px;">${safe(mosque.address)}</p>
+                ${headerImgHTML}
+            </div>
+            <div class="summary-grid">
+                <div class="summary-card"><h3>মোট বরাদ্দ</h3><strong>${money(mosque.allocated)}</strong></div>
+                <div class="summary-card"><h3>মোট পরিশোধ</h3><strong>${money(paid)}</strong></div>
+                <div class="summary-card"><h3>বাকি / Due</h3><strong>${money(due)}</strong></div>
+            </div>
+            <button class="btn detail-btn no-print" onclick="showFullDetails(${index})">📋 বিস্তারিত দেখুন</button>
+            <div id="fullDetails" style="display:none; margin-top:20px;"></div>
+        `;
+        showPage("mosqueView");
+    }
+
+    function showFullDetails(index){
+        const mosque = db.mosques[index];
+        const box = document.getElementById("fullDetails");
+        box.style.display="block";
+        const isAdmin = currentUser && currentUser.role === "admin";
+        
+        let runningDue = Number(mosque.allocated);
+        let transRows = "";
+        
+        if (mosque.transactions && mosque.transactions.length) {
+            transRows = mosque.transactions.map((t, tIndex) => {
+                runningDue -= Number(t.amount);
+                
+                let actionBtn = isAdmin ? `<td class="no-print">
+                    <button class="btn btn-info" style="padding:5px 10px; font-size:12px; margin:2px;" onclick="openEditTrans(${index}, ${tIndex})">Edit</button> 
+                    <button class="btn btn-danger" style="padding:5px 10px; font-size:12px; margin:2px;" onclick="deleteTrans(${index}, ${tIndex})">Delete</button>
+                </td>` : '';
+
+                return `<tr><td>${t.date}</td><td>${t.time}</td><td style="color:green;font-weight:bold;">${money(t.amount)}</td>
+                <td>${safe(t.method)}</td><td>${safe(t.purpose)}</td><td style="color:red;font-weight:bold;">${money(runningDue)}</td>
+                <td class="no-print">${t.image?`<img src="${t.image}" class="receipt" onclick="viewImage('${t.image}')" title="Click to enlarge">`:"—"}</td>${actionBtn}</tr>`;
+            }).join("");
+        } else {
+            transRows = `<tr><td colspan="${isAdmin ? 8 : 7}">কোনো লেনদেন নেই।</td></tr>`;
+        }
+
+        let actionHeader = isAdmin ? `<th class="no-print">Action</th>` : '';
+
+        box.innerHTML=`
+            <div class="details-box" id="financialPrintArea">
+                <div style="display:flex; justify-content:center; align-items:center; position:relative; margin-bottom:15px;">
+                    <h3 style="text-align:center; margin:0; color:var(--primary); font-size:22px;">
+                    Financial Details <br> 
+                    <span style="font-size:18px; color:#555;">${safe(mosque.name)}</span>
+                    </h3>
+                    <button class="btn btn-info no-print" style="position:absolute; right:0; top:0; margin:0; padding:6px 12px; font-size:13px;" onclick="printData('financialPrintArea', 'Mosjid Financial Details')"><i class="fa-solid fa-file-pdf"></i> PDF</button>
+                </div>
+                <div class="table-wrap">
+                    <table>
+                        <thead><tr><th>তারিখ</th><th>সময়</th><th>মোট পরিশোধ</th><th>মাধ্যম</th><th>কী বাবদ</th><th>মোট বাকির পরিমাণ</th><th class="no-print">রসিদ / ছবি</th>${actionHeader}</tr></thead>
+                        <tbody>${transRows}</tbody>
+                    </table>
+                </div>
+            </div>
+        `;
+    }
+
+    function renderOfficeHistory(){
+        const isAdmin = currentUser && currentUser.role === "admin";
+        let actionHeader = isAdmin ? `<th class="no-print">Action</th>` : ``;
+        
+        let html = `<div class="table-wrap"><table><thead><tr><th>Date</th><th>Name of Payment</th><th>Method</th><th>Total Payment</th><th>Due Amount</th><th>Total Amount</th>${actionHeader}</tr></thead><tbody>`;
+        
+        if(db.officePayments.length === 0) {
+            html += `<tr><td colspan="${isAdmin ? 7 : 6}">No records</td></tr>`;
+        } else {
+            html += db.officePayments.map((p, i) => {
+                let actionBtn = isAdmin ? `<td class="no-print">
+                    <button class="btn btn-info" style="padding:5px 10px; font-size:12px; margin:2px;" onclick="openEditOfficePayment(${i})">Edit</button> 
+                    <button class="btn btn-danger" style="padding:5px 10px; font-size:12px; margin:2px;" onclick="deleteOfficePayment(${i})">Delete</button>
+                </td>` : ``;
+
+                return `<tr><td>${p.date}</td><td>${safe(p.name)}</td><td>${safe(p.method)}</td><td style="color:green;font-weight:bold;">${money(p.paid)}</td><td style="color:red;font-weight:bold;">${money(p.due)}</td><td>${money(p.total)}</td>${actionBtn}</tr>`;
+            }).join("");
+        }
+        html += `</tbody></table></div>`;
+        document.getElementById("officeHistoryList").innerHTML = html;
+    }
+
+    function renderManageMosque(){
+        document.getElementById("manageMosqueList").innerHTML=`
+            <div class="table-wrap"><table>
+                <thead><tr><th>নাম</th><th>ঠিকানা</th><th>Unique ID</th><th>মোট বরাদ্দ</th><th>মোট পরিশোধ</th><th>মোট বাকি</th><th class="no-print">Action</th></tr></thead>
+                <tbody>${db.mosques.map((m,i)=>{
+                    const paid = m.transactions ? m.transactions.reduce((s,t)=>s+Number(t.amount||0),0) : 0;
+                    const due = Number(m.allocated) - paid;
+                    return `<tr><td>${safe(m.name)}</td><td>${safe(m.address)}</td><td>${safe(m.uniqueId)}</td><td>${money(m.allocated)}</td>
+                    <td style="color:green;font-weight:bold;">${money(paid)}</td><td style="color:red;font-weight:bold;">${money(due)}</td>
+                    <td class="no-print">
+                        <button class="btn btn-info" style="padding: 5px 10px; font-size: 13px; margin: 2px;" onclick="openEditMosque(${i})">Edit</button>
+                        <button class="btn btn-danger" style="padding: 5px 10px; font-size: 13px; margin: 2px;" onclick="deleteMosque(${i})">Delete</button>
+                    </td></tr>`;
+                }).join("")}
+                </tbody>
+            </table></div>`;
+    }
+
+    function populateTransactionMosque(){
+        document.getElementById("transactionMosque").innerHTML = `<option value="">Select</option>` + db.mosques.map((m,i)=>`<option value="${i}">${safe(m.name)}</option>`).join("");
+    }
+
+    function openEditMosque(i) {
+        const m = db.mosques[i];
+        document.getElementById('emIndex').value = i;
+        document.getElementById('emName').value = m.name;
+        document.getElementById('emAddress').value = m.address;
+        document.getElementById('emUniqueId').value = m.uniqueId;
+        document.getElementById('emAllocated').value = m.allocated;
+        document.getElementById('emImage').value = m.image || '';
+        syncPreview(m.image || '', 'emPreview', 'emPlaceholder', 'emHint');
+        document.getElementById('editMosqueModal').classList.add('show');
+    }
+
+    function openEditTrans(mIndex, tIndex) {
+        const t = db.mosques[mIndex].transactions[tIndex];
+        document.getElementById('etMosqueIndex').value = mIndex;
+        document.getElementById('etTransIndex').value = tIndex;
+        document.getElementById('etDate').value = t.date;
+        document.getElementById('etTime').value = t.time;
+        document.getElementById('etAmount').value = t.amount;
+        document.getElementById('etMethod').value = t.method;
+        document.getElementById('etPurpose').value = t.purpose;
+        document.getElementById('etImage').value = t.image || '';
+        syncPreview(t.image || '', 'etPreview', 'etPlaceholder', 'etHint');
+        document.getElementById('editTransactionModal').classList.add('show');
+    }
+
+    function renderAdminLabour(){
+        document.getElementById("adminLabourList").innerHTML=`<div class="table-wrap"><table>
+            <thead><tr><th>নাম</th><th>মোবাইল নম্বর</th><th class="no-print">Action</th></tr></thead>
+            <tbody>${db.labours.map((l,i)=>`<tr>
+                <td>${safe(l.name)}</td><td>${safe(l.mobile)}</td>
+                <td class="no-print">
+                    <button class="btn btn-info" style="padding: 5px 10px; font-size: 13px; margin: 2px;" onclick="openEditLabour(${i})">Edit</button>
+                    <button class="btn btn-danger" style="padding: 5px 10px; font-size: 13px; margin: 2px;" onclick="deleteLabour(${i})">Delete</button>
+                </td>
+            </tr>`).join("")}</tbody></table></div>`;
+    }
+    
+    function renderLabourHistory(){
+        const isAdmin = currentUser && currentUser.role === "admin";
+        let actionHeader = isAdmin ? `<th class="no-print">Action</th>` : ``;
+
+        document.getElementById("labourPaymentHistoryList").innerHTML=`
+        <h3 style="margin:20px 0;color:#062a4d;"> Payment Details </h3>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>নাম</th>
+                        <th>কাজ</th>
+                        <th>দৈনিক মজুরি</th>
+                        <th>মোট দিন (কাজ)</th>
+                        <th>মোট মজুরি</th>
+                        <th>প্রাপ্ত মোট টাকা</th>
+                        <th>বাকি মোট টাকা</th>
+                        ${actionHeader}
+                    </tr>
+                </thead>
+                <tbody>
+                    ${db.labours.map((l,i)=>{
+                        const totalDaysWorked = l.payments ? l.payments.reduce((s,p)=>s+Number(p.workDays||0),0) : 0;
+                        const totalWage = l.dailyWage * totalDaysWorked;
+                        const paid = l.payments ? l.payments.reduce((s,p)=>s+Number(p.amount||0),0) : 0;
+                        const due = totalWage - paid;
+
+                        let actionBtn = isAdmin ? `
+                        <td class="no-print">
+                            <button class="btn btn-info"
+                                style="padding:5px 10px;font-size:12px;"
+                                onclick="viewLabourPayments(${i})">
+                                Details
+                            </button>
+                        </td>` : ``;
+
+                        return `
+                        <tr>
+                            <td>${safe(l.name)}</td>
+                            <td>${safe(l.work)}</td>
+                            <td>${money(l.dailyWage)}</td>
+                            <td>${totalDaysWorked}</td>
+                            <td style="font-weight:bold;">${money(totalWage)}</td>
+                            <td style="color:green;font-weight:bold;">${money(paid)}</td>
+                            <td style="color:red;font-weight:bold;">${money(due)}</td>
+                            ${actionBtn}
+                        </tr>`;
+                    }).join("")}
+                </tbody>
+            </table>
+        </div>
+        <div id="labourPaymentDetailsArea" style="margin-top:20px;display:none;"></div>
+        `;
+    }
+
+    function viewLabourPayments(lIndex) {
+        const l = db.labours[lIndex];
+        const area = document.getElementById("labourPaymentDetailsArea");
+        area.style.display = "block";
+        const isAdmin = currentUser && currentUser.role === "admin";
+        
+        const totalDays = l.payments ? l.payments.reduce((sum, p) => sum + Number(p.workDays || 0), 0) : 0;
+        const totalWage = l.dailyWage * totalDays;
+        const totalPaid = l.payments ? l.payments.reduce((sum, p) => sum + Number(p.amount || 0), 0) : 0;
+        const totalDue = totalWage - totalPaid;
+    
+        let runningDue = 0;
+        let paymentsRows = "";
+
+        if (!l.payments || l.payments.length === 0) {
+            paymentsRows = `<tr><td colspan="${isAdmin ? 9 : 8}" style="text-align:center;">কোনো পেমেন্ট নেই।</td></tr>`;
+        } else {
+            paymentsRows = l.payments.map((p, pIndex) => {
+                const earned = l.dailyWage * Number(p.workDays || 0);
+                runningDue += (earned - Number(p.amount || 0));
+                
+                let actionBtn = isAdmin ? `
+                <td class="no-print">
+                    <button class="btn btn-info" style="padding:4px 8px;font-size:12px;margin:2px;" onclick="openEditLabourPayment(${lIndex},${pIndex})">Edit</button>
+                    <button class="btn btn-danger" style="padding:4px 8px;font-size:12px;margin:2px;" onclick="deleteLabourPayment(${lIndex},${pIndex})">Delete</button>
+                </td>` : ``;
+    
+                return `
+                <tr>
+                    <td>${p.date}</td>
+                    <td>${p.time}</td>
+                    <td>${p.workDays}</td>
+                    <td style="font-weight:bold;">${money(earned)}</td>
+                    <td style="color:green;font-weight:bold;">${money(p.amount)}</td>
+                    <td style="color:red;font-weight:bold;">${money(runningDue)}</td>
+                    <td>${safe(p.method)}</td>
+                    <td>${safe(p.remarks || "-")}</td>
+                    ${actionBtn}
+                </tr>`;
+            }).join("");
+        }
+
+        let html = `
+        <div id="labourDetailsPrintArea">
+            <button class="btn btn-info no-print" onclick="printData('labourDetailsPrintArea','Labour Payment Details')" style="margin-bottom: 15px;">
+                <i class="fa-solid fa-file-pdf"></i> Download PDF
+            </button>
+    
+            <div class="details-box">
+                <h3 style="text-align:center;color:var(--primary);margin-bottom:20px;">
+                    👷 Labour Payment Details: ${safe(l.name)}
+                </h3>
+    
+                <div class="summary-grid">
+                    <div class="summary-card">
+                        <h3>মোট কাজ</h3>
+                        <strong>${totalDays} দিন</strong>
+                    </div>
+                    <div class="summary-card">
+                        <h3>মোট পাওনা</h3>
+                        <strong>${money(totalWage)}</strong>
+                    </div>
+                    <div class="summary-card">
+                        <h3>মোট পরিশোধ</h3>
+                        <strong style="color:green;">${money(totalPaid)}</strong>
+                    </div>
+                    <div class="summary-card">
+                        <h3>বাকি টাকা</h3>
+                        <strong style="color:red;">${money(totalDue)}</strong>
+                    </div>
+                </div>
+    
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>তারিখ</th>
+                                <th>সময়</th>
+                                <th>কাজ (দিন)</th>
+                                <th>মজুরি</th>
+                                <th>প্রাপ্ত টাকা</th>
+                                <th>সর্বমোট বাকি</th>
+                                <th>মাধ্যম</th>
+                                <th>Remarks</th>
+                                ${isAdmin ? `<th class="no-print">Action</th>` : ``}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${paymentsRows}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        `;
+        
+        area.innerHTML = html;
+        area.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function populateLabourSelect(){
+        document.getElementById("paymentLabour").innerHTML = `<option value="">Select</option>` + db.labours.map((l,i)=>`<option value="${i}">${safe(l.name)}</option>`).join("");
+    }
+
+    function updateDashboard(){
+        document.getElementById("dashMosque").innerText = db.mosques.length;
+    }
+
+    function refresh(){
+        updateDashboard(); 
+        renderMosqueList(); 
+        renderManageMosque(); 
+        renderAdminLabour(); 
+        renderLabourHistory();
+        renderOfficeHistory();
+        populateTransactionMosque(); 
+        populateLabourSelect();
+    }
+
+    /* ================= APP NAVIGATION & UI ================= */
+    function toggleMenu() {
+        document.getElementById("sidebar").classList.toggle("open");
+        document.getElementById("sidebarOverlay").classList.toggle("show");
+    }
+
+    function showAdminLogin() {
+        document.getElementById("website").style.display = "none";
+        document.getElementById("loginPage").style.display = "flex";
+        document.getElementById("sidebar").classList.remove("open");
+        document.getElementById("sidebarOverlay").classList.remove("show");
+    }
+
+    // 2. Fixed Log-in method and added validation
+    async function login(){
+        const email = document.getElementById("loginEmail").value.trim();
+        const password = document.getElementById("loginPassword").value;
+        const btn = document.querySelector(".login-btn");
+        
+        // Blank input check
+        if(!email || !password) {
+            showMessage("loginMessage", "দয়া করে ইমেইল এবং পাসওয়ার্ড দিন!", "error");
+            return;
+        }
+        
+        btn.innerText = "লগইন হচ্ছে...";
+        btn.disabled = true;
+        
+        try {
+            await signInWithEmailAndPassword(auth, email, password);
+            currentUser = { email: email, role: "admin" };
+            localStorage.setItem("MUAZ_TOKEN", btoa(JSON.stringify(currentUser)));
+            openWebsite();
+        } catch (error) {
+            console.error("Firebase Login Error:", error.code, error.message);
+            if(error.code === 'auth/invalid-credential' || error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password'){
+                showMessage("loginMessage", "ভুল ইমেইল বা পাসওয়ার্ড!", "error"); 
+            } else if (error.code === 'auth/too-many-requests') {
+                showMessage("loginMessage", "অনেকবার ভুল চেষ্টা করা হয়েছে। কিছুক্ষণ পর আবার চেষ্টা করুন।", "error"); 
+            } else {
+                showMessage("loginMessage", "লগইন ব্যর্থ হয়েছে: " + error.message, "error"); 
+            }
+        }
+        
+        btn.innerText = "Login";
+        btn.disabled = false;
+    }
+    
+    function openWebsite(){
+        document.getElementById("loginPage").style.display = "none";
+        document.getElementById("website").style.display = "flex";
+        applyRole(); 
+        
+        if (!document.querySelector(".page.active")) {
+            showPage("home");
+        }
+        refresh();
+    }
+
+    function logout(){ 
+        localStorage.removeItem("MUAZ_TOKEN"); 
+        currentUser = null; 
+        location.reload(); 
+    }
+
+    function applyRole(){
+        const admin = currentUser && currentUser.role === "admin";
+        document.getElementById("menuPaymentOfOffice").style.display = "block"; 
+        document.getElementById("menuLabour").style.display = admin ? "block" : "none";
+        document.getElementById("menuAdmin").style.display = admin ? "block" : "none";
+        document.getElementById("officePaymentAdminView").style.display = admin ? "block" : "none";
+        document.getElementById("officePaymentVisitorView").style.display = admin ? "none" : "block";
+        
+        document.getElementById("menuLogin").style.display = admin ? "none" : "block";
+        document.getElementById("menuLogout").style.display = admin ? "block" : "none";
+    }
+
+    function showPage(page){
+        document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+        document.getElementById(page).classList.add("active");
+        document.getElementById("sidebar").classList.remove("open");
+        document.getElementById("sidebarOverlay").classList.remove("show");
+        window.scrollTo(0,0);
+        refresh();
+    }
+
+    function printData(elementId, reportName="Payment Report") {
+        document.querySelectorAll('.print-section').forEach(e => e.classList.remove('print-section'));
+        const el = document.getElementById(elementId);
+        
+        if(el) {
+            const dateStr = new Date().toLocaleDateString('en-GB');
+            const header = document.createElement('div');
+            header.className = 'pdf-export-header';
+            header.innerHTML = `
+                <h2>Muaz Construction & Consultant</h2>
+                <h3>${reportName}</h3>
+                <p>Date: ${dateStr}</p>
+                <hr>
+            `;
+            el.insertBefore(header, el.firstChild);
+            el.classList.add('print-section');
+            window.print();
+            el.classList.remove('print-section');
+            header.remove();
+        }
+    }
+
+    function viewImage(src) {
+        if(!src) return;
+        document.getElementById("expandedImg").src = src;
+        document.getElementById("imageViewerModal").classList.add("show");
+    }
+    function closeImageModal() {
+        document.getElementById("imageViewerModal").classList.remove("show");
+    }
+
+    function closeEditModal(modalId) {
+        document.getElementById(modalId).classList.remove('show');
+    }
+
+    function officeTab(id, button){
+        document.querySelectorAll("#officePaymentAdminView .admin-panel").forEach(x => x.classList.remove("active"));
+        document.querySelectorAll("#officePaymentAdminView .admin-tab").forEach(x => x.classList.remove("active"));
+        document.getElementById(id).classList.add("active");
+        button.classList.add("active");
+    }
+
+    function adminTab(id, button){
+        const parent = button.closest('.admin-section') || button.closest('.container');
+        parent.querySelectorAll(".admin-panel").forEach(x => x.classList.remove("active"));
+        parent.querySelectorAll(".admin-tab").forEach(x => x.classList.remove("active"));
+        document.getElementById(id).classList.add("active");
+        button.classList.add("active");
+    }
+
+    /* ================= UPLOADER & LIGHTBOX ================= */
+    function syncPreview(src, previewId, placeholderId, hintId) {
+        const preview = document.getElementById(previewId);
+        const placeholder = document.getElementById(placeholderId);
+        const hint = document.getElementById(hintId);
+        
+        if (src) {
+            preview.src = src;
+            preview.style.display = 'block';
+            placeholder.style.display = 'none';
+            hint.style.display = 'block';
+        } else {
+            preview.style.display = 'none';
+            placeholder.style.display = 'block';
+            hint.style.display = 'none';
+        }
+    }
+
+    function setupFileInput(fileInputId, previewId, placeholderId, hintId) {
+        const fileInput = document.getElementById(fileInputId);
+        if(!fileInput) return;
+        fileInput.addEventListener('change', function() {
+            const file = this.files[0];
+            if (file) {
+                const objectUrl = URL.createObjectURL(file);
+                syncPreview(objectUrl, previewId, placeholderId, hintId);
+            }
+        });
+    }
+
+    setupFileInput('mosqueFile', 'mosquePreview', 'mosquePlaceholder', 'mosqueHint');
+    setupFileInput('transactionFile', 'transactionPreview', 'transactionPlaceholder', 'transactionHint');
+    setupFileInput('emFile', 'emPreview', 'emPlaceholder', 'emHint');
+    setupFileInput('etFile', 'etPreview', 'etPlaceholder', 'etHint');
+
+    function openCustomModal(src) {
+        const modal = document.getElementById('customImageModal');
+        const img = document.getElementById('customEnlargedImg');
+        modal.style.display = 'flex';
+        img.src = src;
+    }
+    
+    function closeCustomModal() {
+        document.getElementById('customImageModal').style.display = 'none';
+    }
+    
+    document.getElementById('customImageModal').addEventListener('click', function(e) {
+        if (e.target !== document.getElementById('customEnlargedImg')) closeCustomModal();
+    });
+
+    // Check user session
+    if(localStorage.getItem("MUAZ_TOKEN")){
+        try {
+            currentUser = JSON.parse(atob(localStorage.getItem("MUAZ_TOKEN")));
+            openWebsite();
+        } catch (error) {
+            currentUser = { role: "visitor" };
+            openWebsite();
+            showPage("home");
+        }
+    } else {
+        currentUser = { role: "visitor" };
+        openWebsite();
+        showPage("home");
+    }
+
+    window.login = login;
+    window.openWebsite = openWebsite;
+    window.logout = logout;
+    window.toggleMenu = toggleMenu;
+    window.showAdminLogin = showAdminLogin;
+    window.showPage = showPage;
+    window.printData = printData;
+    window.viewImage = viewImage;
+    window.closeImageModal = closeImageModal;
+    window.openCustomModal = openCustomModal;
+    window.closeCustomModal = closeCustomModal;
+    window.closeModal = closeModal;
+    window.verifyUniqueId = verifyUniqueId;
+    window.openMosque = openMosque;
+    window.showFullDetails = showFullDetails;
+    window.addMosque = addMosque;
+    window.saveMosqueEdit = saveMosqueEdit;
+    window.deleteMosque = deleteMosque;
+    window.openEditMosque = openEditMosque;
+    window.addTransaction = addTransaction;
+    window.openEditTrans = openEditTrans;
+    window.saveTransactionEdit = saveTransactionEdit;
+    window.deleteTrans = deleteTrans;
+    window.addOfficePayment = addOfficePayment;
+    window.calcOfficeDue = calcOfficeDue;
+    window.calcEditOfficeDue = calcEditOfficeDue;
+    window.openEditOfficePayment = openEditOfficePayment;
+    window.saveOfficePaymentEdit = saveOfficePaymentEdit;
+    window.deleteOfficePayment = deleteOfficePayment;
+    window.officeTab = officeTab;
+    window.adminTab = adminTab;
+    window.addLabour = addLabour;
+    window.openEditLabour = openEditLabour;
+    window.saveLabourEdit = saveLabourEdit;
+    window.deleteLabour = deleteLabour;
+    window.addLabourPayment = addLabourPayment;
+    window.viewLabourPayments = viewLabourPayments;
+    window.openEditLabourPayment = openEditLabourPayment;
+    window.saveLabourPaymentEdit = saveLabourPaymentEdit;
+    window.deleteLabourPayment = deleteLabourPayment;
+    window.closeEditModal = closeEditModal;
+    window.syncPreview = syncPreview;
+</script>
+</body>
+</html>
