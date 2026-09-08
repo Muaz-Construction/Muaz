@@ -14,7 +14,7 @@
 
         /* ================= LOGIN ================= */
         #loginPage{ min-height:100vh; display:flex; align-items:center; justify-content:center; background:#eef3f1; padding:20px; }
-        .login-box{ width:100%; max-width:420px; background:white; padding:35px 30px; border-radius:15px; box-shadow:0 5px 25px #0002; text-align:center; }
+        .login-box{ width:100%; max-width:420px; background:white; padding:35px 30px; border-radius:15px; box-shadow:0 5px 25px rgba(0,0,0,0.1); text-align:center; }
         .logo-img-login { max-width: 150px; margin-bottom: 20px; }
         .login-box h1{ color:var(--primary); margin-top:15px; font-size:24px; }
         .login-box p{ color:#777; margin:8px 0 25px; }
@@ -22,7 +22,6 @@
         .login-btn{ width:100%; padding:14px; border:none; border-radius:7px; background:var(--primary); color:white; font-size:17px; font-weight:bold; cursor:pointer; }
         .login-btn:hover{ background:#041c33; }
         .back-btn{ width:100%; padding:14px; border:none; border-radius:7px; background:#7f8c8d; color:white; font-size:17px; font-weight:bold; cursor:pointer; margin-top: 10px; }
-        .demo-info{ margin-top:20px; font-size:13px; color:#777; }
         
         /* ================= HEADER & SIDEBAR ================= */
         #website{ display:none; flex: 1; flex-direction: column; }
@@ -119,7 +118,7 @@
             .no-print { display: none !important; }
         }
 
-        /* 🖼️ Advanced Image Uploader Styles */
+        /* Image Uploader */
         .upload-container {
             background: #ffffff; padding: 20px; border-radius: 12px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); width: 100%;
@@ -141,7 +140,7 @@
         .uploader-preview-img:hover { transform: scale(1.02); }
         .uploader-placeholder { color: #777; margin: 0; }
         
-        /* 🔍 Lightbox Modal */
+        /* Lightbox Modal */
         #customImageModal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.85); justify-content: center; align-items: center; }
         .custom-modal-content { max-width: 90%; max-height: 90%; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
         .custom-close-btn { position: absolute; top: 20px; right: 35px; color: #fff; font-size: 40px; font-weight: bold; cursor: pointer; }
@@ -172,10 +171,12 @@
         <img src="https://i.ibb.co.com/RkByHr2S/file-000000001ba87208917a643199a1201d.png" alt="Logo" class="logo-img-login">
         <h1>Muaz Construction</h1>
         <p>Admin Login</p>
-        <input id="loginEmail" class="input" type="email" placeholder="Email">
-        <input id="loginPassword" class="input" type="password" placeholder="Password">
-        <button class="login-btn" onclick="login()"> Login </button>
-        <button class="back-btn" onclick="openWebsite()"> Back to Website </button>
+        <form onsubmit="login(event)">
+            <input id="loginEmail" class="input" type="email" placeholder="Email" required>
+            <input id="loginPassword" class="input" type="password" placeholder="Password" required>
+            <button type="submit" class="login-btn"> Login </button>
+            <button type="button" class="back-btn" onclick="openWebsite()"> Back to Website </button>
+        </form>
         <div id="loginMessage" class="message"></div>
     </div>
 </div>
@@ -280,7 +281,7 @@
                             <div class="form-group"><label>Total Payment</label><input id="opTotalPay" type="number" required oninput="calcOfficeDue()"></div>
                             <div class="form-group"><label>Due Amount (Auto Calculated)</label><input id="opDue" type="number" required readonly style="background:#eef3f1; cursor:not-allowed;"></div>
                             
-                            <button class="btn">Submit Payment</button>
+                            <button type="submit" class="btn">Submit Payment</button>
                         </form>
                     </div>
 
@@ -298,7 +299,7 @@
             
             <div id="officePaymentVisitorView" class="empty-state">
                 <i class="fa-solid fa-folder-open fa-3x" style="color:#ddd; margin-bottom:15px;"></i>
-                <p>No Records Found</p>
+                <p>Visitor View: Only Admins can manage office payments.</p>
             </div>
         </div>
     </section>
@@ -320,7 +321,7 @@
                     <div class="form-group"><label>মোবাইল নম্বর</label><input id="labourMobile" required></div>
                     <div class="form-group"><label>কাজের ধরন</label><input id="labourWork" required></div>
                     <div class="form-group"><label>দৈনিক মজুরি</label><input id="labourDaily" type="number" required></div>
-                    <button class="btn">Add Labour</button>
+                    <button type="submit" class="btn">Add Labour</button>
                 </form>
             </div>
 
@@ -345,7 +346,7 @@
                         <select id="paymentMethod" required><option value="">Select</option><option>BKash</option><option>Cash</option><option>Rocket</option><option>Bank</option></select>
                     </div>
                     <div class="form-group"><label>Remarks</label><textarea id="paymentRemarks"></textarea></div>
-                    <button class="btn">Add Payment</button>
+                    <button type="submit" class="btn">Add Payment</button>
                 </form>
             </div>
 
@@ -379,7 +380,6 @@
                         <div class="form-group"><label>Unique ID</label><input id="mosqueUniqueId" required></div>
                         <div class="form-group"><label>মোট বরাদ্দ</label><input id="mosqueAllocated" type="number" required></div>
                         
-                        <!-- 🖼️ Uploader 1: Add Mosque Image -->
                         <div class="upload-container">
                             <h4>🖼️ মসজিদের ছবি (Image Upload & Preview)</h4>
                             <div class="input-group">
@@ -398,7 +398,7 @@
                             </div>
                         </div>
                         
-                        <button class="btn" id="addMosqueBtn">Save Mosjid</button>
+                        <button type="submit" class="btn" id="addMosqueBtn">Save Mosjid</button>
                     </form>
                     <div id="addMosqueMessage" class="message"></div>
                 </div>
@@ -419,7 +419,6 @@
                         </div>
                         <div class="form-group"><label>কী বাবদ খরচ</label><input id="transactionPurpose" required></div>
                         
-                        <!-- 🖼️ Uploader 2: Add Transaction Image -->
                         <div class="upload-container">
                             <h4>🖼️ Bill/Receipt (Image Upload & Preview)</h4>
                             <div class="input-group">
@@ -438,7 +437,7 @@
                             </div>
                         </div>
                         
-                        <button class="btn" id="addTransBtn">Add Transaction</button>
+                        <button type="submit" class="btn" id="addTransBtn">Add Transaction</button>
                     </form>
                 </div>
             </div>
@@ -449,66 +448,37 @@
     <section id="contact" class="page">
         <div class="container">
             <div class="contact-card">
-                
                 <div class="contact-title">
-                    <i class="fa-solid fa-address-book"></i>
-                    Contact Us
+                    <i class="fa-solid fa-address-book"></i> Contact Us
                 </div>
 
                 <img class="contact-logo" src="https://i.ibb.co.com/RkByHr2S/file-000000001ba87208917a643199a1201d.png" alt="Muaz Construction Logo">
-
                 <h2 class="company-name">Muaz Construction & Consultant</h2>
 
                 <a class="contact-item" href="tel:+8801773167407">
-                    <div class="contact-icon phone-icon">
-                        <i class="fa-solid fa-phone"></i>
-                    </div>
-                    <div class="contact-text">
-                        <strong>Phone</strong>
-                        <span>01773167407</span>
-                    </div>
+                    <div class="contact-icon phone-icon"><i class="fa-solid fa-phone"></i></div>
+                    <div class="contact-text"><strong>Phone</strong><span>01773167407</span></div>
                 </a>
 
                 <a class="contact-item" href="tel:+8801612309206">
-                    <div class="contact-icon phone-icon">
-                        <i class="fa-solid fa-phone"></i>
-                    </div>
-                    <div class="contact-text">
-                        <strong>Phone</strong>
-                        <span>01612309206</span>
-                    </div>
+                    <div class="contact-icon phone-icon"><i class="fa-solid fa-phone"></i></div>
+                    <div class="contact-text"><strong>Phone</strong><span>01612309206</span></div>
                 </a>
 
                 <a class="contact-item" href="mailto:info.muazconstruction@gmail.com">
-                    <div class="contact-icon email-icon">
-                        <i class="fa-solid fa-envelope"></i>
-                    </div>
-                    <div class="contact-text">
-                        <strong>Email</strong>
-                        <span>info.muazconstruction@gmail.com</span>
-                    </div>
+                    <div class="contact-icon email-icon"><i class="fa-solid fa-envelope"></i></div>
+                    <div class="contact-text"><strong>Email</strong><span>info.muazconstruction@gmail.com</span></div>
                 </a>
 
                 <a class="contact-item" href="https://www.facebook.com/profile.php?id=61589705093986" target="_blank" rel="noopener noreferrer">
-                    <div class="contact-icon facebook-icon">
-                        <i class="fa-brands fa-facebook-f"></i>
-                    </div>
-                    <div class="contact-text">
-                        <strong>Facebook</strong>
-                        <span>Visit our Facebook Page</span>
-                    </div>
+                    <div class="contact-icon facebook-icon"><i class="fa-brands fa-facebook-f"></i></div>
+                    <div class="contact-text"><strong>Facebook</strong><span>Visit our Facebook Page</span></div>
                 </a>
 
                 <a class="contact-item" href="https://wa.me/8801773167407" target="_blank" rel="noopener noreferrer">
-                    <div class="contact-icon whatsapp-icon">
-                        <i class="fa-brands fa-whatsapp"></i>
-                    </div>
-                    <div class="contact-text">
-                        <strong>WhatsApp</strong>
-                        <span>Chat with us on WhatsApp</span>
-                    </div>
+                    <div class="contact-icon whatsapp-icon"><i class="fa-brands fa-whatsapp"></i></div>
+                    <div class="contact-text"><strong>WhatsApp</strong><span>Chat with us on WhatsApp</span></div>
                 </a>
-
             </div>
         </div>
     </section>
@@ -545,33 +515,34 @@
 <div id="editMosqueModal" class="modal no-print">
     <div class="modal-box" style="max-width: 500px;">
         <span class="close" onclick="closeEditModal('editMosqueModal')">×</span>
-        <h2 style="color: var(--primary); margin-bottom:15px;">Edit Mosque</h2>
-        <input type="hidden" id="emIndex">
-        <div class="form-group"><label>মসজিদের নাম</label><input id="emName" required></div>
-        <div class="form-group"><label>ঠিকানা</label><textarea id="emAddress" required></textarea></div>
-        <div class="form-group"><label>Unique ID</label><input id="emUniqueId" required></div>
-        <div class="form-group"><label>মোট বরাদ্দ</label><input id="emAllocated" type="number" required></div>
-        
-        <!-- 🖼️ Uploader 3: Edit Mosque Image -->
-        <div class="upload-container">
-            <h4>🖼️ Update Image</h4>
-            <div class="input-group">
-                <label><b>Local File (গ্যালারি থেকে):</b></label>
-                <input type="file" id="emFile" accept="image/*">
+        <h2 style="color: var(--primary); margin-bottom:15px;">Edit Mosjid</h2>
+        <form onsubmit="saveMosqueEdit(event)">
+            <input type="hidden" id="emIndex">
+            <div class="form-group"><label>মসজিদের নাম</label><input id="emName" required></div>
+            <div class="form-group"><label>ঠিকানা</label><textarea id="emAddress" required></textarea></div>
+            <div class="form-group"><label>Unique ID</label><input id="emUniqueId" required></div>
+            <div class="form-group"><label>মোট বরাদ্দ</label><input id="emAllocated" type="number" required></div>
+            
+            <div class="upload-container">
+                <h4>🖼️ Update Mosque Image</h4>
+                <div class="input-group">
+                    <label><b>Local File (গ্যালারি থেকে):</b></label>
+                    <input type="file" id="emFile" accept="image/*">
+                </div>
+                <div class="divider">OR</div>
+                <div class="input-group">
+                    <label><b>Image URL:</b></label>
+                    <input type="url" id="emImage" placeholder="🔗 Paste image link here..." oninput="syncPreview(this.value, 'emPreview', 'emPlaceholder', 'emHint')">
+                </div>
+                <div class="preview-area">
+                    <img id="emPreview" class="uploader-preview-img" src="" style="display:none;" onclick="openCustomModal(this.src)">
+                    <p id="emPlaceholder" class="uploader-placeholder">No image selected</p>
+                    <small id="emHint" class="uploader-hint" style="display:none; color:#555; margin-top:10px;">🔍 Click image to enlarge</small>
+                </div>
             </div>
-            <div class="divider">OR</div>
-            <div class="input-group">
-                <label><b>Image URL:</b></label>
-                <input type="url" id="emImage" placeholder="🔗 Paste image link here..." oninput="syncPreview(this.value, 'emPreview', 'emPlaceholder', 'emHint')">
-            </div>
-            <div class="preview-area">
-                <img id="emPreview" class="uploader-preview-img" src="" style="display:none;" onclick="openCustomModal(this.src)">
-                <p id="emPlaceholder" class="uploader-placeholder">No image selected</p>
-                <small id="emHint" class="uploader-hint" style="display:none; color:#555; margin-top:10px;">🔍 Click image to enlarge</small>
-            </div>
-        </div>
-
-        <button class="btn" style="width:100%;" onclick="saveMosqueEdit()">Update Mosjid</button>
+            
+            <button type="submit" class="btn" style="width:100%;">Update Mosjid</button>
+        </form>
     </div>
 </div>
 
@@ -580,12 +551,14 @@
     <div class="modal-box">
         <span class="close" onclick="closeEditModal('editLabourModal')">×</span>
         <h2 style="color: var(--primary); margin-bottom:15px;">Edit Labour</h2>
-        <input type="hidden" id="elIndex">
-        <div class="form-group"><label>নাম</label><input id="elName" required></div>
-        <div class="form-group"><label>মোবাইল</label><input id="elMobile" required></div>
-        <div class="form-group"><label>কাজের ধরন</label><input id="elWork" required></div>
-        <div class="form-group"><label>দৈনিক মজুরি</label><input id="elDaily" type="number" required></div>
-        <button class="btn" style="width:100%;" onclick="saveLabourEdit()">Update Labour</button>
+        <form onsubmit="saveLabourEdit(event)">
+            <input type="hidden" id="elIndex">
+            <div class="form-group"><label>নাম</label><input id="elName" required></div>
+            <div class="form-group"><label>মোবাইল নম্বর</label><input id="elMobile" required></div>
+            <div class="form-group"><label>কাজের ধরন</label><input id="elWork" required></div>
+            <div class="form-group"><label>দৈনিক মজুরি</label><input id="elDaily" type="number" required></div>
+            <button type="submit" class="btn" style="width:100%;">Update Labour</button>
+        </form>
     </div>
 </div>
 
@@ -594,17 +567,19 @@
     <div class="modal-box">
         <span class="close" onclick="closeEditModal('editLabourPaymentModal')">×</span>
         <h2 style="color: var(--primary); margin-bottom:15px;">Edit Labour Payment</h2>
-        <input type="hidden" id="elpLabourIndex">
-        <input type="hidden" id="elpPaymentIndex">
-        <div class="form-group"><label>তারিখ</label><input id="elpDate" type="date" required></div>
-        <div class="form-group"><label>সময়</label><input id="elpTime" type="time" required></div>
-        <div class="form-group"><label>টাকা</label><input id="elpAmount" type="number" required></div>
-        <div class="form-group"><label>মোট কাজ (দিন)</label><input id="elpWorkDays" type="number" step="any" required></div>
-        <div class="form-group"><label>মাধ্যম</label>
-            <select id="elpMethod" required><option>BKash</option><option>Cash</option><option>Rocket</option><option>Bank</option></select>
-        </div>
-        <div class="form-group"><label>Remarks</label><textarea id="elpRemarks"></textarea></div>
-        <button class="btn" style="width:100%;" onclick="saveLabourPaymentEdit()">Update Payment</button>
+        <form onsubmit="saveLabourPaymentEdit(event)">
+            <input type="hidden" id="elpLabourIndex">
+            <input type="hidden" id="elpPaymentIndex">
+            <div class="form-group"><label>তারিখ</label><input id="elpDate" type="date" required></div>
+            <div class="form-group"><label>সময়</label><input id="elpTime" type="time" required></div>
+            <div class="form-group"><label>টাকা</label><input id="elpAmount" type="number" required></div>
+            <div class="form-group"><label>মোট কাজ (দিন)</label><input id="elpWorkDays" type="number" step="any" required></div>
+            <div class="form-group"><label>মাধ্যম</label>
+                <select id="elpMethod" required><option>BKash</option><option>Cash</option><option>Rocket</option><option>Bank</option></select>
+            </div>
+            <div class="form-group"><label>Remarks</label><textarea id="elpRemarks"></textarea></div>
+            <button type="submit" class="btn" style="width:100%;">Update Payment</button>
+        </form>
     </div>
 </div>
 
@@ -613,34 +588,35 @@
     <div class="modal-box" style="max-width: 500px;">
         <span class="close" onclick="closeEditModal('editTransactionModal')">×</span>
         <h2 style="color: var(--primary); margin-bottom:15px;">Edit Transaction</h2>
-        <input type="hidden" id="etMosqueIndex">
-        <input type="hidden" id="etTransIndex">
-        <div class="form-group"><label>তারিখ</label><input id="etDate" type="date" required></div>
-        <div class="form-group"><label>সময়</label><input id="etTime" type="time" required></div>
-        <div class="form-group"><label>টাকা</label><input id="etAmount" type="number" required></div>
-        <div class="form-group"><label>মাধ্যম</label><select id="etMethod" required><option>BKash</option><option>Cash</option><option>Rocket</option><option>Bank</option></select></div>
-        <div class="form-group"><label>কী বাবদ</label><input id="etPurpose" required></div>
-        
-        <!-- 🖼️ Uploader 4: Edit Transaction Image -->
-        <div class="upload-container">
-            <h4>🖼️ Update Receipt Image</h4>
-            <div class="input-group">
-                <label><b>Local File (গ্যালারি থেকে):</b></label>
-                <input type="file" id="etFile" accept="image/*">
+        <form onsubmit="saveTransactionEdit(event)">
+            <input type="hidden" id="etMosqueIndex">
+            <input type="hidden" id="etTransIndex">
+            <div class="form-group"><label>তারিখ</label><input id="etDate" type="date" required></div>
+            <div class="form-group"><label>সময়</label><input id="etTime" type="time" required></div>
+            <div class="form-group"><label>টাকা</label><input id="etAmount" type="number" required></div>
+            <div class="form-group"><label>মাধ্যম</label><select id="etMethod" required><option>BKash</option><option>Cash</option><option>Rocket</option><option>Bank</option></select></div>
+            <div class="form-group"><label>কী বাবদ</label><input id="etPurpose" required></div>
+            
+            <div class="upload-container">
+                <h4>🖼️ Update Receipt Image</h4>
+                <div class="input-group">
+                    <label><b>Local File (গ্যালারি থেকে):</b></label>
+                    <input type="file" id="etFile" accept="image/*">
+                </div>
+                <div class="divider">OR</div>
+                <div class="input-group">
+                    <label><b>Image URL:</b></label>
+                    <input type="url" id="etImage" placeholder="🔗 Paste image link here..." oninput="syncPreview(this.value, 'etPreview', 'etPlaceholder', 'etHint')">
+                </div>
+                <div class="preview-area">
+                    <img id="etPreview" class="uploader-preview-img" src="" style="display:none;" onclick="openCustomModal(this.src)">
+                    <p id="etPlaceholder" class="uploader-placeholder">No image selected</p>
+                    <small id="etHint" class="uploader-hint" style="display:none; color:#555; margin-top:10px;">🔍 Click image to enlarge</small>
+                </div>
             </div>
-            <div class="divider">OR</div>
-            <div class="input-group">
-                <label><b>Image URL:</b></label>
-                <input type="url" id="etImage" placeholder="🔗 Paste image link here..." oninput="syncPreview(this.value, 'etPreview', 'etPlaceholder', 'etHint')">
-            </div>
-            <div class="preview-area">
-                <img id="etPreview" class="uploader-preview-img" src="" style="display:none;" onclick="openCustomModal(this.src)">
-                <p id="etPlaceholder" class="uploader-placeholder">No image selected</p>
-                <small id="etHint" class="uploader-hint" style="display:none; color:#555; margin-top:10px;">🔍 Click image to enlarge</small>
-            </div>
-        </div>
-        
-        <button class="btn" style="width:100%;" onclick="saveTransactionEdit()">Update Transaction</button>
+            
+            <button type="submit" class="btn" style="width:100%;">Update Transaction</button>
+        </form>
     </div>
 </div>
 
@@ -649,38 +625,38 @@
     <div class="modal-box">
         <span class="close" onclick="closeEditModal('editOfficePaymentModal')">×</span>
         <h2 style="color: var(--primary); margin-bottom:15px;">Edit Office Payment</h2>
-        <input type="hidden" id="eopIndex">
-        <div class="form-group"><label>Date</label><input id="eopDate" type="date" required></div>
-        <div class="form-group"><label>Name of Payment</label><input id="eopName" type="text" required></div>
-        <div class="form-group"><label>Payment Method</label>
-            <select id="eopMethod" required><option>BKash</option><option>Cash</option><option>Rocket</option><option>Bank</option></select>
-        </div>
-        <div class="form-group"><label>Total Amount (Admin Allow)</label><input id="eopTotalAmt" type="number" required oninput="calcEditOfficeDue()"></div>
-        <div class="form-group"><label>Total Payment</label><input id="eopTotalPay" type="number" required oninput="calcEditOfficeDue()"></div>
-        <div class="form-group"><label>Due Amount</label><input id="eopDue" type="number" required readonly style="background:#eef3f1; cursor:not-allowed;"></div>
-        <button class="btn" style="width:100%;" onclick="saveOfficePaymentEdit()">Update Payment</button>
+        <form onsubmit="saveOfficePaymentEdit(event)">
+            <input type="hidden" id="eopIndex">
+            <div class="form-group"><label>Date</label><input id="eopDate" type="date" required></div>
+            <div class="form-group"><label>Name of Payment</label><input id="eopName" type="text" required></div>
+            <div class="form-group"><label>Payment Method</label>
+                <select id="eopMethod" required><option>BKash</option><option>Cash</option><option>Rocket</option><option>Bank</option></select>
+            </div>
+            <div class="form-group"><label>Total Amount (Admin Allow)</label><input id="eopTotalAmt" type="number" required oninput="calcEditOfficeDue()"></div>
+            <div class="form-group"><label>Total Payment</label><input id="eopTotalPay" type="number" required oninput="calcEditOfficeDue()"></div>
+            <div class="form-group"><label>Due Amount</label><input id="eopDue" type="number" required readonly style="background:#eef3f1; cursor:not-allowed;"></div>
+            <button type="submit" class="btn" style="width:100%;">Update Payment</button>
+        </form>
     </div>
 </div>
 
-
 <!-- ================= UNIFIED FIREBASE & APP SCRIPT ================= -->
 <script type="module">
-    // 1. Fixed Firebase Versions to a stable release (10.12.2)
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
-    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-  
+    import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, query, where, arrayUnion } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
+    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
     const firebaseConfig = {
-      apiKey: "AIzaSyBTk33tbL_I1du7cYkCxDmyjoJ5C0wHZNM",
-      authDomain: "muaz-contraction.firebaseapp.com",
-      projectId: "muaz-contraction",
-      storageBucket: "muaz-contraction.firebasestorage.app",
-      messagingSenderId: "929764617437",
-      appId: "1:929764617437:web:e6a06207a98a9e20263f34",
-      measurementId: "G-7SRSTJNEWR"
+        apiKey: "AIzaSyBTk33tbL_I1du7cYkCxDmyjoJ5C0wHZNM",
+        authDomain: "muaz-contraction.firebaseapp.com",
+        projectId: "muaz-contraction",
+        storageBucket: "muaz-contraction.firebasestorage.app",
+        messagingSenderId: "929764617437",
+        appId: "1:929764617437:web:e6a06207a98a9e20263f34",
+        measurementId: "G-7SRSTJNEWR"
     };
-  
+
     const app = initializeApp(firebaseConfig);
     const dbFirestore = getFirestore(app);
     const storage = getStorage(app);
@@ -690,7 +666,6 @@
     let currentUser = null;
     let selectedMosque = null;
 
-    // Helper functions
     function money(v){ return "৳ " + Number(v||0).toLocaleString("en-IN"); }
     function makeId(){ return Date.now().toString(36) + Math.random().toString(36).substring(2,8); }
     function safe(v){ return String(v??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;"); }
@@ -701,6 +676,26 @@
         el.innerText = text;
         el.className = "message " + type;
         setTimeout(() => el.className = "message", 4000);
+    }
+
+    async function sendToMakeWebhook(imageUrl, itemName, category) {
+        const webhookUrl = "https://hook.us2.make.com/ja44j66xh776ote9dhepqp63w5p0yq5e"; 
+        if(!imageUrl) return; 
+
+        try {
+            await fetch(webhookUrl, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    imageLink: imageUrl,
+                    name: itemName,
+                    type: category,
+                    date: new Date().toISOString()
+                })
+            });
+        } catch (error) {
+            console.error("Make Webhook Error:", error);
+        }
     }
 
     const today = new Date().toISOString().split("T")[0];
@@ -746,8 +741,24 @@
         return await getDownloadURL(storageRef);
     }
 
-    Promise.all([loadMosques(), loadOfficePayments(), loadLabours()]).then(() => {
-        refresh();
+    // Auth State Observer
+   // Auth State Observer
+    // এখানে আপনার যে ইমেইলগুলো অ্যাডমিন হিসেবে কাজ করবে, সেগুলো কমা দিয়ে লিখুন
+    const adminEmails = ["info.muazconstruction@gmail.com", "your-other-email@gmail.com"]; 
+
+    onAuthStateChanged(auth, (user) => {
+        if (user && adminEmails.includes(user.email)) {
+            currentUser = { email: user.email, role: "admin" };
+        } else if (user) {
+            // যদি অন্য কোনো ইউজার লগইন করে, তাকে শুধু ভিজিটর রোল দেওয়া হবে
+            currentUser = { email: user.email, role: "visitor" }; 
+        } else {
+            currentUser = { role: "visitor" };
+        }
+        applyRole();
+        Promise.all([loadMosques(), loadOfficePayments(), loadLabours()]).then(() => {
+            refresh();
+        });
     });
 
     /* ================= MOSQUE LOGIC ================= */
@@ -758,7 +769,7 @@
 
         try {
             const uniqueId = document.getElementById("mosqueUniqueId").value.trim();
-            if(db.mosques.some(m => m.uniqueId.toLowerCase() === uniqueId.toLowerCase())){
+            if(db.mosques.some(m => (m.uniqueId || "").toLowerCase() === uniqueId.toLowerCase())){
                 showMessage("addMosqueMessage", "Unique ID আগে থেকেই আছে।", "error"); 
                 btn.innerText = "Save Mosjid"; btn.disabled = false;
                 return;
@@ -781,6 +792,7 @@
                 createdAt: Date.now()
             });
 
+            await sendToMakeWebhook(imageUrl, document.getElementById("mosqueName").value.trim(), "New Mosque Added");
             e.target.reset();
             syncPreview('', 'mosquePreview', 'mosquePlaceholder', 'mosqueHint'); 
             alert("Mosque Saved Successfully!");
@@ -795,19 +807,22 @@
         btn.innerText = "Save Mosjid"; btn.disabled = false;
     }
 
-    async function saveMosqueEdit() {
+    async function saveMosqueEdit(e) {
+        e.preventDefault();
         const i = document.getElementById('emIndex').value;
         const newId = document.getElementById('emUniqueId').value.trim();
         const file = document.getElementById('emFile').files[0];
         let imageUrl = document.getElementById('emImage').value.trim();
         
-        if(db.mosques.some((m, idx) => m.uniqueId.toLowerCase() === newId.toLowerCase() && idx != i)){
-            alert("Unique ID Already Exists!");
+        if(db.mosques.some((m, idx) => (m.uniqueId || "").toLowerCase() === newId.toLowerCase() && idx != i)){
+            alert("Unique ID আগে থেকেই আছে।");
             return;
         }
 
         if(file) {
             imageUrl = await uploadImage(file, "mosques");
+        } else if (!imageUrl && db.mosques[i].image) {
+            imageUrl = db.mosques[i].image;
         }
 
         db.mosques[i].name = document.getElementById('emName').value;
@@ -832,19 +847,41 @@
         alert("Mosque updated successfully!");
     }
 
-    async function deleteMosque(i){
-        const pass = prompt("Type DELETE to confirm");
+    async function deleteMosque(i) {
+        const pass = prompt("Type DELETE to confirm mosque deletion");
         if(pass === "DELETE"){
-            if(db.mosques[i].firebaseId) {
-                await deleteDoc(doc(dbFirestore, "mosques", db.mosques[i].firebaseId));
+            const mosque = db.mosques[i];
+            
+            if (mosque.image && mosque.image.includes("firebasestorage")) {
+                try {
+                    const imgRef = ref(storage, mosque.image);
+                    await deleteObject(imgRef);
+                } catch(e) { console.warn("Failed to delete mosque image from storage", e); }
             }
-            db.mosques.splice(i,1);
-            await loadMosques();
+
+            if (mosque.transactions && mosque.transactions.length > 0) {
+                for (let trans of mosque.transactions) {
+                    if (trans.image && trans.image.includes("firebasestorage")) {
+                        try {
+                            const transImgRef = ref(storage, trans.image);
+                            await deleteObject(transImgRef);
+                        } catch(e) { console.warn("Failed to delete transaction receipt", e); }
+                    }
+                }
+            }
+
+            if(mosque.firebaseId) {
+                await deleteDoc(doc(dbFirestore, "mosques", mosque.firebaseId));
+            }
+
+            db.mosques.splice(i, 1);
+            closeModal();
             refresh();
+            alert("Mosque and its files deleted successfully!");
         }
     }
 
-    async function addTransaction(e){
+   async function addTransaction(e){
         e.preventDefault();
         const transMosqueSelect = document.getElementById("transactionMosque");
         if(transMosqueSelect.value === ""){
@@ -865,7 +902,9 @@
             }
             
             if(!db.mosques[i].transactions) db.mosques[i].transactions = [];
-            db.mosques[i].transactions.push({
+            
+            // ✅ tId এর বদলে makeId() ব্যবহার করা হলো
+            const newTrans = {
                 id: makeId(),
                 date: document.getElementById("transactionDate").value,
                 time: document.getElementById("transactionTime").value,
@@ -873,15 +912,16 @@
                 method: document.getElementById("transactionMethod").value,
                 purpose: document.getElementById("transactionPurpose").value.trim(),
                 image: imageUrl
-            });
+            };
+
+            db.mosques[i].transactions.push(newTrans); // লোকাল ডেটা আপডেট
 
             if(db.mosques[i].firebaseId) {
                 await updateDoc(doc(dbFirestore, "mosques", db.mosques[i].firebaseId), {
-                    transactions: db.mosques[i].transactions
+                    transactions: arrayUnion(newTrans) // ডেটাবেসে শুধু নতুন আইটেম যুক্ত হবে
                 });
             }
-
-            e.target.reset(); 
+            await sendToMakeWebhook(imageUrl, "Transaction added for: " + db.mosques[i].name, "Transaction"); 
             syncPreview('', 'transactionPreview', 'transactionPlaceholder', 'transactionHint');
             alert("Transaction যোগ হয়েছে।");
             document.getElementById("transactionDate").value = new Date().toISOString().split("T")[0];
@@ -894,7 +934,8 @@
         btn.innerText = "Add Transaction"; btn.disabled = false;
     }
 
-    async function saveTransactionEdit() {
+    async function saveTransactionEdit(e) {
+        e.preventDefault(); // FIXED: Prevents page reload
         const mIndex = document.getElementById('etMosqueIndex').value;
         const tIndex = document.getElementById('etTransIndex').value;
         const t = db.mosques[mIndex].transactions[tIndex];
@@ -904,6 +945,8 @@
         
         if(file) {
             imageUrl = await uploadImage(file, "receipts");
+        } else if (!imageUrl && t.image) {
+            imageUrl = t.image;
         }
         
         t.date = document.getElementById('etDate').value;
@@ -928,6 +971,15 @@
     async function deleteTrans(mIndex, tIndex) {
         const pass = prompt("Type DELETE to confirm");
         if(pass === "DELETE"){
+            const trans = db.mosques[mIndex].transactions[tIndex];
+            
+            if (trans.image && trans.image.includes("firebasestorage")) {
+                try {
+                    const imgRef = ref(storage, trans.image);
+                    await deleteObject(imgRef);
+                } catch(e) { console.warn("Failed to delete receipt from storage", e); }
+            }
+
             db.mosques[mIndex].transactions.splice(tIndex, 1);
             if(db.mosques[mIndex].firebaseId) {
                 await updateDoc(doc(dbFirestore, "mosques", db.mosques[mIndex].firebaseId), {
@@ -1000,7 +1052,8 @@
         document.getElementById('editOfficePaymentModal').classList.add('show');
     }
 
-    async function saveOfficePaymentEdit() {
+    async function saveOfficePaymentEdit(e) {
+        e.preventDefault(); // FIXED: Prevents page reload
         const i = document.getElementById('eopIndex').value;
         db.officePayments[i].date = document.getElementById('eopDate').value;
         db.officePayments[i].name = document.getElementById('eopName').value.trim();
@@ -1067,7 +1120,8 @@
         document.getElementById('editLabourModal').classList.add('show');
     }
     
-    async function saveLabourEdit() {
+    async function saveLabourEdit(e) {
+        e.preventDefault();
         const i = document.getElementById('elIndex').value;
         const mobile = document.getElementById('elMobile').value.trim();
         
@@ -1108,7 +1162,7 @@
         }
     }
 
-    async function addLabourPayment(e){
+   async function addLabourPayment(e){
         e.preventDefault();
         const labourSelect = document.getElementById("paymentLabour");
         if(labourSelect.value === ""){
@@ -1118,23 +1172,28 @@
 
         const i = Number(labourSelect.value);
         if(!db.labours[i].payments) db.labours[i].payments=[];
-        db.labours[i].payments.push({
+        
+        // ✅ pId এর বদলে makeId() ব্যবহার করা হলো
+        const newPayment = {
             id: makeId(), 
             date: document.getElementById("paymentDate").value, 
-            time: document.getElementById("paymentTime").value,
+            time: document.getElementById("paymentTime").value, 
             amount: Number(document.getElementById("paymentAmount").value), 
             workDays: Number(document.getElementById("paymentWorkDays").value),
             method: document.getElementById("paymentMethod").value,
             remarks: document.getElementById("paymentRemarks").value.trim()
-        });
+        };
+
+        db.labours[i].payments.push(newPayment); // লোকাল ডেটা আপডেট
         
         if(db.labours[i].firebaseId) {
             await updateDoc(doc(dbFirestore, "labours", db.labours[i].firebaseId), {
-                payments: db.labours[i].payments
+                payments: arrayUnion(newPayment) // ডেটাবেসে শুধু নতুন আইটেম যুক্ত হবে
             });
         }
 
-        e.target.reset(); alert("Payment যোগ হয়েছে।");
+        e.target.reset(); 
+        alert("Payment যোগ হয়েছে।");
         document.getElementById("paymentDate").value = new Date().toISOString().split("T")[0];
         renderLabourHistory();
         refresh();
@@ -1153,7 +1212,8 @@
         document.getElementById("editLabourPaymentModal").classList.add("show");
     }
 
-    async function saveLabourPaymentEdit() {
+    async function saveLabourPaymentEdit(e) {
+        e.preventDefault(); // FIXED: Prevents page reload
         const lIndex = document.getElementById("elpLabourIndex").value;
         const pIndex = document.getElementById("elpPaymentIndex").value;
         const p = db.labours[lIndex].payments[pIndex];
@@ -1228,7 +1288,6 @@
             const querySnapshot = await getDocs(q);
             
             let isValid = false;
-            
             querySnapshot.forEach((docSnap) => {
                 if (docSnap.id === clickedMosque.firebaseId) {
                     isValid = true;
@@ -1598,13 +1657,12 @@
         document.getElementById("sidebarOverlay").classList.remove("show");
     }
 
-    // 2. Fixed Log-in method and added validation
-    async function login(){
+    async function login(e){
+        if(e) e.preventDefault();
         const email = document.getElementById("loginEmail").value.trim();
         const password = document.getElementById("loginPassword").value;
         const btn = document.querySelector(".login-btn");
         
-        // Blank input check
         if(!email || !password) {
             showMessage("loginMessage", "দয়া করে ইমেইল এবং পাসওয়ার্ড দিন!", "error");
             return;
@@ -1615,20 +1673,18 @@
         
         try {
             await signInWithEmailAndPassword(auth, email, password);
-            currentUser = { email: email, role: "admin" };
-            localStorage.setItem("MUAZ_TOKEN", btoa(JSON.stringify(currentUser)));
             openWebsite();
+            showPage("dashboard");
         } catch (error) {
             console.error("Firebase Login Error:", error.code, error.message);
             if(error.code === 'auth/invalid-credential' || error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password'){
                 showMessage("loginMessage", "ভুল ইমেইল বা পাসওয়ার্ড!", "error"); 
             } else if (error.code === 'auth/too-many-requests') {
-                showMessage("loginMessage", "অনেকবার ভুল চেষ্টা করা হয়েছে। কিছুক্ষণ পর আবার চেষ্টা করুন।", "error"); 
+                showMessage("loginMessage", "অনেকবার ভুল চেষ্টা করা হয়েছে। কিছুক্ষণ পর আবার চেষ্টা করুন।", "error"); 
             } else {
-                showMessage("loginMessage", "লগইন ব্যর্থ হয়েছে: " + error.message, "error"); 
+                showMessage("loginMessage", "লগইন ব্যর্থ হয়েছে: " + error.message, "error"); 
             }
         }
-        
         btn.innerText = "Login";
         btn.disabled = false;
     }
@@ -1644,10 +1700,11 @@
         refresh();
     }
 
-    function logout(){ 
-        localStorage.removeItem("MUAZ_TOKEN"); 
-        currentUser = null; 
-        location.reload(); 
+    async function logout(){ 
+        await signOut(auth);
+        currentUser = { role: "visitor" };
+        applyRole();
+        showPage("home");
     }
 
     function applyRole(){
@@ -1664,7 +1721,8 @@
 
     function showPage(page){
         document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
-        document.getElementById(page).classList.add("active");
+        const target = document.getElementById(page);
+        if(target) target.classList.add("active");
         document.getElementById("sidebar").classList.remove("open");
         document.getElementById("sidebarOverlay").classList.remove("show");
         window.scrollTo(0,0);
@@ -1771,22 +1829,10 @@
         if (e.target !== document.getElementById('customEnlargedImg')) closeCustomModal();
     });
 
-    // Check user session
-    if(localStorage.getItem("MUAZ_TOKEN")){
-        try {
-            currentUser = JSON.parse(atob(localStorage.getItem("MUAZ_TOKEN")));
-            openWebsite();
-        } catch (error) {
-            currentUser = { role: "visitor" };
-            openWebsite();
-            showPage("home");
-        }
-    } else {
-        currentUser = { role: "visitor" };
-        openWebsite();
-        showPage("home");
-    }
+    // Initial Startup
+    openWebsite();
 
+    // Export variables to Window
     window.login = login;
     window.openWebsite = openWebsite;
     window.logout = logout;
@@ -1829,6 +1875,7 @@
     window.deleteLabourPayment = deleteLabourPayment;
     window.closeEditModal = closeEditModal;
     window.syncPreview = syncPreview;
+    window.sendToMakeWebhook = sendToMakeWebhook;
 </script>
 </body>
 </html>
