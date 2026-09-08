@@ -173,7 +173,12 @@
         <p>Admin Login</p>
         <form onsubmit="login(event)">
             <input id="loginEmail" class="input" type="email" placeholder="Email" required>
-            <input id="loginPassword" class="input" type="password" placeholder="Password" required>
+            <div style="position: relative; margin-bottom: 14px;">
+    <input id="loginPassword" class="input" type="password" placeholder="Password" required style="margin-bottom: 0; padding-right: 45px;">
+    <span onclick="togglePasswordVisibility()" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #777; font-size: 18px;">
+        <i id="eyeIcon" class="fa-solid fa-eye"></i>
+    </span>
+</div>
             <button type="submit" class="login-btn"> Login </button>
             <button type="button" class="back-btn" onclick="openWebsite()"> Back to Website </button>
         </form>
@@ -492,7 +497,12 @@
         <span class="close" onclick="closeModal()">×</span>
         <h2 style="color: var(--primary);">🔐 Unique ID</h2>
         <p id="idMosqueName" style="margin:12px 0 18px; font-weight:bold; color:var(--secondary); font-size: 18px;"></p>
-        <input id="visitorUniqueId" class="input" type="password" placeholder="Enter Unique ID">
+        <div style="position: relative; margin-bottom: 14px;">
+    <input id="visitorUniqueId" class="input" type="password" placeholder="Enter Unique ID" style="margin-bottom: 0; padding-right: 45px;">
+    <span onclick="toggleUniqueIdVisibility()" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #777; font-size: 18px;">
+        <i id="uniqueIdEyeIcon" class="fa-solid fa-eye"></i>
+    </span>
+</div>
         <button class="btn" id="verifyIdBtn" style="width: 100%;" onclick="verifyUniqueId()">প্রবেশ করুন</button>
         <div id="idMessage" class="message"></div>
     </div>
@@ -517,7 +527,7 @@
         <span class="close" onclick="closeEditModal('editMosqueModal')">×</span>
         <h2 style="color: var(--primary); margin-bottom:15px;">Edit Mosjid</h2>
         <form onsubmit="saveMosqueEdit(event)">
-            <input type="hidden" id="emIndex">
+            <input type="hidden" id="emId">
             <div class="form-group"><label>মসজিদের নাম</label><input id="emName" required></div>
             <div class="form-group"><label>ঠিকানা</label><textarea id="emAddress" required></textarea></div>
             <div class="form-group"><label>Unique ID</label><input id="emUniqueId" required></div>
@@ -552,7 +562,7 @@
         <span class="close" onclick="closeEditModal('editLabourModal')">×</span>
         <h2 style="color: var(--primary); margin-bottom:15px;">Edit Labour</h2>
         <form onsubmit="saveLabourEdit(event)">
-            <input type="hidden" id="elIndex">
+            <input type="hidden" id="elId">
             <div class="form-group"><label>নাম</label><input id="elName" required></div>
             <div class="form-group"><label>মোবাইল নম্বর</label><input id="elMobile" required></div>
             <div class="form-group"><label>কাজের ধরন</label><input id="elWork" required></div>
@@ -568,8 +578,8 @@
         <span class="close" onclick="closeEditModal('editLabourPaymentModal')">×</span>
         <h2 style="color: var(--primary); margin-bottom:15px;">Edit Labour Payment</h2>
         <form onsubmit="saveLabourPaymentEdit(event)">
-            <input type="hidden" id="elpLabourIndex">
-            <input type="hidden" id="elpPaymentIndex">
+            <input type="hidden" id="elpLabourId">
+            <input type="hidden" id="elpPaymentId">
             <div class="form-group"><label>তারিখ</label><input id="elpDate" type="date" required></div>
             <div class="form-group"><label>সময়</label><input id="elpTime" type="time" required></div>
             <div class="form-group"><label>টাকা</label><input id="elpAmount" type="number" required></div>
@@ -589,8 +599,8 @@
         <span class="close" onclick="closeEditModal('editTransactionModal')">×</span>
         <h2 style="color: var(--primary); margin-bottom:15px;">Edit Transaction</h2>
         <form onsubmit="saveTransactionEdit(event)">
-            <input type="hidden" id="etMosqueIndex">
-            <input type="hidden" id="etTransIndex">
+            <input type="hidden" id="etMosqueId">
+            <input type="hidden" id="etTransId">
             <div class="form-group"><label>তারিখ</label><input id="etDate" type="date" required></div>
             <div class="form-group"><label>সময়</label><input id="etTime" type="time" required></div>
             <div class="form-group"><label>টাকা</label><input id="etAmount" type="number" required></div>
@@ -626,7 +636,7 @@
         <span class="close" onclick="closeEditModal('editOfficePaymentModal')">×</span>
         <h2 style="color: var(--primary); margin-bottom:15px;">Edit Office Payment</h2>
         <form onsubmit="saveOfficePaymentEdit(event)">
-            <input type="hidden" id="eopIndex">
+            <input type="hidden" id="eopId">
             <div class="form-group"><label>Date</label><input id="eopDate" type="date" required></div>
             <div class="form-group"><label>Name of Payment</label><input id="eopName" type="text" required></div>
             <div class="form-group"><label>Payment Method</label>
@@ -643,7 +653,7 @@
 <!-- ================= UNIFIED FIREBASE & APP SCRIPT ================= -->
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, query, where, arrayUnion } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
     import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
     import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
@@ -664,7 +674,12 @@
 
     let db = { mosques: [], labours: [], officePayments: [] };
     let currentUser = null;
-    let selectedMosque = null;
+    let selectedMosqueId = null; 
+
+    // Utility Getters
+    function getM(id) { return db.mosques.findIndex(m => m.firebaseId === id); }
+    function getL(id) { return db.labours.findIndex(l => l.firebaseId === id); }
+    function getOP(id) { return db.officePayments.findIndex(p => p.firebaseId === id); }
 
     function money(v){ return "৳ " + Number(v||0).toLocaleString("en-IN"); }
     function makeId(){ return Date.now().toString(36) + Math.random().toString(36).substring(2,8); }
@@ -740,18 +755,20 @@
         await uploadBytes(storageRef, file);
         return await getDownloadURL(storageRef);
     }
+    
+    async function deleteFirebaseImage(url) {
+        if (url && url.includes("firebasestorage")) {
+            try {
+                const imgRef = ref(storage, url);
+                await deleteObject(imgRef);
+            } catch(e) { console.warn("Failed to delete old image:", e); }
+        }
+    }
 
     // Auth State Observer
-   // Auth State Observer
-    // এখানে আপনার যে ইমেইলগুলো অ্যাডমিন হিসেবে কাজ করবে, সেগুলো কমা দিয়ে লিখুন
-    const adminEmails = ["info.muazconstruction@gmail.com", "your-other-email@gmail.com"]; 
-
     onAuthStateChanged(auth, (user) => {
-        if (user && adminEmails.includes(user.email)) {
+        if (user) {
             currentUser = { email: user.email, role: "admin" };
-        } else if (user) {
-            // যদি অন্য কোনো ইউজার লগইন করে, তাকে শুধু ভিজিটর রোল দেওয়া হবে
-            currentUser = { email: user.email, role: "visitor" }; 
         } else {
             currentUser = { role: "visitor" };
         }
@@ -809,18 +826,25 @@
 
     async function saveMosqueEdit(e) {
         e.preventDefault();
-        const i = document.getElementById('emIndex').value;
+        const mId = document.getElementById('emId').value;
+        const i = getM(mId);
+        if (i === -1) return;
+        
         const newId = document.getElementById('emUniqueId').value.trim();
         const file = document.getElementById('emFile').files[0];
         let imageUrl = document.getElementById('emImage').value.trim();
         
-        if(db.mosques.some((m, idx) => (m.uniqueId || "").toLowerCase() === newId.toLowerCase() && idx != i)){
+        if(db.mosques.some((m, idx) => (m.uniqueId || "").toLowerCase() === newId.toLowerCase() && idx !== i)){
             alert("Unique ID আগে থেকেই আছে।");
             return;
         }
 
         if(file) {
             imageUrl = await uploadImage(file, "mosques");
+            // Delete old image if it was replaced
+            if (db.mosques[i].image && db.mosques[i].image !== imageUrl) {
+                await deleteFirebaseImage(db.mosques[i].image);
+            }
         } else if (!imageUrl && db.mosques[i].image) {
             imageUrl = db.mosques[i].image;
         }
@@ -847,26 +871,18 @@
         alert("Mosque updated successfully!");
     }
 
-    async function deleteMosque(i) {
+    async function deleteMosque(id) {
         const pass = prompt("Type DELETE to confirm mosque deletion");
         if(pass === "DELETE"){
+            const i = getM(id);
+            if (i === -1) return;
             const mosque = db.mosques[i];
             
-            if (mosque.image && mosque.image.includes("firebasestorage")) {
-                try {
-                    const imgRef = ref(storage, mosque.image);
-                    await deleteObject(imgRef);
-                } catch(e) { console.warn("Failed to delete mosque image from storage", e); }
-            }
+            await deleteFirebaseImage(mosque.image);
 
             if (mosque.transactions && mosque.transactions.length > 0) {
                 for (let trans of mosque.transactions) {
-                    if (trans.image && trans.image.includes("firebasestorage")) {
-                        try {
-                            const transImgRef = ref(storage, trans.image);
-                            await deleteObject(transImgRef);
-                        } catch(e) { console.warn("Failed to delete transaction receipt", e); }
-                    }
+                    await deleteFirebaseImage(trans.image);
                 }
             }
 
@@ -881,7 +897,7 @@
         }
     }
 
-   async function addTransaction(e){
+    async function addTransaction(e){
         e.preventDefault();
         const transMosqueSelect = document.getElementById("transactionMosque");
         if(transMosqueSelect.value === ""){
@@ -893,7 +909,8 @@
         btn.innerText = "Adding..."; btn.disabled = true;
 
         try {
-            const i = Number(transMosqueSelect.value);
+            const mId = transMosqueSelect.value;
+            const i = getM(mId);
             const file = document.getElementById("transactionFile").files[0];
             let imageUrl = document.getElementById("transactionImage").value.trim();
             
@@ -903,28 +920,33 @@
             
             if(!db.mosques[i].transactions) db.mosques[i].transactions = [];
             
-            // ✅ tId এর বদলে makeId() ব্যবহার করা হলো
-            const newTrans = {
-                id: makeId(),
+            // Unique ID check
+            let tId = makeId();
+            while (db.mosques[i].transactions.some(t => t.id === tId)) { tId = makeId(); }
+
+            db.mosques[i].transactions.push({
+                id: tId,
                 date: document.getElementById("transactionDate").value,
                 time: document.getElementById("transactionTime").value,
                 amount: Number(document.getElementById("transactionAmount").value),
                 method: document.getElementById("transactionMethod").value,
                 purpose: document.getElementById("transactionPurpose").value.trim(),
                 image: imageUrl
-            };
-
-            db.mosques[i].transactions.push(newTrans); // লোকাল ডেটা আপডেট
+            });
 
             if(db.mosques[i].firebaseId) {
                 await updateDoc(doc(dbFirestore, "mosques", db.mosques[i].firebaseId), {
-                    transactions: arrayUnion(newTrans) // ডেটাবেসে শুধু নতুন আইটেম যুক্ত হবে
+                    transactions: db.mosques[i].transactions
                 });
             }
             await sendToMakeWebhook(imageUrl, "Transaction added for: " + db.mosques[i].name, "Transaction"); 
             syncPreview('', 'transactionPreview', 'transactionPlaceholder', 'transactionHint');
+            
+            e.target.reset();
+            document.getElementById("transactionDate").value = today;
+            document.getElementById("transactionTime").value = ""; 
+            
             alert("Transaction যোগ হয়েছে।");
-            document.getElementById("transactionDate").value = new Date().toISOString().split("T")[0];
             refresh();
         } catch (error) {
             console.error(error);
@@ -935,9 +957,13 @@
     }
 
     async function saveTransactionEdit(e) {
-        e.preventDefault(); // FIXED: Prevents page reload
-        const mIndex = document.getElementById('etMosqueIndex').value;
-        const tIndex = document.getElementById('etTransIndex').value;
+        e.preventDefault(); 
+        const mId = document.getElementById('etMosqueId').value;
+        const tId = document.getElementById('etTransId').value;
+        const mIndex = getM(mId);
+        const tIndex = db.mosques[mIndex].transactions.findIndex(t => t.id === tId);
+        if (mIndex === -1 || tIndex === -1) return;
+        
         const t = db.mosques[mIndex].transactions[tIndex];
         
         const file = document.getElementById('etFile').files[0];
@@ -945,6 +971,9 @@
         
         if(file) {
             imageUrl = await uploadImage(file, "receipts");
+            if (t.image && t.image !== imageUrl) {
+                await deleteFirebaseImage(t.image);
+            }
         } else if (!imageUrl && t.image) {
             imageUrl = t.image;
         }
@@ -963,22 +992,19 @@
         }
 
         closeEditModal('editTransactionModal');
-        showFullDetails(mIndex); 
+        showFullDetails(mId); 
         refresh();
         alert("Transaction updated successfully!");
     }
 
-    async function deleteTrans(mIndex, tIndex) {
+    async function deleteTrans(mId, tId) {
         const pass = prompt("Type DELETE to confirm");
         if(pass === "DELETE"){
+            const mIndex = getM(mId);
+            const tIndex = db.mosques[mIndex].transactions.findIndex(t => t.id === tId);
             const trans = db.mosques[mIndex].transactions[tIndex];
             
-            if (trans.image && trans.image.includes("firebasestorage")) {
-                try {
-                    const imgRef = ref(storage, trans.image);
-                    await deleteObject(imgRef);
-                } catch(e) { console.warn("Failed to delete receipt from storage", e); }
-            }
+            await deleteFirebaseImage(trans.image);
 
             db.mosques[mIndex].transactions.splice(tIndex, 1);
             if(db.mosques[mIndex].firebaseId) {
@@ -986,7 +1012,7 @@
                     transactions: db.mosques[mIndex].transactions
                 });
             }
-            showFullDetails(mIndex);
+            showFullDetails(mId);
             refresh();
         }
     }
@@ -1019,8 +1045,8 @@
         try {
             await addDoc(collection(dbFirestore, "officePayments"), newPayment);
             e.target.reset(); 
+            document.getElementById("opDate").value = today;
             alert("Office Payment যোগ হয়েছে।");
-            document.getElementById("opDate").value = new Date().toISOString().split("T")[0];
             await loadOfficePayments();
             refresh();
         } catch(err) {
@@ -1028,9 +1054,12 @@
         }
     }
 
-    async function deleteOfficePayment(i) {
+    async function deleteOfficePayment(id) {
         const pass = prompt("Type DELETE to confirm");
         if(pass === "DELETE"){
+            const i = getOP(id);
+            if (i === -1) return;
+            
             if(db.officePayments[i].firebaseId) {
                 await deleteDoc(doc(dbFirestore, "officePayments", db.officePayments[i].firebaseId));
             }
@@ -1040,9 +1069,10 @@
         }
     }
 
-    function openEditOfficePayment(i) {
+    function openEditOfficePayment(id) {
+        const i = getOP(id);
         const p = db.officePayments[i];
-        document.getElementById('eopIndex').value = i;
+        document.getElementById('eopId').value = id;
         document.getElementById('eopDate').value = p.date;
         document.getElementById('eopName').value = p.name;
         document.getElementById('eopMethod').value = p.method;
@@ -1053,8 +1083,11 @@
     }
 
     async function saveOfficePaymentEdit(e) {
-        e.preventDefault(); // FIXED: Prevents page reload
-        const i = document.getElementById('eopIndex').value;
+        e.preventDefault(); 
+        const id = document.getElementById('eopId').value;
+        const i = getOP(id);
+        if (i === -1) return;
+        
         db.officePayments[i].date = document.getElementById('eopDate').value;
         db.officePayments[i].name = document.getElementById('eopName').value.trim();
         db.officePayments[i].method = document.getElementById('eopMethod').value;
@@ -1110,9 +1143,10 @@
         }
     }
 
-    function openEditLabour(i) {
+    function openEditLabour(id) {
+        const i = getL(id);
         const l = db.labours[i];
-        document.getElementById('elIndex').value = i;
+        document.getElementById('elId').value = id;
         document.getElementById('elName').value = l.name;
         document.getElementById('elMobile').value = l.mobile;
         document.getElementById('elWork').value = l.work;
@@ -1122,10 +1156,11 @@
     
     async function saveLabourEdit(e) {
         e.preventDefault();
-        const i = document.getElementById('elIndex').value;
+        const id = document.getElementById('elId').value;
+        const i = getL(id);
         const mobile = document.getElementById('elMobile').value.trim();
         
-        if(db.labours.some((l, idx) => l.mobile === mobile && idx != i)){
+        if(db.labours.some((l, idx) => l.mobile === mobile && idx !== i)){
             alert("Mobile Number Already Exists!");
             return;
         }
@@ -1150,9 +1185,10 @@
         alert("Labour updated successfully!");
     }
 
-    async function deleteLabour(i){
+    async function deleteLabour(id){
         const pass = prompt("Type DELETE to confirm");
         if(pass === "DELETE"){
+            const i = getL(id);
             if(db.labours[i].firebaseId) {
                 await deleteDoc(doc(dbFirestore, "labours", db.labours[i].firebaseId));
             }
@@ -1162,7 +1198,7 @@
         }
     }
 
-   async function addLabourPayment(e){
+    async function addLabourPayment(e){
         e.preventDefault();
         const labourSelect = document.getElementById("paymentLabour");
         if(labourSelect.value === ""){
@@ -1170,39 +1206,45 @@
             return;
         }
 
-        const i = Number(labourSelect.value);
+        const lId = labourSelect.value;
+        const i = getL(lId);
+        
         if(!db.labours[i].payments) db.labours[i].payments=[];
         
-        // ✅ pId এর বদলে makeId() ব্যবহার করা হলো
-        const newPayment = {
-            id: makeId(), 
+        // Unique ID check
+        let pId = makeId();
+        while (db.labours[i].payments.some(p => p.id === pId)) { pId = makeId(); }
+
+        db.labours[i].payments.push({
+            id: pId, 
             date: document.getElementById("paymentDate").value, 
             time: document.getElementById("paymentTime").value, 
             amount: Number(document.getElementById("paymentAmount").value), 
             workDays: Number(document.getElementById("paymentWorkDays").value),
             method: document.getElementById("paymentMethod").value,
             remarks: document.getElementById("paymentRemarks").value.trim()
-        };
-
-        db.labours[i].payments.push(newPayment); // লোকাল ডেটা আপডেট
+        });
         
         if(db.labours[i].firebaseId) {
             await updateDoc(doc(dbFirestore, "labours", db.labours[i].firebaseId), {
-                payments: arrayUnion(newPayment) // ডেটাবেসে শুধু নতুন আইটেম যুক্ত হবে
+                payments: db.labours[i].payments
             });
         }
 
         e.target.reset(); 
+        document.getElementById("paymentDate").value = today;
+        document.getElementById("paymentTime").value = ""; 
         alert("Payment যোগ হয়েছে।");
-        document.getElementById("paymentDate").value = new Date().toISOString().split("T")[0];
-        renderLabourHistory();
-        refresh();
+        refresh(); // Only refresh, rendering double fixed
     }
 
-    function openEditLabourPayment(lIndex, pIndex) {
+    function openEditLabourPayment(lId, pId) {
+        const lIndex = getL(lId);
+        const pIndex = db.labours[lIndex].payments.findIndex(p => p.id === pId);
         const p = db.labours[lIndex].payments[pIndex];
-        document.getElementById("elpLabourIndex").value = lIndex;
-        document.getElementById("elpPaymentIndex").value = pIndex;
+        
+        document.getElementById("elpLabourId").value = lId;
+        document.getElementById("elpPaymentId").value = pId;
         document.getElementById("elpDate").value = p.date;
         document.getElementById("elpTime").value = p.time;
         document.getElementById("elpAmount").value = p.amount;
@@ -1213,9 +1255,11 @@
     }
 
     async function saveLabourPaymentEdit(e) {
-        e.preventDefault(); // FIXED: Prevents page reload
-        const lIndex = document.getElementById("elpLabourIndex").value;
-        const pIndex = document.getElementById("elpPaymentIndex").value;
+        e.preventDefault(); 
+        const lId = document.getElementById("elpLabourId").value;
+        const pId = document.getElementById("elpPaymentId").value;
+        const lIndex = getL(lId);
+        const pIndex = db.labours[lIndex].payments.findIndex(p => p.id === pId);
         const p = db.labours[lIndex].payments[pIndex];
         
         p.date = document.getElementById("elpDate").value;
@@ -1232,21 +1276,23 @@
         }
 
         closeEditModal("editLabourPaymentModal");
-        viewLabourPayments(lIndex);
+        viewLabourPayments(lId);
         refresh();
         alert("Payment updated successfully!");
     }
 
-    async function deleteLabourPayment(lIndex, pIndex) {
+    async function deleteLabourPayment(lId, pId) {
         const pass = prompt("Type DELETE to confirm");
         if(pass === "DELETE"){
+            const lIndex = getL(lId);
+            const pIndex = db.labours[lIndex].payments.findIndex(p => p.id === pId);
             db.labours[lIndex].payments.splice(pIndex, 1);
             if(db.labours[lIndex].firebaseId) {
                 await updateDoc(doc(dbFirestore, "labours", db.labours[lIndex].firebaseId), {
                     payments: db.labours[lIndex].payments
                 });
             }
-            viewLabourPayments(lIndex);
+            viewLabourPayments(lId);
             refresh();
         }
     }
@@ -1254,17 +1300,18 @@
     /* ================= RENDERING ================= */
     function renderMosqueList(){
         const box = document.getElementById("mosqueList");
-        box.innerHTML = db.mosques.map((m,index)=>`
-            <div class="mosque-card" onclick="openMosque(${index})">
+        box.innerHTML = db.mosques.map((m)=>`
+            <div class="mosque-card" onclick="openMosque('${m.firebaseId}')">
                 ${m.image ? `<img src="${m.image}" style="width:100%;height:180px;object-fit:cover;border-radius:8px;margin-bottom:10px;">` : `<i class="fa-solid fa-mosque" style="font-size: 40px; color: var(--secondary); margin-bottom:15px;"></i>`}
                 <h3>${safe(m.name)}</h3>
             </div>`).join("");
     }
 
-    function openMosque(index){
-        selectedMosque = index;
-        if(currentUser && currentUser.role==="admin"){ showMosqueSummary(index); return; }
-        document.getElementById("idMosqueName").innerText = db.mosques[index].name;
+    function openMosque(id){
+        selectedMosqueId = id;
+        const i = getM(id);
+        if(currentUser && currentUser.role==="admin"){ showMosqueSummary(id); return; }
+        document.getElementById("idMosqueName").innerText = db.mosques[i].name;
         document.getElementById("visitorUniqueId").value = "";
         document.getElementById("idMessage").className = "message";
         document.getElementById("idModal").classList.add("show");
@@ -1272,7 +1319,7 @@
 
     async function verifyUniqueId(){
         const id = document.getElementById("visitorUniqueId").value.trim();
-        const clickedMosque = db.mosques[selectedMosque];
+        const clickedMosque = db.mosques[getM(selectedMosqueId)];
         const btn = document.getElementById("verifyIdBtn");
         
         if (!id) {
@@ -1296,7 +1343,7 @@
 
             if (isValid) {
                 closeModal(); 
-                showMosqueSummary(selectedMosque); 
+                showMosqueSummary(selectedMosqueId); 
             } else {
                 showMessage("idMessage", "ভুল Unique ID।", "error"); 
             }
@@ -1311,8 +1358,8 @@
     
     function closeModal(){ document.getElementById("idModal").classList.remove("show"); }
 
-    function showMosqueSummary(index){
-        const mosque = db.mosques[index];
+    function showMosqueSummary(id){
+        const mosque = db.mosques[getM(id)];
         const paid = mosque.transactions ? mosque.transactions.reduce((sum,t)=>sum+Number(t.amount||0),0) : 0;
         const due = Number(mosque.allocated) - paid;
         
@@ -1335,14 +1382,14 @@
                 <div class="summary-card"><h3>মোট পরিশোধ</h3><strong>${money(paid)}</strong></div>
                 <div class="summary-card"><h3>বাকি / Due</h3><strong>${money(due)}</strong></div>
             </div>
-            <button class="btn detail-btn no-print" onclick="showFullDetails(${index})">📋 বিস্তারিত দেখুন</button>
+            <button class="btn detail-btn no-print" onclick="showFullDetails('${id}')">📋 বিস্তারিত দেখুন</button>
             <div id="fullDetails" style="display:none; margin-top:20px;"></div>
         `;
         showPage("mosqueView");
     }
 
-    function showFullDetails(index){
-        const mosque = db.mosques[index];
+    function showFullDetails(id){
+        const mosque = db.mosques[getM(id)];
         const box = document.getElementById("fullDetails");
         box.style.display="block";
         const isAdmin = currentUser && currentUser.role === "admin";
@@ -1351,12 +1398,12 @@
         let transRows = "";
         
         if (mosque.transactions && mosque.transactions.length) {
-            transRows = mosque.transactions.map((t, tIndex) => {
+            transRows = mosque.transactions.map((t) => {
                 runningDue -= Number(t.amount);
                 
                 let actionBtn = isAdmin ? `<td class="no-print">
-                    <button class="btn btn-info" style="padding:5px 10px; font-size:12px; margin:2px;" onclick="openEditTrans(${index}, ${tIndex})">Edit</button> 
-                    <button class="btn btn-danger" style="padding:5px 10px; font-size:12px; margin:2px;" onclick="deleteTrans(${index}, ${tIndex})">Delete</button>
+                    <button class="btn btn-info" style="padding:5px 10px; font-size:12px; margin:2px;" onclick="openEditTrans('${id}', '${t.id}')">Edit</button> 
+                    <button class="btn btn-danger" style="padding:5px 10px; font-size:12px; margin:2px;" onclick="deleteTrans('${id}', '${t.id}')">Delete</button>
                 </td>` : '';
 
                 return `<tr><td>${t.date}</td><td>${t.time}</td><td style="color:green;font-weight:bold;">${money(t.amount)}</td>
@@ -1397,10 +1444,10 @@
         if(db.officePayments.length === 0) {
             html += `<tr><td colspan="${isAdmin ? 7 : 6}">No records</td></tr>`;
         } else {
-            html += db.officePayments.map((p, i) => {
+            html += db.officePayments.map((p) => {
                 let actionBtn = isAdmin ? `<td class="no-print">
-                    <button class="btn btn-info" style="padding:5px 10px; font-size:12px; margin:2px;" onclick="openEditOfficePayment(${i})">Edit</button> 
-                    <button class="btn btn-danger" style="padding:5px 10px; font-size:12px; margin:2px;" onclick="deleteOfficePayment(${i})">Delete</button>
+                    <button class="btn btn-info" style="padding:5px 10px; font-size:12px; margin:2px;" onclick="openEditOfficePayment('${p.firebaseId}')">Edit</button> 
+                    <button class="btn btn-danger" style="padding:5px 10px; font-size:12px; margin:2px;" onclick="deleteOfficePayment('${p.firebaseId}')">Delete</button>
                 </td>` : ``;
 
                 return `<tr><td>${p.date}</td><td>${safe(p.name)}</td><td>${safe(p.method)}</td><td style="color:green;font-weight:bold;">${money(p.paid)}</td><td style="color:red;font-weight:bold;">${money(p.due)}</td><td>${money(p.total)}</td>${actionBtn}</tr>`;
@@ -1414,14 +1461,14 @@
         document.getElementById("manageMosqueList").innerHTML=`
             <div class="table-wrap"><table>
                 <thead><tr><th>নাম</th><th>ঠিকানা</th><th>Unique ID</th><th>মোট বরাদ্দ</th><th>মোট পরিশোধ</th><th>মোট বাকি</th><th class="no-print">Action</th></tr></thead>
-                <tbody>${db.mosques.map((m,i)=>{
+                <tbody>${db.mosques.map((m)=>{
                     const paid = m.transactions ? m.transactions.reduce((s,t)=>s+Number(t.amount||0),0) : 0;
                     const due = Number(m.allocated) - paid;
                     return `<tr><td>${safe(m.name)}</td><td>${safe(m.address)}</td><td>${safe(m.uniqueId)}</td><td>${money(m.allocated)}</td>
                     <td style="color:green;font-weight:bold;">${money(paid)}</td><td style="color:red;font-weight:bold;">${money(due)}</td>
                     <td class="no-print">
-                        <button class="btn btn-info" style="padding: 5px 10px; font-size: 13px; margin: 2px;" onclick="openEditMosque(${i})">Edit</button>
-                        <button class="btn btn-danger" style="padding: 5px 10px; font-size: 13px; margin: 2px;" onclick="deleteMosque(${i})">Delete</button>
+                        <button class="btn btn-info" style="padding: 5px 10px; font-size: 13px; margin: 2px;" onclick="openEditMosque('${m.firebaseId}')">Edit</button>
+                        <button class="btn btn-danger" style="padding: 5px 10px; font-size: 13px; margin: 2px;" onclick="deleteMosque('${m.firebaseId}')">Delete</button>
                     </td></tr>`;
                 }).join("")}
                 </tbody>
@@ -1429,12 +1476,12 @@
     }
 
     function populateTransactionMosque(){
-        document.getElementById("transactionMosque").innerHTML = `<option value="">Select</option>` + db.mosques.map((m,i)=>`<option value="${i}">${safe(m.name)}</option>`).join("");
+        document.getElementById("transactionMosque").innerHTML = `<option value="">Select</option>` + db.mosques.map((m)=>`<option value="${m.firebaseId}">${safe(m.name)}</option>`).join("");
     }
 
-    function openEditMosque(i) {
-        const m = db.mosques[i];
-        document.getElementById('emIndex').value = i;
+    function openEditMosque(id) {
+        const m = db.mosques[getM(id)];
+        document.getElementById('emId').value = id;
         document.getElementById('emName').value = m.name;
         document.getElementById('emAddress').value = m.address;
         document.getElementById('emUniqueId').value = m.uniqueId;
@@ -1444,10 +1491,12 @@
         document.getElementById('editMosqueModal').classList.add('show');
     }
 
-    function openEditTrans(mIndex, tIndex) {
+    function openEditTrans(mId, tId) {
+        const mIndex = getM(mId);
+        const tIndex = db.mosques[mIndex].transactions.findIndex(t => t.id === tId);
         const t = db.mosques[mIndex].transactions[tIndex];
-        document.getElementById('etMosqueIndex').value = mIndex;
-        document.getElementById('etTransIndex').value = tIndex;
+        document.getElementById('etMosqueId').value = mId;
+        document.getElementById('etTransId').value = tId;
         document.getElementById('etDate').value = t.date;
         document.getElementById('etTime').value = t.time;
         document.getElementById('etAmount').value = t.amount;
@@ -1461,11 +1510,11 @@
     function renderAdminLabour(){
         document.getElementById("adminLabourList").innerHTML=`<div class="table-wrap"><table>
             <thead><tr><th>নাম</th><th>মোবাইল নম্বর</th><th class="no-print">Action</th></tr></thead>
-            <tbody>${db.labours.map((l,i)=>`<tr>
+            <tbody>${db.labours.map((l)=>`<tr>
                 <td>${safe(l.name)}</td><td>${safe(l.mobile)}</td>
                 <td class="no-print">
-                    <button class="btn btn-info" style="padding: 5px 10px; font-size: 13px; margin: 2px;" onclick="openEditLabour(${i})">Edit</button>
-                    <button class="btn btn-danger" style="padding: 5px 10px; font-size: 13px; margin: 2px;" onclick="deleteLabour(${i})">Delete</button>
+                    <button class="btn btn-info" style="padding: 5px 10px; font-size: 13px; margin: 2px;" onclick="openEditLabour('${l.firebaseId}')">Edit</button>
+                    <button class="btn btn-danger" style="padding: 5px 10px; font-size: 13px; margin: 2px;" onclick="deleteLabour('${l.firebaseId}')">Delete</button>
                 </td>
             </tr>`).join("")}</tbody></table></div>`;
     }
@@ -1491,7 +1540,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    ${db.labours.map((l,i)=>{
+                    ${db.labours.map((l)=>{
                         const totalDaysWorked = l.payments ? l.payments.reduce((s,p)=>s+Number(p.workDays||0),0) : 0;
                         const totalWage = l.dailyWage * totalDaysWorked;
                         const paid = l.payments ? l.payments.reduce((s,p)=>s+Number(p.amount||0),0) : 0;
@@ -1501,7 +1550,7 @@
                         <td class="no-print">
                             <button class="btn btn-info"
                                 style="padding:5px 10px;font-size:12px;"
-                                onclick="viewLabourPayments(${i})">
+                                onclick="viewLabourPayments('${l.firebaseId}')">
                                 Details
                             </button>
                         </td>` : ``;
@@ -1525,8 +1574,8 @@
         `;
     }
 
-    function viewLabourPayments(lIndex) {
-        const l = db.labours[lIndex];
+    function viewLabourPayments(id) {
+        const l = db.labours[getL(id)];
         const area = document.getElementById("labourPaymentDetailsArea");
         area.style.display = "block";
         const isAdmin = currentUser && currentUser.role === "admin";
@@ -1542,14 +1591,14 @@
         if (!l.payments || l.payments.length === 0) {
             paymentsRows = `<tr><td colspan="${isAdmin ? 9 : 8}" style="text-align:center;">কোনো পেমেন্ট নেই।</td></tr>`;
         } else {
-            paymentsRows = l.payments.map((p, pIndex) => {
+            paymentsRows = l.payments.map((p) => {
                 const earned = l.dailyWage * Number(p.workDays || 0);
                 runningDue += (earned - Number(p.amount || 0));
                 
                 let actionBtn = isAdmin ? `
                 <td class="no-print">
-                    <button class="btn btn-info" style="padding:4px 8px;font-size:12px;margin:2px;" onclick="openEditLabourPayment(${lIndex},${pIndex})">Edit</button>
-                    <button class="btn btn-danger" style="padding:4px 8px;font-size:12px;margin:2px;" onclick="deleteLabourPayment(${lIndex},${pIndex})">Delete</button>
+                    <button class="btn btn-info" style="padding:4px 8px;font-size:12px;margin:2px;" onclick="openEditLabourPayment('${id}','${p.id}')">Edit</button>
+                    <button class="btn btn-danger" style="padding:4px 8px;font-size:12px;margin:2px;" onclick="deleteLabourPayment('${id}','${p.id}')">Delete</button>
                 </td>` : ``;
     
                 return `
@@ -1626,7 +1675,7 @@
     }
 
     function populateLabourSelect(){
-        document.getElementById("paymentLabour").innerHTML = `<option value="">Select</option>` + db.labours.map((l,i)=>`<option value="${i}">${safe(l.name)}</option>`).join("");
+        document.getElementById("paymentLabour").innerHTML = `<option value="">Select</option>` + db.labours.map((l)=>`<option value="${l.firebaseId}">${safe(l.name)}</option>`).join("");
     }
 
     function updateDashboard(){
@@ -1720,6 +1769,12 @@
     }
 
     function showPage(page){
+        // Secure Pages from URL/Console access (BUG 7 Fixed)
+        const securedPages = ['admin', 'labour', 'officePayment'];
+        if (securedPages.includes(page) && (!currentUser || currentUser.role !== "admin")) {
+            page = 'home';
+        }
+
         document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
         const target = document.getElementById(page);
         if(target) target.classList.add("active");
@@ -1876,6 +1931,36 @@
     window.closeEditModal = closeEditModal;
     window.syncPreview = syncPreview;
     window.sendToMakeWebhook = sendToMakeWebhook;
+// Login পাসওয়ার্ড দেখানোর বা লুকানোর ফাংশন
+    function togglePasswordVisibility() {
+        const passwordInput = document.getElementById("loginPassword");
+        const eyeIcon = document.getElementById("eyeIcon");
+        
+        if (passwordInput.type === "password") {
+            passwordInput.type = "text";
+            eyeIcon.className = "fa-solid fa-eye-slash";
+        } else {
+            passwordInput.type = "password";
+            eyeIcon.className = "fa-solid fa-eye";
+        }
+    }
+
+    // Unique ID পাসওয়ার্ড দেখানোর বা লুকানোর ফাংশন
+    function toggleUniqueIdVisibility() {
+        const idInput = document.getElementById("visitorUniqueId");
+        const eyeIcon = document.getElementById("uniqueIdEyeIcon");
+        
+        if (idInput.type === "password") {
+            idInput.type = "text";
+            eyeIcon.className = "fa-solid fa-eye-slash";
+        } else {
+            idInput.type = "password";
+            eyeIcon.className = "fa-solid fa-eye";
+        }
+    }
+
+    window.togglePasswordVisibility = togglePasswordVisibility;
+    window.toggleUniqueIdVisibility = toggleUniqueIdVisibility;
 </script>
 </body>
 </html>
