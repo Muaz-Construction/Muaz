@@ -693,23 +693,21 @@
         setTimeout(() => el.className = "message", 4000);
     }
 
-    async function sendToMakeWebhook(imageUrl, itemName, category) {
-        const webhookUrl = "https://hook.us2.make.com/ja44j66xh776ote9dhepqp63w5p0yq5e"; 
-        if(!imageUrl) return; 
-
+    async function sendToGoogleSheet(sheetName, rowData) {
+        const scriptUrl = "https://script.google.com/macros/s/AKfycbwajOJGlfyzVGu1N6XykOta2sGB4sXFX-MxhExdLl9RrCoxk03s3V66sEu3ZadFO7SuDw/exec";
         try {
-            await fetch(webhookUrl, {
+            await fetch(scriptUrl, {
                 method: "POST",
+                mode: "no-cors",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    imageLink: imageUrl,
-                    name: itemName,
-                    type: category,
-                    date: new Date().toISOString()
+                    sheetName: sheetName,
+                    rowData: rowData
                 })
             });
+            console.log(sheetName + " - Data sent to Google Sheet!");
         } catch (error) {
-            console.error("Make Webhook Error:", error);
+            console.error("Sheet Error:", error);
         }
     }
 
@@ -809,9 +807,16 @@
                 createdAt: Date.now()
             });
 
-            await sendToMakeWebhook(imageUrl, document.getElementById("mosqueName").value.trim(), "New Mosque Added");
+           await sendToGoogleSheet("Mosjid List", [
+                new Date().toLocaleString("en-GB"),
+                document.getElementById("mosqueName").value.trim(),
+                document.getElementById("mosqueAddress").value.trim(),
+                uniqueId,
+                document.getElementById("mosqueAllocated").value,
+                imageUrl || "N/A"
+            ]);
             e.target.reset();
-            syncPreview('', 'mosquePreview', 'mosquePlaceholder', 'mosqueHint'); 
+            syncPreview('', 'mosquePreview', 'mosquePlaceholder', 'mosqueHint');
             alert("Mosque Saved Successfully!");
             await loadMosques(); 
             refresh();
@@ -939,7 +944,15 @@
                     transactions: db.mosques[i].transactions
                 });
             }
-            await sendToMakeWebhook(imageUrl, "Transaction added for: " + db.mosques[i].name, "Transaction"); 
+            await sendToGoogleSheet("Mosjid Payment", [
+                document.getElementById("transactionDate").value,
+                document.getElementById("transactionTime").value,
+                db.mosques[i].name,
+                document.getElementById("transactionAmount").value,
+                document.getElementById("transactionMethod").value,
+                document.getElementById("transactionPurpose").value.trim(),
+                imageUrl || "N/A"
+            ]);
             syncPreview('', 'transactionPreview', 'transactionPlaceholder', 'transactionHint');
             
             e.target.reset();
@@ -1042,8 +1055,18 @@
             createdAt: Date.now()
         };
 
-        try {
+       try {
             await addDoc(collection(dbFirestore, "officePayments"), newPayment);
+            
+            await sendToGoogleSheet("Office Payment", [
+                document.getElementById("opDate").value,
+                document.getElementById("opName").value.trim(),
+                document.getElementById("opMethod").value,
+                document.getElementById("opTotalAmt").value,
+                document.getElementById("opTotalPay").value,
+                document.getElementById("opDue").value
+            ]);
+
             e.target.reset(); 
             document.getElementById("opDate").value = today;
             alert("Office Payment যোগ হয়েছে।");
@@ -1132,8 +1155,17 @@
             createdAt: Date.now()
         };
 
-        try {
+       try {
             await addDoc(collection(dbFirestore, "labours"), newLabour);
+            
+            await sendToGoogleSheet("Labour List", [
+                new Date().toLocaleString("en-GB"),
+                document.getElementById("labourName").value.trim(),
+                mobile,
+                document.getElementById("labourWork").value.trim(),
+                document.getElementById("labourDaily").value
+            ]);
+
             e.target.reset(); 
             alert("Labour যোগ হয়েছে।");
             await loadLabours();
@@ -1225,11 +1257,21 @@
             remarks: document.getElementById("paymentRemarks").value.trim()
         });
         
-        if(db.labours[i].firebaseId) {
+       if(db.labours[i].firebaseId) {
             await updateDoc(doc(dbFirestore, "labours", db.labours[i].firebaseId), {
                 payments: db.labours[i].payments
             });
         }
+
+        await sendToGoogleSheet("Labour Payment", [
+            document.getElementById("paymentDate").value,
+            document.getElementById("paymentTime").value,
+            db.labours[i].name,
+            document.getElementById("paymentWorkDays").value,
+            document.getElementById("paymentAmount").value,
+            document.getElementById("paymentMethod").value,
+            document.getElementById("paymentRemarks").value.trim()
+        ]);
 
         e.target.reset(); 
         document.getElementById("paymentDate").value = today;
@@ -1930,7 +1972,7 @@
     window.deleteLabourPayment = deleteLabourPayment;
     window.closeEditModal = closeEditModal;
     window.syncPreview = syncPreview;
-    window.sendToMakeWebhook = sendToMakeWebhook;
+    window.sendToGoogleSheet = sendToGoogleSheet;
 // Login পাসওয়ার্ড দেখানোর বা লুকানোর ফাংশন
     function togglePasswordVisibility() {
         const passwordInput = document.getElementById("loginPassword");
@@ -1949,7 +1991,6 @@
     function toggleUniqueIdVisibility() {
         const idInput = document.getElementById("visitorUniqueId");
         const eyeIcon = document.getElementById("uniqueIdEyeIcon");
-        
         if (idInput.type === "password") {
             idInput.type = "text";
             eyeIcon.className = "fa-solid fa-eye-slash";
