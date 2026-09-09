@@ -693,7 +693,7 @@
         setTimeout(() => el.className = "message", 4000);
     }
 
-    aasync function sendToGoogleSheet(sheetName, rowData) {
+    async function sendToGoogleSheet(sheetName, rowData) {
         const scriptUrl = "https://script.google.com/macros/s/AKfycbwajOJGlfyzVGu1N6XykOta2sGB4sXFX-MxhExdLl9RrCoxk03s3V66sEu3ZadFO7SuDw/exec";
         try {
             await fetch(scriptUrl, {
