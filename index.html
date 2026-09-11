@@ -693,12 +693,13 @@
         setTimeout(() => el.className = "message", 4000);
     }
 
-   async function sendToGoogleSheet(sheetName, rowData) {
-        const scriptUrl = "https://script.google.com/macros/s/AKfycbwajOJGlfyzVGu1N6XykOta2sGB4sXFX-MxhExdLl9RrCoxk03s3V66sEu3ZadFO7SuDw/exec";
+  async function sendToGoogleSheet(sheetName, rowData) {
+               const scriptUrl = "https://script.google.com/macros/s/AKfycbzsK-7exZh0VY3TADu1znzqkX0VY2oYqjosNPlZ-_UIs3dAYTI43NiDB7G4Td_EFx8Bqg/exec"; 
+        
         try {
             await fetch(scriptUrl, {
                 method: "POST",
-                // mode: "no-cors", // এটি সাময়িকভাবে বন্ধ রাখা হলো যাতে আসল Error দেখা যায়
+                mode: "no-cors", // এটি অবশ্যই থাকতে হবে
                 headers: { 
                     "Content-Type": "text/plain;charset=utf-8"
                 },
