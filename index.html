@@ -810,8 +810,10 @@
                 createdAt: Date.now()
             });
 
+           const now = new Date();
            await sendToGoogleSheet("Mosjid List", [
-                new Date().toLocaleString("en-GB"),
+                now.toLocaleDateString("en-GB"),
+                now.toLocaleTimeString("en-GB"),
                 document.getElementById("mosqueName").value.trim(),
                 document.getElementById("mosqueAddress").value.trim(),
                 uniqueId,
@@ -1061,8 +1063,10 @@
        try {
             await addDoc(collection(dbFirestore, "officePayments"), newPayment);
             
+            const now = new Date();
             await sendToGoogleSheet("Office Payment", [
                 document.getElementById("opDate").value,
+                now.toLocaleTimeString("en-GB"),
                 document.getElementById("opName").value.trim(),
                 document.getElementById("opMethod").value,
                 document.getElementById("opTotalAmt").value,
@@ -1161,8 +1165,10 @@
        try {
             await addDoc(collection(dbFirestore, "labours"), newLabour);
             
+            const now = new Date();
             await sendToGoogleSheet("Labour List", [
-                new Date().toLocaleString("en-GB"),
+                now.toLocaleDateString("en-GB"),
+                now.toLocaleTimeString("en-GB"),
                 document.getElementById("labourName").value.trim(),
                 mobile,
                 document.getElementById("labourWork").value.trim(),
