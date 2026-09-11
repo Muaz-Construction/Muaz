@@ -1143,12 +1143,19 @@
     }
 
     /* ================= LABOUR LOGIC ================= */
-    async function addLabour(e){
+   async function addLabour(e){
         e.preventDefault();
+        
+        // বাটন লক করা হচ্ছে যাতে ডাবল ক্লিক না পড়ে
+        const btn = e.target.querySelector('button[type="submit"]');
+        btn.innerText = "Saving..."; 
+        btn.disabled = true;
+
         const mobile = document.getElementById("labourMobile").value.trim();
         
         if(db.labours.some(l => l.mobile === mobile)){
             alert("Mobile Number Already Exists!");
+            btn.innerText = "Add Labour"; btn.disabled = false; // লক খুলে দেওয়া
             return;
         }
         
@@ -1182,6 +1189,10 @@
         } catch(err) {
             console.error(err); alert("Failed to add Labour");
         }
+        
+        // কাজ শেষ হলে বাটন আবার আগের মতো চালু করে দেওয়া
+        btn.innerText = "Add Labour"; 
+        btn.disabled = false;
     }
 
     function openEditLabour(id) {
@@ -1239,11 +1250,18 @@
         }
     }
 
-    async function addLabourPayment(e){
+   async function addLabourPayment(e){
         e.preventDefault();
+        
+        // বাটন লক করা হচ্ছে
+        const btn = e.target.querySelector('button[type="submit"]');
+        btn.innerText = "Adding..."; 
+        btn.disabled = true;
+
         const labourSelect = document.getElementById("paymentLabour");
         if(labourSelect.value === ""){
             alert("অনুগ্রহ করে একজন শ্রমিক নির্বাচন করুন!");
+            btn.innerText = "Add Payment"; btn.disabled = false;
             return;
         }
 
@@ -1252,7 +1270,6 @@
         
         if(!db.labours[i].payments) db.labours[i].payments=[];
         
-        // Unique ID check
         let pId = makeId();
         while (db.labours[i].payments.some(p => p.id === pId)) { pId = makeId(); }
 
@@ -1283,10 +1300,14 @@
         ]);
 
         e.target.reset(); 
-        document.getElementById("paymentDate").value = today;
+        document.getElementById("paymentDate").value = new Date().toISOString().split("T")[0];
         document.getElementById("paymentTime").value = ""; 
         alert("Payment যোগ হয়েছে।");
-        refresh(); // Only refresh, rendering double fixed
+        refresh(); 
+        
+        // বাটন আনলক
+        btn.innerText = "Add Payment"; 
+        btn.disabled = false;
     }
 
     function openEditLabourPayment(lId, pId) {
