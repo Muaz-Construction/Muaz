@@ -297,17 +297,11 @@
                         </form>
                     </div>
 
-                    <div id="officePaymentHistory" class="admin-panel">
-                        <div id="printOfficeHistoryArea">
-                            <button class="btn btn-info no-print"
-                                onclick="printData('printOfficeHistoryArea', 'Office Payment Report')">
-                                <i class="fa-solid fa-file-pdf"></i> Download PDF
-                            </button>
-                            <div id="officeHistoryList"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                  <div id="officePaymentHistory" class="admin-panel">
+    <div id="printOfficeHistoryArea">
+        <div id="officeHistoryList"></div>
+    </div>
+</div>
             
             <div id="officePaymentVisitorView" class="empty-state">
                 <i class="fa-solid fa-folder-open fa-3x" style="color:#ddd; margin-bottom:15px;"></i>
@@ -321,11 +315,13 @@
         <div class="container">
             <h2 style="color:var(--primary); margin-bottom: 20px;">👷 Labour Management</h2>
             <div class="admin-tabs no-print">
-                <button class="admin-tab active" onclick="adminTab('labourForm',this)">Labour Form</button>
-                <button class="admin-tab" onclick="adminTab('labourListTab',this)">Labour List</button>
-                <button class="admin-tab" onclick="adminTab('labourPaymentTab',this)">Labour Payment</button>
-                <button class="admin-tab" onclick="adminTab('labourHistoryTab',this)">Payment History</button>
-            </div>
+    <button class="admin-tab active" onclick="adminTab('labourForm',this)">Labour Form</button>
+    <button class="admin-tab" onclick="adminTab('labourListTab',this)">Labour List</button>
+    <button class="admin-tab" onclick="adminTab('labourPaymentTab',this)">Labour Payment</button>
+    <button class="admin-tab" onclick="adminTab('labourHistoryTab',this)">Payment History</button>
+    <button class="admin-tab" onclick="adminTab('labourAdvanceTab',this)">Advance Form</button>
+    <button class="admin-tab" onclick="adminTab('labourAdvanceHistoryTab',this)">Advance History</button>
+</div>
 
             <div id="labourForm" class="admin-panel active admin-section">
                 <form onsubmit="addLabour(event)">
@@ -2271,6 +2267,7 @@
             eyeIcon.className = "fa-solid fa-eye";
         }
     }
+
     window.togglePasswordVisibility = togglePasswordVisibility;
     window.toggleUniqueIdVisibility = toggleUniqueIdVisibility;
 </script>
