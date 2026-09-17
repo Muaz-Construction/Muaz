@@ -623,8 +623,10 @@
             <div class="form-group"><label>সময়</label><input id="elpTime" type="time" required></div>
             <div class="form-group"><label>টাকা</label><input id="elpAmount" type="number" required></div>
             <div class="form-group"><label>মোট কাজ (দিন)</label><input id="elpWorkDays" type="number" step="any" required></div>
-            <div class="form-group"><label>মাধ্যম</label>
-    <select id="elpMethod" required>
+            <div class="form-group"><label>Payment Method</label>
+    <select id="eopMethod" required>
+        <option value="">Select</option>
+        <option>Cash</option>
         <option>Nagot</option>
         <option>Bkesh</option>
         <option>Roket</option>
@@ -685,6 +687,8 @@
             <div class="form-group"><label>Date</label><input id="eopDate" type="date" required></div>
             <div class="form-group"><label>Payment Method</label>
     <select id="eopMethod" required>
+        <option value="">Select</option>
+        <option>Cash</option>
         <option>Nagot</option>
         <option>Bkesh</option>
         <option>Roket</option>
