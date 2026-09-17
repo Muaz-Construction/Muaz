@@ -281,9 +281,14 @@
                                 <select id="opMosqueId" required onchange="calcOfficeDue()"></select>
                             </div>
                             <div class="form-group"><label>Payment Method</label>
-                                <select id="opMethod" required><option>BKash</option><option>Cash</option><option>Rocket</option><option>Bank</option></select>
-                            </div>
-                            
+    <select id="opMethod" required>
+        <option value="">Select</option>
+        <option>Nagot</option>
+        <option>Bkesh</option>
+        <option>Roket</option>
+        <option>Bank</option>
+    </select>
+</div>
                             <div class="form-group"><label>Total Amount (Current Balance)</label><input id="opTotalAmt" type="number" required readonly style="background:#eef3f1; cursor:not-allowed;"></div>
                             <div class="form-group"><label>Total Payment</label><input id="opTotalPay" type="number" required oninput="calcOfficeDue()"></div>
                             <div class="form-group"><label>Due Amount (Auto Calculated)</label><input id="opDue" type="number" required readonly style="background:#eef3f1; cursor:not-allowed;"></div>
@@ -350,14 +355,19 @@
                     <div class="form-group"><label>মোট টাকার পরিমান</label><input id="paymentAmount" type="number" required></div>
                     <div class="form-group"><label>মোট কাজ (দিন)</label><input id="paymentWorkDays" type="number" step="any" required></div>
                     <div class="form-group"><label>মাধ্যম</label>
-                        <select id="paymentMethod" required><option value="">Select</option><option>BKash</option><option>Cash</option><option>Rocket</option><option>Bank</option></select>
-                    </div>
+    <select id="elpMethod" required>
+        <option>Nagot</option>
+        <option>Bkesh</option>
+        <option>Roket</option>
+        <option>Bank</option>
+    </select>
+</div>
                     <div class="form-group"><label>Remarks</label><textarea id="paymentRemarks"></textarea></div>
                     <button type="submit" class="btn">Add Payment</button>
                 </form>
             </div>
 
-            <div id="labourHistoryTab" class="admin-panel admin-section">
+           <div id="labourHistoryTab" class="admin-panel admin-section">
                 <div id="printLabourHistoryArea">
                     <button class="btn btn-info no-print"
                         onclick="printData('printLabourHistoryArea', 'Labour Payment Report')">
@@ -366,6 +376,37 @@
                     <div id="labourPaymentHistoryList"></div>
                 </div>
             </div>
+
+            <!-- নতুন Advance Form -->
+            <div id="labourAdvanceTab" class="admin-panel admin-section">
+                <form onsubmit="addLabourAdvance(event)">
+                    <div class="form-group"><label>শ্রমিক (Name)</label><select id="advanceLabour" required></select></div>
+                    <div class="form-group"><label>তারিখ (Date)</label><input id="advanceDate" type="date" required></div>
+                    <div class="form-group"><label>অগ্রিম টাকার পরিমাণ (Total TK)</label><input id="advanceAmount" type="number" required></div>
+                    <div class="form-group"><label>মাধ্যম (Method)</label>
+                        <select id="advanceMethod" required>
+                            <option value="">Select</option>
+                            <option>Nagot</option>
+                            <option>Bkesh</option>
+                            <option>Roket</option>
+                            <option>Bank</option>
+                        </select>
+                    </div>
+                    <div class="form-group"><label>নোট (Note)</label><textarea id="advanceNote"></textarea></div>
+                    <button type="submit" class="btn">Add Advance</button>
+                </form>
+            </div>
+
+            <!-- নতুন Advance History -->
+            <div id="labourAdvanceHistoryTab" class="admin-panel admin-section">
+                <div id="printAdvanceHistoryArea">
+                    <button class="btn btn-info no-print" onclick="printData('printAdvanceHistoryArea', 'Labour Advance Report')">
+                        <i class="fa-solid fa-file-pdf"></i> Download PDF
+                    </button>
+                    <div id="labourAdvanceHistoryList"></div>
+                </div>
+            </div>
+
         </div>
     </section>
 
@@ -374,11 +415,7 @@
         <div class="container">
             <h2 style="color:var(--primary); margin-bottom: 20px;">⚙️ Admin Panel</h2>
             <div class="admin-section">
-                <div class="admin-tabs no-print">
-                    <button class="admin-tab active" onclick="adminTab('addMosque',this)">Add Mosjid</button>
-                    <button class="admin-tab" onclick="adminTab('manageMosque',this)">Manage Mosjid</button>
-                    <button class="admin-tab" onclick="adminTab('transaction',this)">Transaction</button>
-                </div>
+               <div class="admin-tabs no-print">
                 
                 <div id="addMosque" class="admin-panel active">
                     <form onsubmit="addMosque(event)">
@@ -587,8 +624,13 @@
             <div class="form-group"><label>টাকা</label><input id="elpAmount" type="number" required></div>
             <div class="form-group"><label>মোট কাজ (দিন)</label><input id="elpWorkDays" type="number" step="any" required></div>
             <div class="form-group"><label>মাধ্যম</label>
-                <select id="elpMethod" required><option>BKash</option><option>Cash</option><option>Rocket</option><option>Bank</option></select>
-            </div>
+    <select id="elpMethod" required>
+        <option>Nagot</option>
+        <option>Bkesh</option>
+        <option>Roket</option>
+        <option>Bank</option>
+    </select>
+</div>
             <div class="form-group"><label>Remarks</label><textarea id="elpRemarks"></textarea></div>
             <button type="submit" class="btn" style="width:100%;">Update Payment</button>
         </form>
@@ -642,8 +684,13 @@
             <div class="form-group"><label>Mosjid Name</label><select id="eopMosqueId" required onchange="calcEditOfficeDue()"></select></div>
             <div class="form-group"><label>Date</label><input id="eopDate" type="date" required></div>
             <div class="form-group"><label>Payment Method</label>
-                <select id="eopMethod" required><option>BKash</option><option>Cash</option><option>Rocket</option><option>Bank</option></select>
-            </div>
+    <select id="eopMethod" required>
+        <option>Nagot</option>
+        <option>Bkesh</option>
+        <option>Roket</option>
+        <option>Bank</option>
+    </select>
+</div>
             <div class="form-group"><label>Total Amount (Current Balance)</label><input id="eopTotalAmt" type="number" required readonly style="background:#eef3f1; cursor:not-allowed;"></div>
             <div class="form-group"><label>Total Payment</label><input id="eopTotalPay" type="number" required oninput="calcEditOfficeDue()"></div>
             <div class="form-group"><label>Due Amount</label><input id="eopDue" type="number" required readonly style="background:#eef3f1; cursor:not-allowed;"></div>
@@ -715,10 +762,11 @@
         }
     }
 
-    const today = new Date().toISOString().split("T")[0];
+   const today = new Date().toISOString().split("T")[0];
     if(document.getElementById("opDate")) document.getElementById("opDate").value = today;
     if(document.getElementById("transactionDate")) document.getElementById("transactionDate").value = today;
     if(document.getElementById("paymentDate")) document.getElementById("paymentDate").value = today;
+    if(document.getElementById("advanceDate")) document.getElementById("advanceDate").value = today;
 
     /* ================= FIREBASE SYNC ================= */
     async function loadMosques(){
@@ -1819,25 +1867,145 @@
     }
 
     function populateLabourSelect(){
-        document.getElementById("paymentLabour").innerHTML = `<option value="">Select</option>` + db.labours.map((l)=>`<option value="${l.firebaseId}">${safe(l.name)}</option>`).join("");
+        const options = `<option value="">Select</option>` + db.labours.map((l)=>`<option value="${l.firebaseId}">${safe(l.name)}</option>`).join("");
+        document.getElementById("paymentLabour").innerHTML = options;
+        if(document.getElementById("advanceLabour")) document.getElementById("advanceLabour").innerHTML = options;
     }
 
     function updateDashboard(){
         document.getElementById("dashMosque").innerText = db.mosques.length;
     }
 
-   function refresh(){
+    function refresh(){
         updateDashboard(); 
         renderMosqueList(); 
         renderManageMosque(); 
         renderAdminLabour(); 
         renderLabourHistory();
+        renderAdvanceHistory();
         renderOfficeHistory();
         populateMosqueSelects(); 
         populateLabourSelect();
     }
 
     /* ================= APP NAVIGATION & UI ================= */
+/* ================= LABOUR ADVANCE LOGIC ================= */
+    async function addLabourAdvance(e) {
+        e.preventDefault();
+        const btn = e.target.querySelector('button[type="submit"]');
+        btn.innerText = "Adding..."; 
+        btn.disabled = true;
+
+        const labourSelect = document.getElementById("advanceLabour");
+        if(labourSelect.value === ""){
+            alert("অনুগ্রহ করে একজন শ্রমিক নির্বাচন করুন!");
+            btn.innerText = "Add Advance"; btn.disabled = false;
+            return;
+        }
+
+        const lId = labourSelect.value;
+        const i = getL(lId);
+        
+        if(!db.labours[i].advances) db.labours[i].advances = [];
+        let aId = makeId();
+
+        db.labours[i].advances.push({
+            id: aId, 
+            date: document.getElementById("advanceDate").value, 
+            amount: Number(document.getElementById("advanceAmount").value),
+            method: document.getElementById("advanceMethod").value,
+            note: document.getElementById("advanceNote").value.trim()
+        });
+        
+        if(db.labours[i].firebaseId) {
+            await updateDoc(doc(dbFirestore, "labours", db.labours[i].firebaseId), {
+                advances: db.labours[i].advances
+            });
+        }
+
+        await sendToGoogleSheet("Labour Advance", [
+            document.getElementById("advanceDate").value,
+            db.labours[i].name,
+            document.getElementById("advanceAmount").value,
+            document.getElementById("advanceMethod").value,
+            document.getElementById("advanceNote").value.trim()
+        ]);
+
+        e.target.reset(); 
+        document.getElementById("advanceDate").value = new Date().toISOString().split("T")[0];
+        alert("অগ্রিম (Advance) যোগ হয়েছে।");
+        refresh(); 
+        
+        btn.innerText = "Add Advance"; 
+        btn.disabled = false;
+    }
+
+    async function deleteLabourAdvance(lId, aId) {
+        const pass = prompt("Type DELETE to confirm");
+        if(pass === "DELETE"){
+            const lIndex = getL(lId);
+            const aIndex = db.labours[lIndex].advances.findIndex(a => a.id === aId);
+            db.labours[lIndex].advances.splice(aIndex, 1);
+            if(db.labours[lIndex].firebaseId) {
+                await updateDoc(doc(dbFirestore, "labours", db.labours[lIndex].firebaseId), {
+                    advances: db.labours[lIndex].advances
+                });
+            }
+            refresh();
+        }
+    }
+
+    function renderAdvanceHistory() {
+        const isAdmin = currentUser && currentUser.role === "admin";
+        let actionHeader = isAdmin ? `<th class="no-print">Action</th>` : ``;
+        
+        let html = `
+        <h3 style="margin:20px 0;color:#062a4d;"> Advance Details </h3>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>তারিখ (Date)</th>
+                        <th>নাম (Name)</th>
+                        <th>টাকার পরিমাণ (Amount)</th>
+                        <th>মাধ্যম (Method)</th>
+                        <th>নোট (Note)</th>
+                        ${actionHeader}
+                    </tr>
+                </thead>
+                <tbody>
+        `;
+
+        let hasRecords = false;
+        db.labours.forEach(l => {
+            if(l.advances && l.advances.length > 0) {
+                l.advances.forEach(a => {
+                    hasRecords = true;
+                    let actionBtn = isAdmin ? `
+                    <td class="no-print">
+                        <button class="btn btn-danger" style="padding:4px 8px;font-size:12px;" onclick="deleteLabourAdvance('${l.firebaseId}', '${a.id}')">Delete</button>
+                    </td>` : ``;
+
+                    html += `
+                    <tr>
+                        <td>${a.date}</td>
+                        <td>${safe(l.name)}</td>
+                        <td style="color:green;font-weight:bold;">${money(a.amount)}</td>
+                        <td>${safe(a.method)}</td>
+                        <td>${safe(a.note || "-")}</td>
+                        ${actionBtn}
+                    </tr>`;
+                });
+            }
+        });
+
+        if (!hasRecords) {
+            html += `<tr><td colspan="${isAdmin ? 6 : 5}" style="text-align:center;">কোনো অগ্রিম লেনদেন নেই।</td></tr>`;
+        }
+
+        html += `</tbody></table></div>`;
+        document.getElementById("labourAdvanceHistoryList").innerHTML = html;
+    }
     function toggleMenu() {
         document.getElementById("sidebar").classList.toggle("open");
         document.getElementById("sidebarOverlay").classList.toggle("show");
@@ -2072,6 +2240,8 @@
     window.openEditLabourPayment = openEditLabourPayment;
     window.saveLabourPaymentEdit = saveLabourPaymentEdit;
     window.deleteLabourPayment = deleteLabourPayment;
+    window.addLabourAdvance = addLabourAdvance;
+    window.deleteLabourAdvance = deleteLabourAdvance;
     window.closeEditModal = closeEditModal;
     window.syncPreview = syncPreview;
     window.sendToGoogleSheet = sendToGoogleSheet;
