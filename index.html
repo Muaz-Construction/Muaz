@@ -282,12 +282,13 @@
                             </div>
                             <div class="form-group"><label>Payment Method</label>
     <select id="opMethod" required>
-        <option value="">Select</option>
-        <option>Nagot</option>
-        <option>Bkesh</option>
-        <option>Roket</option>
-        <option>Bank</option>
-    </select>
+    <option value="">Select</option>
+    <option>Cash</option>
+    <option>Nagot</option>
+    <option>Bkesh</option>
+    <option>Roket</option>
+    <option>Bank</option>
+</select>
 </div>
                             <div class="form-group"><label>Total Amount (Current Balance)</label><input id="opTotalAmt" type="number" required readonly style="background:#eef3f1; cursor:not-allowed;"></div>
                             <div class="form-group"><label>Total Payment</label><input id="opTotalPay" type="number" required oninput="calcOfficeDue()"></div>
@@ -351,12 +352,14 @@
                     <div class="form-group"><label>মোট টাকার পরিমান</label><input id="paymentAmount" type="number" required></div>
                     <div class="form-group"><label>মোট কাজ (দিন)</label><input id="paymentWorkDays" type="number" step="any" required></div>
                     <div class="form-group"><label>মাধ্যম</label>
-    <select id="elpMethod" required>
-        <option>Nagot</option>
-        <option>Bkesh</option>
-        <option>Roket</option>
-        <option>Bank</option>
-    </select>
+    <select id="opMethod" required>
+    <option value="">Select</option>
+    <option>Cash</option>
+    <option>Nagot</option>
+    <option>Bkesh</option>
+    <option>Roket</option>
+    <option>Bank</option>
+</select>
 </div>
                     <div class="form-group"><label>Remarks</label><textarea id="paymentRemarks"></textarea></div>
                     <button type="submit" class="btn">Add Payment</button>
@@ -383,6 +386,7 @@
                         <select id="advanceMethod" required>
                             <option value="">Select</option>
                             <option>Nagot</option>
+                            <option>Cash</option>
                             <option>Bkesh</option>
                             <option>Roket</option>
                             <option>Bank</option>
