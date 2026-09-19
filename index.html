@@ -416,7 +416,11 @@
             <h2 style="color:var(--primary); margin-bottom: 20px;">⚙️ Admin Panel</h2>
             <div class="admin-section">
                <div class="admin-tabs no-print">
-                
+                    <button class="admin-tab active" onclick="adminTab('addMosque',this)">Add Mosjid</button>
+                    <button class="admin-tab" onclick="adminTab('manageMosque',this)">Manage Mosjid</button>
+                    <button class="admin-tab" onclick="adminTab('transaction',this)">Payment of Mosjid</button>
+               </div>
+               
 <div id="addMosque" class="admin-panel active">
                     <form onsubmit="addMosque(event)">
                         <div class="form-group"><label>মসজিদের নাম</label><input id="mosqueName" required></div>
@@ -461,8 +465,9 @@
                         <div class="form-group"><label>পরিশোধের মাধ্যম</label>
                             <select id="transactionMethod" required><option value="">Select</option><option>BKash</option><option>Cash</option><option>Rocket</option><option>Bank</option></select>
                         </div>
-                        <div class="form-group"><label>কী বাবদ খরচ</label><input id="transactionPurpose" required></div>
-                        
+                       <div class="form-group"><label>কী বাবদ খরচ</label><input id="transactionPurpose" required></div>
+ <div class="form-group"><label>নোট (Note)</label><textarea id="transactionNote"></textarea></div>
+                       
                         <div class="upload-container">
                             <h4>🖼️ Bill/Receipt (Image Upload & Preview)</h4>
                             <div class="input-group">
@@ -652,6 +657,7 @@
             <div class="form-group"><label>টাকা</label><input id="etAmount" type="number" required></div>
             <div class="form-group"><label>মাধ্যম</label><select id="etMethod" required><option>BKash</option><option>Cash</option><option>Rocket</option><option>Bank</option></select></div>
             <div class="form-group"><label>কী বাবদ</label><input id="etPurpose" required></div>
+<div class="form-group"><label>নোট</label><textarea id="etNote"></textarea></div>
             
             <div class="upload-container">
                 <h4>🖼️ Update Receipt Image</h4>
@@ -1003,8 +1009,9 @@ const file = document.getElementById("transactionFile").files[0];
                 date: document.getElementById("transactionDate").value,
                 time: document.getElementById("transactionTime").value,
                 amount: Number(document.getElementById("transactionAmount").value),
-                method: document.getElementById("transactionMethod").value,
+               method: document.getElementById("transactionMethod").value,
                 purpose: document.getElementById("transactionPurpose").value.trim(),
+                note: document.getElementById("transactionNote").value.trim(),
                 image: imageUrl
             });
 
@@ -1020,6 +1027,7 @@ const file = document.getElementById("transactionFile").files[0];
                 document.getElementById("transactionAmount").value,
                 document.getElementById("transactionMethod").value,
                 document.getElementById("transactionPurpose").value.trim(),
+                document.getElementById("transactionNote").value.trim(),
                 imageUrl || "N/A"
             ]);
             syncPreview('', 'transactionPreview', 'transactionPlaceholder', 'transactionHint');
@@ -1064,7 +1072,7 @@ const file = document.getElementById("transactionFile").files[0];
         t.time = document.getElementById('etTime').value;
         t.amount = Number(document.getElementById('etAmount').value);
         t.method = document.getElementById('etMethod').value;
-        t.purpose = document.getElementById('etPurpose').value;
+       t.note = document.getElementById('etNote').value.trim();
         t.image = imageUrl;
         
         if(db.mosques[mIndex].firebaseId) {
@@ -1565,11 +1573,11 @@ const mosque = db.mosques[i];
         showPage("mosqueView");
     }
 
-    function showFullDetails(id){
-    const i = getM(id);
-    if(i === -1) return;
-    const mosque = db.mosques[i];
-    const box = document.getElementById("fullDetails");
+   function showFullDetails(id){
+        const i = getM(id);
+        if(i === -1) return;
+        const mosque = db.mosques[i];
+        const box = document.getElementById("fullDetails");
         box.style.display="block";
         const isAdmin = currentUser && currentUser.role === "admin";
         
@@ -1586,11 +1594,11 @@ const mosque = db.mosques[i];
                 </td>` : '';
 
                 return `<tr><td>${t.date}</td><td>${t.time}</td><td style="color:green;font-weight:bold;">${money(t.amount)}</td>
-                <td>${safe(t.method)}</td><td>${safe(t.purpose)}</td><td style="color:red;font-weight:bold;">${money(runningDue)}</td>
+                <td>${safe(t.method)}</td><td>${safe(t.purpose)}</td><td>${safe(t.note || "-")}</td><td style="color:red;font-weight:bold;">${money(runningDue)}</td>
                 <td class="no-print">${t.image?`<img src="${t.image}" class="receipt" onclick="viewImage('${t.image}')" title="Click to enlarge">`:"—"}</td>${actionBtn}</tr>`;
             }).join("");
         } else {
-            transRows = `<tr><td colspan="${isAdmin ? 8 : 7}">কোনো লেনদেন নেই।</td></tr>`;
+            transRows = `<tr><td colspan="${isAdmin ? 9 : 8}">কোনো লেনদেন নেই।</td></tr>`;
         }
 
         let actionHeader = isAdmin ? `<th class="no-print">Action</th>` : '';
@@ -1606,7 +1614,7 @@ const mosque = db.mosques[i];
                 </div>
                 <div class="table-wrap">
                     <table>
-                        <thead><tr><th>তারিখ</th><th>সময়</th><th>মোট পরিশোধ</th><th>মাধ্যম</th><th>কী বাবদ</th><th>মোট বাকির পরিমাণ</th><th class="no-print">রসিদ / ছবি</th>${actionHeader}</tr></thead>
+                        <thead><tr><th>তারিখ</th><th>সময়</th><th>মোট পরিশোধ</th><th>মাধ্যম</th><th>কী বাবদ</th><th>নোট</th><th>মোট বাকির পরিমাণ</th><th class="no-print">রসিদ / ছবি</th>${actionHeader}</tr></thead>
                         <tbody>${transRows}</tbody>
                     </table>
                 </div>
@@ -1718,7 +1726,8 @@ const tIndex = db.mosques[mIndex].transactions.findIndex(t => t.id === tId);
         document.getElementById('etTime').value = t.time;
         document.getElementById('etAmount').value = t.amount;
         document.getElementById('etMethod').value = t.method;
-        document.getElementById('etPurpose').value = t.purpose;
+         document.getElementById('etPurpose').value = t.purpose;
+        document.getElementById('etNote').value = t.note || '';
         document.getElementById('etImage').value = t.image || '';
         syncPreview(t.image || '', 'etPreview', 'etPlaceholder', 'etHint');
         document.getElementById('editTransactionModal').classList.add('show');
