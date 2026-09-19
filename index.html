@@ -281,14 +281,14 @@
                                 <select id="opMosqueId" required onchange="calcOfficeDue()"></select>
                             </div>
                             <div class="form-group"><label>Payment Method</label>
-    <select id="opMethod" required>
-        <option value="">Select</option>
-        <option>Cash</option>
-        <option>Nagot</option>
-        <option>Bkesh</option>
-        <option>Roket</option>
-        <option>Bank</option>
-    </select>
+  <select id="opMethod" required>
+    <option value="">Select</option>
+    <option value="BKash">BKash</option>
+    <option value="Cash">Cash</option>
+    <option value="Rocket">Rocket</option>
+    <option value="Nagad">Nagad</option>
+    <option value="Bank">Bank</option>
+</select>
 </div>
                             <div class="form-group"><label>Total Amount (Current Balance)</label><input id="opTotalAmt" type="number" required readonly style="background:#eef3f1; cursor:not-allowed;"></div>
                             <div class="form-group"><label>Total Payment</label><input id="opTotalPay" type="number" required oninput="calcOfficeDue()"></div>
@@ -306,7 +306,7 @@
             
             <div id="officePaymentVisitorView" class="empty-state">
                 <i class="fa-solid fa-folder-open fa-3x" style="color:#ddd; margin-bottom:15px;"></i>
-                <p>Visitor View: Only Admins can manage office payments.</p>
+                <p>No Record Data</p>
             </div>
         </div>
     </section>
@@ -352,13 +352,13 @@
                     <div class="form-group"><label>মোট টাকার পরিমান</label><input id="paymentAmount" type="number" required></div>
                     <div class="form-group"><label>মোট কাজ (দিন)</label><input id="paymentWorkDays" type="number" step="any" required></div>
                     <div class="form-group"><label>মাধ্যম</label>
-    <select id="opMethod" required>
+  <select id="paymentMethod" required>
     <option value="">Select</option>
-    <option>Cash</option>
-    <option>Nagot</option>
-    <option>Bkesh</option>
-    <option>Roket</option>
-    <option>Bank</option>
+    <option value="BKash">BKash</option>
+    <option value="Cash">Cash</option>
+    <option value="Rocket">Rocket</option>
+    <option value="Nagad">Nagad</option>
+    <option value="Bank">Bank</option>
 </select>
 </div>
                     <div class="form-group"><label>Remarks</label><textarea id="paymentRemarks"></textarea></div>
@@ -384,13 +384,13 @@
                     <div class="form-group"><label>অগ্রিম টাকার পরিমাণ (Total TK)</label><input id="advanceAmount" type="number" required></div>
                     <div class="form-group"><label>মাধ্যম (Method)</label>
                         <select id="advanceMethod" required>
-                            <option value="">Select</option>
-                            <option>Nagot</option>
-                            <option>Cash</option>
-                            <option>Bkesh</option>
-                            <option>Roket</option>
-                            <option>Bank</option>
-                        </select>
+    <option value="">Select</option>
+    <option value="BKash">BKash</option>
+    <option value="Cash">Cash</option>
+    <option value="Rocket">Rocket</option>
+    <option value="Nagad">Nagad</option>
+    <option value="Bank">Bank</option>
+</select>
                     </div>
                     <div class="form-group"><label>নোট (Note)</label><textarea id="advanceNote"></textarea></div>
                     <button type="submit" class="btn">Add Advance</button>
@@ -417,7 +417,7 @@
             <div class="admin-section">
                <div class="admin-tabs no-print">
                 
-                <div id="addMosque" class="admin-panel active">
+<div id="addMosque" class="admin-panel active">
                     <form onsubmit="addMosque(event)">
                         <div class="form-group"><label>মসজিদের নাম</label><input id="mosqueName" required></div>
                         <div class="form-group"><label>ঠিকানা</label><textarea id="mosqueAddress" required></textarea></div>
@@ -624,14 +624,14 @@
             <div class="form-group"><label>টাকা</label><input id="elpAmount" type="number" required></div>
             <div class="form-group"><label>মোট কাজ (দিন)</label><input id="elpWorkDays" type="number" step="any" required></div>
             <div class="form-group"><label>Payment Method</label>
-    <select id="eopMethod" required>
-        <option value="">Select</option>
-        <option>Cash</option>
-        <option>Nagot</option>
-        <option>Bkesh</option>
-        <option>Roket</option>
-        <option>Bank</option>
-    </select>
+   <select id="elpMethod" required>
+    <option value="">Select</option>
+    <option value="BKash">BKash</option>
+    <option value="Cash">Cash</option>
+    <option value="Rocket">Rocket</option>
+    <option value="Nagad">Nagad</option>
+    <option value="Bank">Bank</option>
+</select>
 </div>
             <div class="form-group"><label>Remarks</label><textarea id="elpRemarks"></textarea></div>
             <button type="submit" class="btn" style="width:100%;">Update Payment</button>
@@ -686,14 +686,14 @@
             <div class="form-group"><label>Mosjid Name</label><select id="eopMosqueId" required onchange="calcEditOfficeDue()"></select></div>
             <div class="form-group"><label>Date</label><input id="eopDate" type="date" required></div>
             <div class="form-group"><label>Payment Method</label>
-    <select id="eopMethod" required>
-        <option value="">Select</option>
-        <option>Cash</option>
-        <option>Nagot</option>
-        <option>Bkesh</option>
-        <option>Roket</option>
-        <option>Bank</option>
-    </select>
+   <select id="eopMethod" required>
+    <option value="">Select</option>
+    <option value="BKash">BKash</option>
+    <option value="Cash">Cash</option>
+    <option value="Rocket">Rocket</option>
+    <option value="Nagad">Nagad</option>
+    <option value="Bank">Bank</option>
+</select>
 </div>
             <div class="form-group"><label>Total Amount (Current Balance)</label><input id="eopTotalAmt" type="number" required readonly style="background:#eef3f1; cursor:not-allowed;"></div>
             <div class="form-group"><label>Total Payment</label><input id="eopTotalPay" type="number" required oninput="calcEditOfficeDue()"></div>
@@ -766,7 +766,9 @@
         }
     }
 
-   const today = new Date().toISOString().split("T")[0];
+   const nowTime = new Date();
+   nowTime.setMinutes(nowTime.getMinutes() - nowTime.getTimezoneOffset());
+   const today = nowTime.toISOString().split("T")[0];
     if(document.getElementById("opDate")) document.getElementById("opDate").value = today;
     if(document.getElementById("transactionDate")) document.getElementById("transactionDate").value = today;
     if(document.getElementById("paymentDate")) document.getElementById("paymentDate").value = today;
@@ -810,14 +812,22 @@
         return await getDownloadURL(storageRef);
     }
     
-    async function deleteFirebaseImage(url) {
-        if (url && url.includes("firebasestorage")) {
-            try {
-                const imgRef = ref(storage, url);
-                await deleteObject(imgRef);
-            } catch(e) { console.warn("Failed to delete old image:", e); }
+  async function deleteFirebaseImage(url) {
+    if (!url || !url.includes("firebasestorage")) return;
+    try {
+        // Firebase Storage ref তৈরি করতে হয় path দিয়ে, ডাউনলোড URL দিয়ে নয়
+        // URL থেকে path বের করার একটি উপায়:
+        const decodedUrl = decodeURIComponent(url);
+        const match = decodedUrl.match(/\/o\/(.+?)\?/);
+        if (match && match[1]) {
+            const filePath = match[1];
+            const imgRef = ref(storage, filePath);
+            await deleteObject(imgRef);
         }
+    } catch(e) { 
+        console.warn("Failed to delete old image:", e); 
     }
+}
 
     // Auth State Observer
     onAuthStateChanged(auth, (user) => {
@@ -974,7 +984,8 @@
         try {
             const mId = transMosqueSelect.value;
             const i = getM(mId);
-            const file = document.getElementById("transactionFile").files[0];
+if (i === -1) { alert("Mosjid not found!"); btn.innerText = "Add Transaction"; btn.disabled = false; return; }
+const file = document.getElementById("transactionFile").files[0];
             let imageUrl = document.getElementById("transactionImage").value.trim();
             
             if(file) {
@@ -1068,11 +1079,13 @@
         alert("Transaction updated successfully!");
     }
 
-    async function deleteTrans(mId, tId) {
+   async function deleteTrans(mId, tId) {
         const pass = prompt("Type DELETE to confirm");
         if(pass === "DELETE"){
             const mIndex = getM(mId);
+            if(mIndex === -1) return;
             const tIndex = db.mosques[mIndex].transactions.findIndex(t => t.id === tId);
+            if(tIndex === -1) return;
             const trans = db.mosques[mIndex].transactions[tIndex];
             
             await deleteFirebaseImage(trans.image);
@@ -1185,7 +1198,8 @@
 
     function openEditOfficePayment(id) {
         const i = getOP(id);
-        const p = db.officePayments[i];
+if (i === -1) return;
+const p = db.officePayments[i];
         document.getElementById('eopId').value = id;
         document.getElementById('eopMosqueId').value = p.mosqueId;
         document.getElementById('eopDate').value = p.date;
@@ -1286,6 +1300,7 @@
 
     function openEditLabour(id) {
         const i = getL(id);
+if(i === -1) return;
         const l = db.labours[i];
         document.getElementById('elId').value = id;
         document.getElementById('elName').value = l.name;
@@ -1299,8 +1314,8 @@
         e.preventDefault();
         const id = document.getElementById('elId').value;
         const i = getL(id);
-        const mobile = document.getElementById('elMobile').value.trim();
-        
+if(i === -1) return;
+const mobile = document.getElementById('elMobile').value.trim();
         if(db.labours.some((l, idx) => l.mobile === mobile && idx !== i)){
             alert("Mobile Number Already Exists!");
             return;
@@ -1326,18 +1341,22 @@
         alert("Labour updated successfully!");
     }
 
-    async function deleteLabour(id){
-        const pass = prompt("Type DELETE to confirm");
-        if(pass === "DELETE"){
-            const i = getL(id);
-            if(db.labours[i].firebaseId) {
-                await deleteDoc(doc(dbFirestore, "labours", db.labours[i].firebaseId));
-            }
-            db.labours.splice(i,1);
-            await loadLabours();
-            refresh();
+   async function deleteLabour(id){
+    const pass = prompt("Type DELETE to confirm");
+    if(pass === "DELETE"){
+        const i = getL(id);
+        if(i === -1) {
+            alert("শ্রমিক খুঁজে পাওয়া যায়নি!");
+            return;
         }
+        if(db.labours[i].firebaseId) {
+            await deleteDoc(doc(dbFirestore, "labours", db.labours[i].firebaseId));
+        }
+        db.labours.splice(i, 1);
+        await loadLabours();
+        refresh();
     }
+}
 
    async function addLabourPayment(e){
         e.preventDefault();
@@ -1354,11 +1373,11 @@
             return;
         }
 
-        const lId = labourSelect.value;
-        const i = getL(lId);
-        
-        if(!db.labours[i].payments) db.labours[i].payments=[];
-        
+       const lId = labourSelect.value;
+const i = getL(lId);
+if(i === -1) { alert("Labour not found!"); btn.innerText = "Add Payment"; btn.disabled = false; return; }
+
+if(!db.labours[i].payments) db.labours[i].payments=[];
         let pId = makeId();
         while (db.labours[i].payments.some(p => p.id === pId)) { pId = makeId(); }
 
@@ -1401,7 +1420,9 @@
 
     function openEditLabourPayment(lId, pId) {
         const lIndex = getL(lId);
-        const pIndex = db.labours[lIndex].payments.findIndex(p => p.id === pId);
+if(lIndex === -1) return;
+const pIndex = db.labours[lIndex].payments.findIndex(p => p.id === pId);
+if(pIndex === -1) return;
         const p = db.labours[lIndex].payments[pIndex];
         
         document.getElementById("elpLabourId").value = lId;
@@ -1420,9 +1441,10 @@
         const lId = document.getElementById("elpLabourId").value;
         const pId = document.getElementById("elpPaymentId").value;
         const lIndex = getL(lId);
-        const pIndex = db.labours[lIndex].payments.findIndex(p => p.id === pId);
+if(lIndex === -1) return;
+const pIndex = db.labours[lIndex].payments.findIndex(p => p.id === pId);
+if(pIndex === -1) return;
         const p = db.labours[lIndex].payments[pIndex];
-        
         p.date = document.getElementById("elpDate").value;
         p.time = document.getElementById("elpTime").value;
         p.amount = Number(document.getElementById("elpAmount").value);
@@ -1445,9 +1467,11 @@
     async function deleteLabourPayment(lId, pId) {
         const pass = prompt("Type DELETE to confirm");
         if(pass === "DELETE"){
-            const lIndex = getL(lId);
-            const pIndex = db.labours[lIndex].payments.findIndex(p => p.id === pId);
-            db.labours[lIndex].payments.splice(pIndex, 1);
+           const lIndex = getL(lId);
+if(lIndex === -1) return;
+const pIndex = db.labours[lIndex].payments.findIndex(p => p.id === pId);
+if(pIndex === -1) return;
+             db.labours[lIndex].payments.splice(pIndex, 1);
             if(db.labours[lIndex].firebaseId) {
                 await updateDoc(doc(dbFirestore, "labours", db.labours[lIndex].firebaseId), {
                     payments: db.labours[lIndex].payments
@@ -1468,10 +1492,12 @@
             </div>`).join("");
     }
 
-    function openMosque(id){
+        function openMosque(id){
         selectedMosqueId = id;
         const i = getM(id);
+        if(i === -1) { alert("Mosjid not found!"); return; }
         if(currentUser && currentUser.role==="admin"){ showMosqueSummary(id); return; }
+        
         document.getElementById("idMosqueName").innerText = db.mosques[i].name;
         document.getElementById("visitorUniqueId").value = "";
         document.getElementById("idMessage").className = "message";
@@ -1480,7 +1506,9 @@
 
     async function verifyUniqueId(){
         const id = document.getElementById("visitorUniqueId").value.trim();
-        const clickedMosque = db.mosques[getM(selectedMosqueId)];
+        const mIndex = getM(selectedMosqueId);
+        if(mIndex === -1) return;
+        const clickedMosque = db.mosques[mIndex];
         const btn = document.getElementById("verifyIdBtn");
         
         if (!id) {
@@ -1491,26 +1519,12 @@
         btn.innerText = "চেক করা হচ্ছে...";
         btn.disabled = true;
 
-        try {
-            const q = query(collection(dbFirestore, "mosques"), where("uniqueId", "==", id));
-            const querySnapshot = await getDocs(q);
-            
-            let isValid = false;
-            querySnapshot.forEach((docSnap) => {
-                if (docSnap.id === clickedMosque.firebaseId) {
-                    isValid = true;
-                }
-            });
-
-            if (isValid) {
-                closeModal(); 
-                showMosqueSummary(selectedMosqueId); 
-            } else {
-                showMessage("idMessage", "ভুল Unique ID।", "error"); 
-            }
-        } catch (error) {
-            console.error("Error verifying Unique ID:", error);
-            showMessage("idMessage", "সার্ভার এরর! আবার চেষ্টা করুন।", "error");
+       // লোকাল ডাটাবেস থেকে চেক করা হলো (খুব দ্রুত কাজ করবে এবং ইন্টারনেট খরচ হবে না)
+        if (clickedMosque.uniqueId && clickedMosque.uniqueId.toLowerCase() === id.toLowerCase()) {
+            closeModal(); 
+            showMosqueSummary(selectedMosqueId); 
+        } else {
+            showMessage("idMessage", "ভুল Unique ID।", "error"); 
         }
         
         btn.innerText = "প্রবেশ করুন";
@@ -1520,7 +1534,9 @@
     function closeModal(){ document.getElementById("idModal").classList.remove("show"); }
 
     function showMosqueSummary(id){
-        const mosque = db.mosques[getM(id)];
+        const i = getM(id);
+if(i === -1) return;
+const mosque = db.mosques[i];
         const paid = mosque.transactions ? mosque.transactions.reduce((sum,t)=>sum+Number(t.amount||0),0) : 0;
         const due = Number(mosque.allocated) - paid;
         
@@ -1550,8 +1566,10 @@
     }
 
     function showFullDetails(id){
-        const mosque = db.mosques[getM(id)];
-        const box = document.getElementById("fullDetails");
+    const i = getM(id);
+    if(i === -1) return;
+    const mosque = db.mosques[i];
+    const box = document.getElementById("fullDetails");
         box.style.display="block";
         const isAdmin = currentUser && currentUser.role === "admin";
         
@@ -1676,7 +1694,9 @@
     }
 
     function openEditMosque(id) {
-        const m = db.mosques[getM(id)];
+        const i = getM(id);
+if(i === -1) return;
+const m = db.mosques[i];
         document.getElementById('emId').value = id;
         document.getElementById('emName').value = m.name;
         document.getElementById('emAddress').value = m.address;
@@ -1689,7 +1709,8 @@
 
     function openEditTrans(mId, tId) {
         const mIndex = getM(mId);
-        const tIndex = db.mosques[mIndex].transactions.findIndex(t => t.id === tId);
+if(mIndex === -1) return;
+const tIndex = db.mosques[mIndex].transactions.findIndex(t => t.id === tId);
         const t = db.mosques[mIndex].transactions[tIndex];
         document.getElementById('etMosqueId').value = mId;
         document.getElementById('etTransId').value = tId;
@@ -1738,9 +1759,11 @@
                 <tbody>
                     ${db.labours.map((l)=>{
                         const totalDaysWorked = l.payments ? l.payments.reduce((s,p)=>s+Number(p.workDays||0),0) : 0;
-                        const totalWage = l.dailyWage * totalDaysWorked;
-                        const paid = l.payments ? l.payments.reduce((s,p)=>s+Number(p.amount||0),0) : 0;
-                        const due = totalWage - paid;
+    const totalWage = l.dailyWage * totalDaysWorked;
+    const paid = l.payments ? l.payments.reduce((s,p)=>s+Number(p.amount||0),0) : 0;
+    const advancePaid = l.advances ? l.advances.reduce((s,a)=>s+Number(a.amount||0),0) : 0;
+    const totalReceived = paid + advancePaid;
+    const due = totalWage - totalReceived;
 
                         let actionBtn = isAdmin ? `
                         <td class="no-print">
@@ -1758,7 +1781,7 @@
                             <td>${money(l.dailyWage)}</td>
                             <td>${totalDaysWorked}</td>
                             <td style="font-weight:bold;">${money(totalWage)}</td>
-                            <td style="color:green;font-weight:bold;">${money(paid)}</td>
+                            <td style="color:green;font-weight:bold;">${money(totalReceived)}</td>
                             <td style="color:red;font-weight:bold;">${money(due)}</td>
                             ${actionBtn}
                         </tr>`;
@@ -1771,15 +1794,19 @@
     }
 
     function viewLabourPayments(id) {
-        const l = db.labours[getL(id)];
+        const i = getL(id);
+if(i === -1) return;
+const l = db.labours[i];
         const area = document.getElementById("labourPaymentDetailsArea");
         area.style.display = "block";
         const isAdmin = currentUser && currentUser.role === "admin";
         
         const totalDays = l.payments ? l.payments.reduce((sum, p) => sum + Number(p.workDays || 0), 0) : 0;
         const totalWage = l.dailyWage * totalDays;
-        const totalPaid = l.payments ? l.payments.reduce((sum, p) => sum + Number(p.amount || 0), 0) : 0;
-        const totalDue = totalWage - totalPaid;
+       const totalPaid = l.payments ? l.payments.reduce((sum, p) => sum + Number(p.amount || 0), 0) : 0;
+    const totalAdvance = l.advances ? l.advances.reduce((sum, a) => sum + Number(a.amount || 0), 0) : 0;
+    const grandTotalPaid = totalPaid + totalAdvance;
+    const totalDue = totalWage - grandTotalPaid;
     
         let runningDue = 0;
         let paymentsRows = "";
@@ -1834,7 +1861,7 @@
                     </div>
                     <div class="summary-card">
                         <h3>মোট পরিশোধ</h3>
-                        <strong style="color:green;">${money(totalPaid)}</strong>
+                        <strong style="color:green;">${money(grandTotalPaid)}</strong>
                     </div>
                     <div class="summary-card">
                         <h3>বাকি টাকা</h3>
@@ -1908,10 +1935,11 @@
         }
 
         const lId = labourSelect.value;
-        const i = getL(lId);
+const i = getL(lId);
+if(i === -1) { alert("Labour not found!"); btn.innerText = "Add Advance"; btn.disabled = false; return; }
         
-        if(!db.labours[i].advances) db.labours[i].advances = [];
-        let aId = makeId();
+if(!db.labours[i].advances) db.labours[i].advances = [];
+let aId = makeId();
 
         db.labours[i].advances.push({
             id: aId, 
@@ -1948,8 +1976,10 @@
         const pass = prompt("Type DELETE to confirm");
         if(pass === "DELETE"){
             const lIndex = getL(lId);
-            const aIndex = db.labours[lIndex].advances.findIndex(a => a.id === aId);
-            db.labours[lIndex].advances.splice(aIndex, 1);
+if(lIndex === -1) return;
+const aIndex = db.labours[lIndex].advances.findIndex(a => a.id === aId);
+if(aIndex === -1) return;
+             db.labours[lIndex].advances.splice(aIndex, 1);
             if(db.labours[lIndex].firebaseId) {
                 await updateDoc(doc(dbFirestore, "labours", db.labours[lIndex].firebaseId), {
                     advances: db.labours[lIndex].advances
@@ -2086,7 +2116,7 @@
 
     function showPage(page){
         // Secure Pages from URL/Console access (BUG 7 Fixed)
-        const securedPages = ['admin', 'labour', 'officePayment'];
+        const securedPages = ['admin', 'labour'];
         if (securedPages.includes(page) && (!currentUser || currentUser.role !== "admin")) {
             page = 'home';
         }
