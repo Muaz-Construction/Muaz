@@ -104,17 +104,40 @@
         .empty-state { padding: 50px; text-align: center; color: #aaa; font-size: 20px; }
         footer{ background:var(--primary); color:white; text-align:center; padding:20px; margin-top: auto; font-size: 14px; width: 100%; }
 
-        /* PRINT STYLES */
+       /* PRINT STYLES */
+     /* PRINT STYLES */
         .pdf-export-header { display: none; }
         @media print {
+            /* এটি ব্রাউজারের ডিফল্ট তারিখ ও সময় (9/20/26...) মুছে ফেলবে */
+            @page { margin: 0; } 
+            
+            * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
             body * { visibility: hidden; }
-            .print-section, .print-section * { visibility: visible; }
-            .print-section { position: absolute; left: 0; top: 0; width: 100%; }
-            .pdf-export-header { display: block !important; text-align: center; margin-bottom: 25px; }
-            .pdf-export-header h2 { color: #062a4d; margin: 0; font-size: 26px; }
-            .pdf-export-header h3 { margin: 5px 0; color: #333; font-size: 18px; }
-            .pdf-export-header p { margin: 0; font-weight: bold; font-size: 15px; }
-            .pdf-export-header hr { margin-top: 15px; border: 1px solid #ddd; }
+            
+            /* মূল সেকশন ও লেখার কালার */
+            .print-section, .print-section * { visibility: visible; } 
+            .print-section { position: absolute; left: 0; top: 0; width: 100%; padding: 25px; box-sizing: border-box; }
+            
+            .pdf-export-header { display: block !important; margin-bottom: 20px; }
+            
+            /* টেবিলের প্রফেশনাল প্রিন্ট ডিজাইন (Light Gray Header, Black Text) */
+            table { width: 100% !important; border-collapse: collapse !important; border: 1px solid #000 !important; }
+            th { 
+                background-color: #e9ecef !important; /* হালকা ধূসর ব্যাকগ্রাউন্ড */
+                color: #000 !important; /* কালো লেখা */
+                font-weight: bold !important; 
+                font-size: 16px !important; 
+                border: 1px solid #000 !important; 
+                padding: 10px !important;
+            }
+            td { 
+                color: #000 !important; 
+                font-weight: normal !important; 
+                font-size: 15px !important; 
+                border: 1px solid #000 !important; 
+                padding: 8px !important; 
+            }
+            
             .no-print { display: none !important; }
         }
 
@@ -2141,7 +2164,7 @@ if(aIndex === -1) return;
         refresh();
     }
 
-    function printData(elementId, reportName="Payment Report") {
+  function printData(elementId, reportName="Payment Report") {
         document.querySelectorAll('.print-section').forEach(e => e.classList.remove('print-section'));
         const el = document.getElementById(elementId);
         
@@ -2149,11 +2172,17 @@ if(aIndex === -1) return;
             const dateStr = new Date().toLocaleDateString('en-GB');
             const header = document.createElement('div');
             header.className = 'pdf-export-header';
+            
             header.innerHTML = `
-                <h2>Muaz Construction & Consultant</h2>
-                <h3>${reportName}</h3>
-                <p>Date: ${dateStr}</p>
-                <hr>
+                <!-- Watermark Background (Brighter) -->
+                <img src="https://i.ibb.co.com/RkByHr2S/file-000000001ba87208917a643199a1201d.png" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); opacity: 0.15; z-index: -1; width: 450px; pointer-events: none;" alt="Watermark">
+                
+                <!-- Centered Header Text -->
+                <div style="text-align: center; border-bottom: 2px solid #ddd; padding-bottom: 10px; margin-bottom: 15px;">
+                    <h2 style="color: #062a4d; margin: 0; font-size: 26px;">Muaz Construction & Consultant</h2>
+                    <h3 style="margin: 5px 0; color: #333; font-size: 18px;">${reportName}</h3>
+                    <p style="margin: 0; font-weight: bold; font-size: 15px;">Date: ${dateStr}</p>
+                </div>
             `;
             el.insertBefore(header, el.firstChild);
             el.classList.add('print-section');
@@ -2162,7 +2191,6 @@ if(aIndex === -1) return;
             header.remove();
         }
     }
-
     function viewImage(src) {
         if(!src) return;
         document.getElementById("expandedImg").src = src;
