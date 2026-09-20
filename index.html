@@ -105,10 +105,9 @@
         footer{ background:var(--primary); color:white; text-align:center; padding:20px; margin-top: auto; font-size: 14px; width: 100%; }
 
        /* PRINT STYLES */
-     /* PRINT STYLES */
         .pdf-export-header { display: none; }
         @media print {
-            /* এটি ব্রাউজারের ডিফল্ট তারিখ ও সময় (9/20/26...) মুছে ফেলবে */
+            /* এটি ব্রাউজারের ডিফল্ট তারিখ ও সময় মুছে ফেলবে */
             @page { margin: 0; } 
             
             * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
@@ -120,7 +119,7 @@
             
             .pdf-export-header { display: block !important; margin-bottom: 20px; }
             
-            /* টেবিলের প্রফেশনাল প্রিন্ট ডিজাইন (Light Gray Header, Black Text) */
+            /* টেবিলের প্রফেশনাল প্রিন্ট ডিজাইন (Light Gray Header, Normal Text) */
             table { width: 100% !important; border-collapse: collapse !important; border: 1px solid #000 !important; }
             th { 
                 background-color: #e9ecef !important; /* হালকা ধূসর ব্যাকগ্রাউন্ড */
@@ -132,7 +131,7 @@
             }
             td { 
                 color: #000 !important; 
-                font-weight: normal !important; 
+                font-weight: normal !important; /* লেখা অতিরিক্ত গাঢ় হবে না */
                 font-size: 15px !important; 
                 border: 1px solid #000 !important; 
                 padding: 8px !important; 
@@ -376,7 +375,7 @@
                     <div class="form-group"><label>সময়</label><input id="paymentTime" type="time" required></div>
                     <div class="form-group"><label>মোট টাকার পরিমান</label><input id="paymentAmount" type="number" required></div>
                     <div class="form-group"><label>মোট কাজ (দিন)</label><input id="paymentWorkDays" type="number" step="any" required></div>
-                    <div class="form-group"><label>মাধ্যম</label>
+                    <div class="form-group"><label>Payment Method</label>
   <select id="paymentMethod" required>
     <option value="">Select</option>
     <option value="BKash">BKash</option>
@@ -407,7 +406,7 @@
                     <div class="form-group"><label>শ্রমিক (Name)</label><select id="advanceLabour" required></select></div>
                     <div class="form-group"><label>তারিখ (Date)</label><input id="advanceDate" type="date" required></div>
                     <div class="form-group"><label>অগ্রিম টাকার পরিমাণ (Total TK)</label><input id="advanceAmount" type="number" required></div>
-                    <div class="form-group"><label>মাধ্যম (Method)</label>
+                    <div class="form-group"><label>Payment Method</label>
                         <select id="advanceMethod" required>
     <option value="">Select</option>
     <option value="BKash">BKash</option>
@@ -487,7 +486,7 @@
                         <div class="form-group"><label>তারিখ</label><input id="transactionDate" type="date" required></div>
                         <div class="form-group"><label>সময়</label><input id="transactionTime" type="time" required></div>
                         <div class="form-group"><label>মোট টাকার পরিমান</label><input id="transactionAmount" type="number" required></div>
-                        <div class="form-group"><label>পরিশোধের মাধ্যম</label>
+                       <div class="form-group"><label>Payment Method</label>
                             <select id="transactionMethod" required><option value="">Select</option><option>BKash</option><option>Cash</option><option>Rocket</option><option>Bank</option></select>
                         </div>
                        <div class="form-group"><label>কী বাবদ খরচ</label><input id="transactionPurpose" required></div>
@@ -680,7 +679,7 @@
             <div class="form-group"><label>তারিখ</label><input id="etDate" type="date" required></div>
             <div class="form-group"><label>সময়</label><input id="etTime" type="time" required></div>
             <div class="form-group"><label>টাকা</label><input id="etAmount" type="number" required></div>
-            <div class="form-group"><label>মাধ্যম</label><select id="etMethod" required><option>BKash</option><option>Cash</option><option>Rocket</option><option>Bank</option></select></div>
+            <div class="form-group"><label>Payment Method</label><select id="etMethod" required><option>BKash</option><option>Cash</option><option>Rocket</option><option>Bank</option></select></div>
             <div class="form-group"><label>কী বাবদ</label><input id="etPurpose" required></div>
 <div class="form-group"><label>নোট</label><textarea id="etNote"></textarea></div>
             
@@ -1639,7 +1638,7 @@ const mosque = db.mosques[i];
                 </div>
                 <div class="table-wrap">
                     <table>
-                        <thead><tr><th>তারিখ</th><th>সময়</th><th>মোট পরিশোধ</th><th>মাধ্যম</th><th>কী বাবদ</th><th>নোট</th><th>মোট বাকির পরিমাণ</th><th class="no-print">রসিদ / ছবি</th>${actionHeader}</tr></thead>
+                        <thead><tr><th>তারিখ</th><th>সময়</th><th>মোট পরিশোধ</th><th>Payment Method</th><th>কী বাবদ</th><th>নোট</th><th>মোট বাকির পরিমাণ</th><th class="no-print">রসিদ / ছবি</th>${actionHeader}</tr></thead>
                         <tbody>${transRows}</tbody>
                     </table>
                 </div>
@@ -1662,7 +1661,7 @@ const mosque = db.mosques[i];
                     <tr>
                         <th>Date</th>
                         <th>Name of Mosjid</th>
-                        <th>Method</th>
+                        <th>Payment Method</th>
                         <th>Total Payment</th>
                         <th>Total Due</th>
                         <th>Total Payable Amount</th>
@@ -1912,9 +1911,7 @@ const l = db.labours[i];
                                 <th>কাজ (দিন)</th>
                                 <th>মজুরি</th>
                                 <th>প্রাপ্ত টাকা</th>
-                                <th>সর্বমোট বাকি</th>
-                                <th>মাধ্যম</th>
-                                <th>Remarks</th>
+                                <th>সর্বমোট বাকি</th><th>Payment Method</th><th>Remarks</th>
                                 ${isAdmin ? `<th class="no-print">Action</th>` : ``}
                             </tr>
                         </thead>
@@ -2036,7 +2033,7 @@ if(aIndex === -1) return;
                         <th>তারিখ (Date)</th>
                         <th>নাম (Name)</th>
                         <th>টাকার পরিমাণ (Amount)</th>
-                        <th>মাধ্যম (Method)</th>
+                        <th>Payment Method</th>
                         <th>নোট (Note)</th>
                         ${actionHeader}
                     </tr>
@@ -2164,7 +2161,7 @@ if(aIndex === -1) return;
         refresh();
     }
 
-  function printData(elementId, reportName="Payment Report") {
+    function printData(elementId, reportName="Payment Report") {
         document.querySelectorAll('.print-section').forEach(e => e.classList.remove('print-section'));
         const el = document.getElementById(elementId);
         
@@ -2173,8 +2170,9 @@ if(aIndex === -1) return;
             const header = document.createElement('div');
             header.className = 'pdf-export-header';
             
+            // ওয়াটারমার্ক এবং সেন্টার্ড হেডার ডিজাইন
             header.innerHTML = `
-                <!-- Watermark Background (Brighter) -->
+                <!-- Watermark Background -->
                 <img src="https://i.ibb.co.com/RkByHr2S/file-000000001ba87208917a643199a1201d.png" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); opacity: 0.15; z-index: -1; width: 450px; pointer-events: none;" alt="Watermark">
                 
                 <!-- Centered Header Text -->
