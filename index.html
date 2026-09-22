@@ -1588,8 +1588,8 @@ const mosque = db.mosques[i];
             </div>
             <div class="summary-grid">
                 <div class="summary-card"><h3>মোট বরাদ্দ</h3><strong>${money(mosque.allocated)}</strong></div>
-                <div class="summary-card"><h3>মোট পরিশোধ</h3><strong>${money(paid)}</strong></div>
-                <div class="summary-card"><h3>বাকি / Due</h3><strong>${money(due)}</strong></div>
+                <div class="summary-card"><h3>সর্বমোট পরিশোধ</h3><strong>${money(paid)}</strong></div>
+                <div class="summary-card"><h3>বতর্মান বাকির পরিমাণ</h3><strong>${money(due)}</strong></div>
             </div>
             <button class="btn detail-btn no-print" onclick="showFullDetails('${id}')">📋 বিস্তারিত দেখুন</button>
             <div id="fullDetails" style="display:none; margin-top:20px;"></div>
@@ -1625,6 +1625,9 @@ const mosque = db.mosques[i];
             transRows = `<tr><td colspan="${isAdmin ? 9 : 8}">কোনো লেনদেন নেই।</td></tr>`;
         }
 
+        const paid = mosque.transactions ? mosque.transactions.reduce((sum,t)=>sum+Number(t.amount||0),0) : 0;
+        const due = Number(mosque.allocated) - paid;
+
         let actionHeader = isAdmin ? `<th class="no-print">Action</th>` : '';
 
         box.innerHTML=`
@@ -1636,9 +1639,16 @@ const mosque = db.mosques[i];
                     </h3>
                     <button class="btn btn-info no-print" style="position:absolute; right:0; top:0; margin:0; padding:6px 12px; font-size:13px;" onclick="printData('financialPrintArea', 'Mosjid Financial Details')"><i class="fa-solid fa-file-pdf"></i> PDF</button>
                 </div>
+                
+                <div style="margin-bottom: 20px; font-size: 16px; text-align: center; background: #f8f9fa; padding: 12px; border-radius: 8px; border: 1px solid #ddd;">
+                    <span style="color: #0984e3; font-weight: bold; margin: 0 10px; display: inline-block;">মোট বরাদ্দ: ${money(mosque.allocated)}</span>
+                    <span style="color: #27ae60; font-weight: bold; margin: 0 10px; display: inline-block;">সর্বমোট পরিশোধ: ${money(paid)}</span>
+                    <span style="color: #e74c3c; font-weight: bold; margin: 0 10px; display: inline-block;">বতর্মান বাকির পরিমাণ: ${money(due)}</span>
+                </div>
+
                 <div class="table-wrap">
                     <table>
-                        <thead><tr><th>তারিখ</th><th>সময়</th><th>মোট পরিশোধ</th><th>Payment Method</th><th>কী বাবদ</th><th>নোট</th><th>মোট বাকির পরিমাণ</th><th class="no-print">রসিদ / ছবি</th>${actionHeader}</tr></thead>
+                        <thead><tr><th>তারিখ</th><th>সময়</th><th>সর্বমোট পরিশোধ</th><th>Payment Method</th><th>কী বাবদ</th><th>নোট</th><th>বতর্মান বাকির পরিমাণ</th><th class="no-print">রসিদ / ছবি</th>${actionHeader}</tr></thead>
                         <tbody>${transRows}</tbody>
                     </table>
                 </div>
