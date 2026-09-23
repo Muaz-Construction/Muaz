@@ -1190,26 +1190,7 @@ const file = document.getElementById("transactionFile").files[0];
         document.getElementById('eopDue').value = finalDue;
     }
     
-   function calcEditOfficeDue() {
-        const mId = document.getElementById("eopMosqueId").value;
-        const currentId = document.getElementById('eopId').value;
-        if(!mId) return;
-        const mosque = db.mosques.find(m => m.firebaseId === mId);
-        const allocated = Number(mosque.allocated) || 0;
-
-        // Total Amount সবসময় মূল বরাদ্দকৃত পরিমাণই থাকবে
-        document.getElementById('eopTotalAmt').value = allocated;
-
-        const totalPaidOffice = db.officePayments
-            .filter(p => p.mosqueId === mId && p.firebaseId !== currentId)
-            .reduce((sum, p) => sum + Number(p.paid || 0), 0);
-
-        let pay = Number(document.getElementById('eopTotalPay').value) || 0;
-        
-        // Due হবে Total (Allocated) থেকে আগের সব পেমেন্ট এবং বর্তমান (এডিটেড) পেমেন্ট এর বিয়োগফল
-        document.getElementById('eopDue').value = allocated - (totalPaidOffice + pay);
-    }
-
+  
     async function addOfficePayment(e){
         e.preventDefault();
         
