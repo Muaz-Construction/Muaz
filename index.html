@@ -1136,7 +1136,7 @@ const file = document.getElementById("transactionFile").files[0];
         }
     }
 
-   /* ================= OFFICE PAYMENT LOGIC ================= */
+  /* ================= OFFICE PAYMENT LOGIC ================= */
     function calcOfficeDue() {
         const mId = document.getElementById("opMosqueId").value;
         if(!mId) {
@@ -1144,20 +1144,50 @@ const file = document.getElementById("transactionFile").files[0];
             document.getElementById('opDue').value = '';
             return;
         }
+        
         const mosque = db.mosques.find(m => m.firebaseId === mId);
-        const allocated = Number(mosque.allocated) || 0;
+        const allocatedAmount = Number(mosque.allocated) || 0;
 
-        // Total Amount সবসময় মূল বরাদ্দকৃত পরিমাণই থাকবে
-        document.getElementById('opTotalAmt').value = allocated;
+        // ১. ফিক্সড: Total Amount ফিল্ডে সর্বদা মসজিদের মূল বরাদ্দ দেখাবে
+        document.getElementById('opTotalAmt').value = allocatedAmount;
 
-        const totalPaidOffice = db.officePayments
+        // ২. এই মসজিদে এর আগে কত টাকা পেমেন্ট করা হয়েছে তার যোগফল বের করা
+        const totalPreviousPaid = db.officePayments
             .filter(p => p.mosqueId === mId)
             .reduce((sum, p) => sum + Number(p.paid || 0), 0);
 
-        let pay = Number(document.getElementById('opTotalPay').value) || 0;
+        // ৩. বর্তমানে যে টাকাটা ফর্মে ইনপুট দেওয়া হচ্ছে
+        let currentPay = Number(document.getElementById('opTotalPay').value) || 0;
         
-        // Due হবে Total (Allocated) থেকে আগের সব পেমেন্ট এবং বর্তমান পেমেন্ট এর বিয়োগফল
-        document.getElementById('opDue').value = allocated - (totalPaidOffice + pay);
+        // ৪. Due = মূল বরাদ্দ - (আগের মোট পেমেন্ট + বর্তমান পেমেন্ট)
+        let finalDue = allocatedAmount - (totalPreviousPaid + currentPay);
+        
+        document.getElementById('opDue').value = finalDue;
+    }
+    
+    function calcEditOfficeDue() {
+        const mId = document.getElementById("eopMosqueId").value;
+        const currentId = document.getElementById('eopId').value;
+        if(!mId) return;
+        
+        const mosque = db.mosques.find(m => m.firebaseId === mId);
+        const allocatedAmount = Number(mosque.allocated) || 0;
+
+        // ১. ফিক্সড: Total Amount ফিল্ডে সর্বদা মসজিদের মূল বরাদ্দ দেখাবে
+        document.getElementById('eopTotalAmt').value = allocatedAmount;
+
+        // ২. এই মসজিদে এর আগে কত টাকা পেমেন্ট করা হয়েছে (বর্তমান এডিট করা পেমেন্টটি বাদে) তার যোগফল
+        const totalPreviousPaid = db.officePayments
+            .filter(p => p.mosqueId === mId && p.firebaseId !== currentId)
+            .reduce((sum, p) => sum + Number(p.paid || 0), 0);
+
+        // ৩. বর্তমানে এডিট ফর্মে যে টাকাটা ইনপুট দেওয়া হচ্ছে
+        let currentPay = Number(document.getElementById('eopTotalPay').value) || 0;
+        
+        // ৪. Due = মূল বরাদ্দ - (আগের মোট পেমেন্ট + বর্তমান এডিটেড পেমেন্ট)
+        let finalDue = allocatedAmount - (totalPreviousPaid + currentPay);
+        
+        document.getElementById('eopDue').value = finalDue;
     }
     
    function calcEditOfficeDue() {
