@@ -1106,11 +1106,11 @@ const file = document.getElementById("transactionFile").files[0];
         }
 
         closeEditModal('editTransactionModal');
-        showFullDetails(mId); 
+        // ক্র্যাশ ফিক্স: আগে refresh() কল করতে হবে, তারপর showFullDetails() 
         refresh();
+        showFullDetails(mId); 
         alert("Transaction updated successfully!");
     }
-
    async function deleteTrans(mId, tId) {
         const pass = prompt("Type DELETE to confirm");
         if(pass === "DELETE"){
@@ -1120,7 +1120,9 @@ const file = document.getElementById("transactionFile").files[0];
             if(tIndex === -1) return;
             const trans = db.mosques[mIndex].transactions[tIndex];
             
-            await deleteFirebaseImage(trans.image);
+            if (trans.image && trans.image !== "N/A") {
+                await deleteFirebaseImage(trans.image);
+            }
 
             db.mosques[mIndex].transactions.splice(tIndex, 1);
             if(db.mosques[mIndex].firebaseId) {
@@ -1128,8 +1130,9 @@ const file = document.getElementById("transactionFile").files[0];
                     transactions: db.mosques[mIndex].transactions
                 });
             }
-            showFullDetails(mId);
+            // ক্র্যাশ ফিক্স: আগে refresh() কল করতে হবে, তারপর showFullDetails() 
             refresh();
+            showFullDetails(mId);
         }
     }
 
@@ -1144,52 +1147,61 @@ const file = document.getElementById("transactionFile").files[0];
         const mosque = db.mosques.find(m => m.firebaseId === mId);
         const allocated = Number(mosque.allocated) || 0;
 
+        // Total Amount সবসময় মূল বরাদ্দকৃত পরিমাণই থাকবে
+        document.getElementById('opTotalAmt').value = allocated;
+
         const totalPaidOffice = db.officePayments
             .filter(p => p.mosqueId === mId)
             .reduce((sum, p) => sum + Number(p.paid || 0), 0);
 
-        const currentBalance = allocated - totalPaidOffice;
-        document.getElementById('opTotalAmt').value = currentBalance;
-
         let pay = Number(document.getElementById('opTotalPay').value) || 0;
-        document.getElementById('opDue').value = currentBalance - pay;
+        
+        // Due হবে Total (Allocated) থেকে আগের সব পেমেন্ট এবং বর্তমান পেমেন্ট এর বিয়োগফল
+        document.getElementById('opDue').value = allocated - (totalPaidOffice + pay);
     }
     
-    function calcEditOfficeDue() {
+   function calcEditOfficeDue() {
         const mId = document.getElementById("eopMosqueId").value;
         const currentId = document.getElementById('eopId').value;
         if(!mId) return;
         const mosque = db.mosques.find(m => m.firebaseId === mId);
         const allocated = Number(mosque.allocated) || 0;
 
+        // Total Amount সবসময় মূল বরাদ্দকৃত পরিমাণই থাকবে
+        document.getElementById('eopTotalAmt').value = allocated;
+
         const totalPaidOffice = db.officePayments
             .filter(p => p.mosqueId === mId && p.firebaseId !== currentId)
             .reduce((sum, p) => sum + Number(p.paid || 0), 0);
 
-        const currentBalance = allocated - totalPaidOffice;
-        document.getElementById('eopTotalAmt').value = currentBalance;
-
         let pay = Number(document.getElementById('eopTotalPay').value) || 0;
-        document.getElementById('eopDue').value = currentBalance - pay;
+        
+        // Due হবে Total (Allocated) থেকে আগের সব পেমেন্ট এবং বর্তমান (এডিটেড) পেমেন্ট এর বিয়োগফল
+        document.getElementById('eopDue').value = allocated - (totalPaidOffice + pay);
     }
 
     async function addOfficePayment(e){
         e.preventDefault();
+        
+        // বাটন লক করা হচ্ছে ডাবল সাবমিট ঠেকাতে
+        const btn = e.target.querySelector('button[type="submit"]');
+        btn.innerText = "Saving..."; 
+        btn.disabled = true;
+
         const mId = document.getElementById("opMosqueId").value;
         const mosque = db.mosques.find(m => m.firebaseId === mId);
 
-        const newPayment = {
+        cconst newPayment = {
             mosqueId: mId,
-            mosqueName: mosque.name,
-            date: document.getElementById("opDate").value,
-            method: document.getElementById("opMethod").value,
+            // ...
+            originalAllocated: mosque.allocated, // <--- নতুন লাইন
             total: Number(document.getElementById("opTotalAmt").value),
             paid: Number(document.getElementById("opTotalPay").value),
             due: Number(document.getElementById("opDue").value),
             createdAt: Date.now()
         };
 
-       try {
+        try {
             await addDoc(collection(dbFirestore, "officePayments"), newPayment);
             
             const now = new Date();
@@ -1209,8 +1221,13 @@ const file = document.getElementById("transactionFile").files[0];
             await loadOfficePayments();
             refresh();
         } catch(err) {
-            console.error(err); alert("Failed to add Office Payment");
+            console.error(err); 
+            alert("Failed to add Office Payment");
         }
+        
+        // সবশেষে বাটন আনলক করে দেওয়া
+        btn.innerText = "Submit Payment"; 
+        btn.disabled = false;
     }
 
     async function deleteOfficePayment(id) {
@@ -1230,16 +1247,23 @@ const file = document.getElementById("transactionFile").files[0];
 
     function openEditOfficePayment(id) {
         const i = getOP(id);
-if (i === -1) return;
-const p = db.officePayments[i];
+        if (i === -1) return;
+        const p = db.officePayments[i];
         document.getElementById('eopId').value = id;
         document.getElementById('eopMosqueId').value = p.mosqueId;
         document.getElementById('eopDate').value = p.date;
         document.getElementById('eopMethod').value = p.method;
-        document.getElementById('eopTotalAmt').value = p.total;
+        
+        // ফিক্স: এডিট ফর্মেও যেন ফিক্সড বরাদ্দের টাকাটিই দেখায়
+        const mosque = db.mosques.find(m => m.firebaseId === p.mosqueId);
+        const originalAllocated = mosque ? mosque.allocated : p.total;
+        
+        document.getElementById('eopTotalAmt').value = originalAllocated;
         document.getElementById('eopTotalPay').value = p.paid;
         document.getElementById('eopDue').value = p.due;
         document.getElementById('editOfficePaymentModal').classList.add('show');
+        
+        calcEditOfficeDue(); // ফর্ম খোলার সাথে সাথে ক্যালকুলেশন আপডেট করে দেবে
     }
 
     async function saveOfficePaymentEdit(e) {
@@ -1413,12 +1437,13 @@ if(!db.labours[i].payments) db.labours[i].payments=[];
         let pId = makeId();
         while (db.labours[i].payments.some(p => p.id === pId)) { pId = makeId(); }
 
-        db.labours[i].payments.push({
+       db.labours[i].payments.push({
             id: pId, 
             date: document.getElementById("paymentDate").value, 
             time: document.getElementById("paymentTime").value, 
             amount: Number(document.getElementById("paymentAmount").value), 
             workDays: Number(document.getElementById("paymentWorkDays").value),
+            wageRate: l.dailyWage, // ফিক্সড: কাজের সময় শ্রমিকের যে মজুরি ছিল, তা সেভ করে রাখা হলো
             method: document.getElementById("paymentMethod").value,
             remarks: document.getElementById("paymentRemarks").value.trim()
         });
@@ -1491,8 +1516,9 @@ if(pIndex === -1) return;
         }
 
         closeEditModal("editLabourPaymentModal");
-        viewLabourPayments(lId);
+        // ক্র্যাশ ফিক্স: আগে refresh() কল করতে হবে, তারপর viewLabourPayments() 
         refresh();
+        viewLabourPayments(lId);
         alert("Payment updated successfully!");
     }
 
@@ -1509,11 +1535,11 @@ if(pIndex === -1) return;
                     payments: db.labours[lIndex].payments
                 });
             }
-            viewLabourPayments(lId);
+            // ক্র্যাশ ফিক্স: আগে refresh() কল করতে হবে, তারপর viewLabourPayments() 
             refresh();
+            viewLabourPayments(lId);
         }
     }
-
     /* ================= RENDERING ================= */
     function renderMosqueList(){
         const box = document.getElementById("mosqueList");
@@ -1659,6 +1685,8 @@ const mosque = db.mosques[i];
    function renderOfficeHistory(){
         const isAdmin = currentUser && currentUser.role === "admin";
         const container = document.getElementById("officeHistoryList");
+        
+        // প্রিন্টের সময় অ্যাকশন কলাম যেন না আসে তার জন্য no-print ক্লাস রাখা হয়েছে
         let actionHeader = isAdmin ? `<th class="no-print">Action</th>` : ``;
 
         let html = `
@@ -1683,19 +1711,34 @@ const mosque = db.mosques[i];
         if(db.officePayments.length === 0) {
             html += `<tr><td colspan="${isAdmin ? 7 : 6}" style="text-align:center;">No records found.</td></tr>`;
         } else {
-            db.officePayments.forEach(p => {
+            // তারিখ অনুযায়ী পুরনো থেকে নতুন (Ascending) ক্রমানুসারে সাজানো
+            const sortedPayments = [...db.officePayments].sort((a, b) => new Date(a.date) - new Date(b.date));
+
+            sortedPayments.forEach(p => {
+                // প্রিন্টের সময় এডিট/ডিলিট বাটন যেন না আসে তার জন্য no-print ক্লাস রাখা হয়েছে
                 let actionBtn = isAdmin ? `<td class="no-print">
                     <button class="btn btn-info" style="padding:5px 10px; font-size:12px; margin:2px;" onclick="openEditOfficePayment('${p.firebaseId}')">Edit</button> 
                     <button class="btn btn-danger" style="padding:5px 10px; font-size:12px; margin:2px;" onclick="deleteOfficePayment('${p.firebaseId}')">Delete</button>
                 </td>` : ``;
+                
+                // Total Payable Amount: সংশ্লিষ্ট মসজিদের অরিজিনাল মোট বরাদ্দ (ফিক্সড থাকবে, বিয়োগ হবে না)
+                const mosque = db.mosques.find(m => m.firebaseId === p.mosqueId);
+                const originalAllocated = mosque ? mosque.allocated : p.total;
+
+                // তারিখের ফরম্যাট পরিবর্তন (YYYY-MM-DD থেকে DD/MM/YY যেমন: 14/09/26)
+                let displayDate = p.date;
+                if(p.date && p.date.includes('-')) {
+                    const [year, month, day] = p.date.split('-');
+                    displayDate = `${day}/${month}/${year.substring(2)}`; 
+                }
 
                 html += `<tr>
-                    <td>${p.date}</td>
+                    <td>${displayDate}</td>
                     <td>${safe(p.mosqueName)}</td>
                     <td>${safe(p.method)}</td>
                     <td style="color:green;font-weight:bold;">${money(p.paid)}</td>
                     <td style="color:red;font-weight:bold;">${money(p.due)}</td>
-                    <td>${money(p.total)}</td>
+                    <td style="font-weight:bold; color:var(--primary);">${money(originalAllocated)}</td>
                     ${actionBtn}
                 </tr>`;
             });
@@ -1800,9 +1843,11 @@ const tIndex = db.mosques[mIndex].transactions.findIndex(t => t.id === tId);
                     </tr>
                 </thead>
                 <tbody>
-                    ${db.labours.map((l)=>{
+                   ${db.labours.map((l)=>{
                         const totalDaysWorked = l.payments ? l.payments.reduce((s,p)=>s+Number(p.workDays||0),0) : 0;
-    const totalWage = l.dailyWage * totalDaysWorked;
+    // ফিক্স: প্রতিটি পেমেন্টের সময়কার মজুরি অনুযায়ী মোট পাওনা হিসাব করা
+    const totalWage = l.payments ? l.payments.reduce((s,p)=>s+(Number(p.workDays||0) * Number(p.wageRate || l.dailyWage)),0) : 0;
+    
     const paid = l.payments ? l.payments.reduce((s,p)=>s+Number(p.amount||0),0) : 0;
     const advancePaid = l.advances ? l.advances.reduce((s,a)=>s+Number(a.amount||0),0) : 0;
     const totalReceived = paid + advancePaid;
@@ -1838,19 +1883,22 @@ const tIndex = db.mosques[mIndex].transactions.findIndex(t => t.id === tId);
 
     function viewLabourPayments(id) {
         const i = getL(id);
-if(i === -1) return;
-const l = db.labours[i];
+        if(i === -1) return;
+        const l = db.labours[i];
         const area = document.getElementById("labourPaymentDetailsArea");
         area.style.display = "block";
         const isAdmin = currentUser && currentUser.role === "admin";
         
         const totalDays = l.payments ? l.payments.reduce((sum, p) => sum + Number(p.workDays || 0), 0) : 0;
-        const totalWage = l.dailyWage * totalDays;
-       const totalPaid = l.payments ? l.payments.reduce((sum, p) => sum + Number(p.amount || 0), 0) : 0;
-    const totalAdvance = l.advances ? l.advances.reduce((sum, a) => sum + Number(a.amount || 0), 0) : 0;
-    const grandTotalPaid = totalPaid + totalAdvance;
-    const totalDue = totalWage - grandTotalPaid;
-    
+        
+        // ফিক্স: প্রোফাইলের বর্তমান মজুরির বদলে পেমেন্টের সময়কার মজুরি (wageRate) ব্যবহার করে মোট পাওনা হিসাব করা
+        const totalWage = l.payments ? l.payments.reduce((sum, p) => sum + (Number(p.workDays || 0) * Number(p.wageRate || l.dailyWage)), 0) : 0;
+        
+        const totalPaid = l.payments ? l.payments.reduce((sum, p) => sum + Number(p.amount || 0), 0) : 0;
+        const totalAdvance = l.advances ? l.advances.reduce((sum, a) => sum + Number(a.amount || 0), 0) : 0;
+        const grandTotalPaid = totalPaid + totalAdvance;
+        const totalDue = totalWage - grandTotalPaid;
+        
         let runningDue = 0;
         let paymentsRows = "";
 
@@ -1858,7 +1906,10 @@ const l = db.labours[i];
             paymentsRows = `<tr><td colspan="${isAdmin ? 9 : 8}" style="text-align:center;">কোনো পেমেন্ট নেই।</td></tr>`;
         } else {
             paymentsRows = l.payments.map((p) => {
-                const earned = l.dailyWage * Number(p.workDays || 0);
+                // ফিক্স: হিস্ট্রিতে সেভ থাকা wageRate অনুযায়ী দিনের পাওনা (earned) হিসাব করা
+                const currentWageRate = Number(p.wageRate || l.dailyWage);
+                const earned = currentWageRate * Number(p.workDays || 0);
+                
                 runningDue += (earned - Number(p.amount || 0));
                 
                 let actionBtn = isAdmin ? `
