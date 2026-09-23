@@ -1191,7 +1191,7 @@ const file = document.getElementById("transactionFile").files[0];
         const mId = document.getElementById("opMosqueId").value;
         const mosque = db.mosques.find(m => m.firebaseId === mId);
 
-        cconst newPayment = {
+        const newPayment = {
             mosqueId: mId,
             // ...
             originalAllocated: mosque.allocated, // <--- নতুন লাইন
