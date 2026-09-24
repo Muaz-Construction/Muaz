@@ -137,7 +137,16 @@
                 padding: 8px !important; 
             }
             
-            .no-print { display: none !important; }
+           .no-print { display: none !important; }
+            
+            /* ওয়াটারমার্ক দৃশ্যমান করার জন্য ব্যাকগ্রাউন্ড ট্রান্সপারেন্ট করা হলো */
+            .print-section, .details-box, .admin-section, .table-wrap, table, tbody, tr, td {
+                background-color: transparent !important;
+                box-shadow: none !important;
+            }
+            tr:nth-child(even) { 
+                background-color: transparent !important; 
+            }
         }
 
         /* Image Uploader */
