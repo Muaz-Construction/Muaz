@@ -487,7 +487,7 @@
                         <div class="form-group"><label>সময়</label><input id="transactionTime" type="time" required></div>
                         <div class="form-group"><label>মোট টাকার পরিমান</label><input id="transactionAmount" type="number" required></div>
                        <div class="form-group"><label>Payment Method</label>
-                            <select id="transactionMethod" required><option value="">Select</option><option>BKash</option><option>Cash</option><option>Rocket</option><option>Bank</option></select>
+                            <select id="transactionMethod" required><option value="">Select</option><option>BKash</option><option>Cash</option><option>Rocket</option><option>Nagad</option><option>Bank</option></select>
                         </div>
                        <div class="form-group"><label>কী বাবদ খরচ</label><input id="transactionPurpose" required></div>
  <div class="form-group"><label>নোট (Note)</label><textarea id="transactionNote"></textarea></div>
@@ -679,7 +679,7 @@
             <div class="form-group"><label>তারিখ</label><input id="etDate" type="date" required></div>
             <div class="form-group"><label>সময়</label><input id="etTime" type="time" required></div>
             <div class="form-group"><label>টাকা</label><input id="etAmount" type="number" required></div>
-            <div class="form-group"><label>Payment Method</label><select id="etMethod" required><option>BKash</option><option>Cash</option><option>Rocket</option><option>Bank</option></select></div>
+            <div class="form-group"><label>Payment Method</label><select id="etMethod" required><option value="">Select</option><option>BKash</option><option>Cash</option><option>Rocket</option><option>Nagad</option><option>Bank</option></select></div>
             <div class="form-group"><label>কী বাবদ</label><input id="etPurpose" required></div>
 <div class="form-group"><label>নোট</label><textarea id="etNote"></textarea></div>
             
@@ -1204,8 +1204,10 @@ const file = document.getElementById("transactionFile").files[0];
 
         const newPayment = {
             mosqueId: mId,
-            // ...
-            originalAllocated: mosque.allocated, // <--- নতুন লাইন
+            mosqueName: mosque.name,
+            date: document.getElementById("opDate").value,
+            method: document.getElementById("opMethod").value,
+            originalAllocated: mosque.allocated, 
             total: Number(document.getElementById("opTotalAmt").value),
             paid: Number(document.getElementById("opTotalPay").value),
             due: Number(document.getElementById("opDue").value),
@@ -1745,7 +1747,7 @@ const mosque = db.mosques[i];
 
                 html += `<tr>
                     <td>${displayDate}</td>
-                    <td>${safe(p.mosqueName)}</td>
+                    <td>${safe(mosque ? mosque.name : p.mosqueName)}</td>
                     <td>${safe(p.method)}</td>
                     <td style="color:green;font-weight:bold;">${money(p.paid)}</td>
                     <td style="color:red;font-weight:bold;">${money(p.due)}</td>
