@@ -1695,69 +1695,139 @@ const mosque = db.mosques[i];
         `;
     }
 
-   function renderOfficeHistory(){
+  let selectedOfficeMosqueId = null;
+
+    function selectOfficeMosque(mId) {
+        selectedOfficeMosqueId = mId;
+        renderOfficeHistory();
+    }
+
+    function renderOfficeHistory(){
         const isAdmin = currentUser && currentUser.role === "admin";
         const container = document.getElementById("officeHistoryList");
-        
-        // প্রিন্টের সময় অ্যাকশন কলাম যেন না আসে তার জন্য no-print ক্লাস রাখা হয়েছে
+        if (!container) return;
+
+        // কোনো মসজিদ সিলেক্ট করা না থাকলে সব মসজিদের আলাদা আলাদা কার্ড/ট্যাব দেখাবে
+        if (!selectedOfficeMosqueId) {
+            if (db.mosques.length === 0) {
+                container.innerHTML = `<p style="text-align:center; padding:20px;">কোনো মসজিদ যোগ করা হয়নি।</p>`;
+                return;
+            }
+
+            let html = `<h3 style="color:var(--primary); margin-bottom:15px;">🕌 মসজিদ নির্বাচন করুন (Mosjid Wise Office Payment):</h3>
+            <div class="mosque-grid">`;
+
+            db.mosques.forEach(m => {
+                const mPayments = db.officePayments.filter(p => p.mosqueId === m.firebaseId);
+                const totalPaid = mPayments.reduce((sum, p) => sum + Number(p.paid || 0), 0);
+                const currentDue = Number(m.allocated || 0) - totalPaid;
+
+                html += `
+                <div class="mosque-card" onclick="selectOfficeMosque('${m.firebaseId}')" style="border-top: 4px solid var(--primary); text-align:left; padding:20px;">
+                    <h3 style="color:var(--primary); margin-bottom:12px;"><i class="fa-solid fa-mosque" style="color:var(--secondary);"></i> ${safe(m.name)}</h3>
+                    <p style="font-size:14px; color:#555; margin-bottom:6px;"><strong>মোট বরাদ্দ:</strong> ${money(m.allocated)}</p>
+                    <p style="font-size:14px; color:green; margin-bottom:6px;"><strong>মোট পরিশোধ:</strong> ${money(totalPaid)}</p>
+                    <p style="font-size:14px; color:red; margin-bottom:8px;"><strong>বর্তমান বাকি:</strong> ${money(currentDue)}</p>
+                    <div style="margin-top:12px; text-align:right;">
+                        <span class="btn" style="padding:6px 14px; font-size:13px; margin:0;">হিসাব দেখুন →</span>
+                    </div>
+                </div>`;
+            });
+
+            html += `</div>`;
+            container.innerHTML = html;
+            return;
+        }
+
+        // নির্দিষ্ট মসজিদ সিলেক্ট করা থাকলে তার বিস্তারিত হিসাব ও অটো-সমন্বয়কৃত টেবিল দেখাবে
+        const mosque = db.mosques.find(m => m.firebaseId === selectedOfficeMosqueId);
+        if (!mosque) {
+            selectedOfficeMosqueId = null;
+            renderOfficeHistory();
+            return;
+        }
+
+        // তারিখ অনুযায়ী ক্রমানুসারে সাজানো (যাতে ভুলে পরে তোলা পুরনো পেমেন্টও সঠিক তারিখের লাইনে বসে)
+        const mPayments = db.officePayments
+            .filter(p => p.mosqueId === selectedOfficeMosqueId)
+            .sort((a, b) => {
+                const dateDiff = new Date(a.date || 0) - new Date(b.date || 0);
+                if (dateDiff !== 0) return dateDiff;
+                return (a.createdAt || 0) - (b.createdAt || 0);
+            });
+
+        const allocated = Number(mosque.allocated || 0);
+        const totalPaid = mPayments.reduce((sum, p) => sum + Number(p.paid || 0), 0);
+        const finalDue = allocated - totalPaid;
+
         let actionHeader = isAdmin ? `<th class="no-print">Action</th>` : ``;
+        let runningDue = allocated; // প্রথম থেকে রানিং হিসাব শুরু
 
-        let html = `
-        <button class="btn btn-info no-print" onclick="printData('printOfficeHistoryArea', 'Office Payment Report')" style="margin-bottom:15px;">
-            <i class="fa-solid fa-file-pdf"></i> Download PDF
-        </button>
-        <div class="table-wrap">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Name of Mosjid</th>
-                        <th>Payment Method</th>
-                        <th>Total Payment</th>
-                        <th>Total Due</th>
-                        <th>Total Payable Amount</th>
-                        ${actionHeader}
-                    </tr>
-                </thead>
-                <tbody>
-        `;
-        if(db.officePayments.length === 0) {
-            html += `<tr><td colspan="${isAdmin ? 7 : 6}" style="text-align:center;">No records found.</td></tr>`;
+        let rowsHtml = "";
+        if (mPayments.length === 0) {
+            rowsHtml = `<tr><td colspan="${isAdmin ? 6 : 5}" style="text-align:center;">এই মসজিদে কোনো অফিস পেমেন্ট রেকর্ড নেই।</td></tr>`;
         } else {
-            // তারিখ অনুযায়ী পুরনো থেকে নতুন (Ascending) ক্রমানুসারে সাজানো
-            const sortedPayments = [...db.officePayments].sort((a, b) => new Date(a.date) - new Date(b.date));
+            mPayments.forEach(p => {
+                const paidAmt = Number(p.paid || 0);
+                runningDue -= paidAmt; // অটোমেটিক টাকা সমন্বয় (আগের জের থেকে বর্তমান পেমেন্ট বাদ)
 
-            sortedPayments.forEach(p => {
-                // প্রিন্টের সময় এডিট/ডিলিট বাটন যেন না আসে তার জন্য no-print ক্লাস রাখা হয়েছে
+                let displayDate = p.date || "-";
+                if(p.date && p.date.includes('-')) {
+                    const [year, month, day] = p.date.split('-');
+                    displayDate = `${day}/${month}/${year.substring(2)}`;
+                }
+
                 let actionBtn = isAdmin ? `<td class="no-print">
                     <button class="btn btn-info" style="padding:5px 10px; font-size:12px; margin:2px;" onclick="openEditOfficePayment('${p.firebaseId}')">Edit</button> 
                     <button class="btn btn-danger" style="padding:5px 10px; font-size:12px; margin:2px;" onclick="deleteOfficePayment('${p.firebaseId}')">Delete</button>
                 </td>` : ``;
-                
-                // Total Payable Amount: সংশ্লিষ্ট মসজিদের অরিজিনাল মোট বরাদ্দ (ফিক্সড থাকবে, বিয়োগ হবে না)
-                const mosque = db.mosques.find(m => m.firebaseId === p.mosqueId);
-                const originalAllocated = mosque ? mosque.allocated : p.total;
 
-                // তারিখের ফরম্যাট পরিবর্তন (YYYY-MM-DD থেকে DD/MM/YY যেমন: 14/09/26)
-                let displayDate = p.date;
-                if(p.date && p.date.includes('-')) {
-                    const [year, month, day] = p.date.split('-');
-                    displayDate = `${day}/${month}/${year.substring(2)}`; 
-                }
-
-                html += `<tr>
+                rowsHtml += `<tr>
                     <td>${displayDate}</td>
-                    <td>${safe(mosque ? mosque.name : p.mosqueName)}</td>
-                    <td>${safe(p.method)}</td>
-                    <td style="color:green;font-weight:bold;">${money(p.paid)}</td>
-                    <td style="color:red;font-weight:bold;">${money(p.due)}</td>
-                    <td style="font-weight:bold; color:var(--primary);">${money(originalAllocated)}</td>
+                    <td>${safe(p.method || "-")}</td>
+                    <td style="font-weight:bold; color:var(--primary);">${money(allocated)}</td>
+                    <td style="color:green;font-weight:bold;">${money(paidAmt)}</td>
+                    <td style="color:red;font-weight:bold;">${money(runningDue)}</td>
                     ${actionBtn}
                 </tr>`;
             });
         }
-        html += `</tbody></table></div>`;
-        container.innerHTML = html;
+
+        container.innerHTML = `
+            <div class="no-print" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:15px;">
+                <button class="btn" style="background:#7f8c8d; margin:0;" onclick="selectOfficeMosque(null)">← সব মসজিদের তালিকা</button>
+                <button class="btn btn-info" style="margin:0;" onclick="printData('printOfficeHistoryArea', 'Office Payment - ${safe(mosque.name)}')">
+                    <i class="fa-solid fa-file-pdf"></i> Download PDF
+                </button>
+            </div>
+
+            <div class="details-box" style="margin-bottom:15px; text-align:center; padding:20px;">
+                <h3 style="color:var(--primary); font-size:22px; margin-bottom:12px;"><i class="fa-solid fa-mosque"></i> ${safe(mosque.name)} - Office Payment</h3>
+                <div style="font-size: 16px; background: #f8f9fa; padding: 12px; border-radius: 8px; border: 1px solid #ddd;">
+                    <span style="color: #0984e3; font-weight: bold; margin: 0 10px; display: inline-block;">মোট বরাদ্দ: ${money(allocated)}</span>
+                    <span style="color: #27ae60; font-weight: bold; margin: 0 10px; display: inline-block;">সর্বমোট পরিশোধ: ${money(totalPaid)}</span>
+                    <span style="color: #e74c3c; font-weight: bold; margin: 0 10px; display: inline-block;">বর্তমান বাকি: ${money(finalDue)}</span>
+                </div>
+            </div>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Payment Method</th>
+                            <th>Total Payable Amount</th>
+                            <th>Total Payment</th>
+                            <th>Total Due (অটো সমন্বয়কৃত)</th>
+                            ${actionHeader}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${rowsHtml}
+                    </tbody>
+                </table>
+            </div>
+        `;
     }
 
     function renderManageMosque(){
@@ -2375,6 +2445,7 @@ if(aIndex === -1) return;
     window.saveOfficePaymentEdit = saveOfficePaymentEdit;
     window.deleteOfficePayment = deleteOfficePayment;
     window.officeTab = officeTab;
+    window.selectOfficeMosque = selectOfficeMosque;
     window.adminTab = adminTab;
     window.addLabour = addLabour;
     window.openEditLabour = openEditLabour;
